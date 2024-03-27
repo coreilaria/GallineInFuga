@@ -3,17 +3,19 @@
 
 #include "point.hpp"
 
-class Boids{
-private:
-Point position;
-Point velocity;
+class Boids {
+ private:
+    Point position_;
+    Point velocity_;
 
-//static std::vector<Boids*> flock;
+ public:
+    Point separation();
+    Point alignment();
+    Point cohesion();
+    void update();
 
-public:
 
-//static void AddBoid (const Boids*);
-Point::
+
 };
 
 #endif

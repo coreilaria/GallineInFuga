@@ -1,19 +1,19 @@
 #include "point.hpp"
 #include <cmath>
 
-Point::Point(): m_x{0.}, m_y{0.} {};
-Point::Point(double x, double y) : m_x{x}, m_y{y} {};
+Point::Point(): x_{0.}, y_{0.} {};
+Point::Point(double x, double y) : x_{x}, y_{y} {};
 
 double Point::distance() const{
-    return std::sqrt(m_x * m_x + m_y * m_y);
+    return std::sqrt(x_ * x_ + y_ * y_);
 };
 
 double Point::get_x() const {
-    return m_x;
+    return x_;
 };
 
 double Point::get_y() const {
-    return m_y;
+    return y_;
 };
 
 Point operator+(const Point& a, const Point& b ){
