@@ -22,6 +22,8 @@ class Boid {
   void set_separation(double);
   void set_distance(double);
 
+  Point get_position(); const
+  Point get_velocity(); const
   Point separation(double);
   Point alignment(double);
   Point cohesion(double);

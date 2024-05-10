@@ -2,7 +2,7 @@
 #define QUADTREE_HPP
 
 #include <vector>
-
+#include "boid.hpp"
 #include "point.hpp"
 
 class Rectangle {
@@ -21,20 +21,29 @@ class Rectangle {
   double get_width() const;
   double get_height() const;
 
-  Rectangle& operator=(const Rectangle&);
+  bool contains(Point);
+
+  // Rectangle& operator=(const Rectangle&);  Operatore di assegnamento
 };
 
 class QuadTree {
  private:
   Rectangle boundary_;
   double capacity_;
-  std::vector<Point> points_;
+  std::vector<Boid*> boids_;
   bool divided_;
 
  public:
   QuadTree(Rectangle, double);
-  void insert(
-      Point);  // ricordarsi che poi sarà Boid::position_ il Point da inserire
+
+  QuadTree* northwest;
+  QuadTree* northeast;
+  QuadTree* southeast;
+  QuadTree* southwest;
+
+  bool insert(Boid*);
+  // ricordarsi che poi ci serviranno le Boid::positions_ per stimare i near_ e le Boid::velocity_ per le regole di volo
+
   void subdivide();
 };
 

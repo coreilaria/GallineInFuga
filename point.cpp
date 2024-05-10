@@ -4,7 +4,6 @@
 
 Point::Point() : x_{0.}, y_{0.} {};
 Point::Point(double x, double y) : x_{x}, y_{y} {};
-// Point::Point(Point p) : x_{p.get_x()}, y_{p.get_y()} {};
 
 double Point::get_x() const { return x_; };
 double Point::get_y() const { return y_; };
@@ -15,19 +14,30 @@ double Point::distance(const Point& P) const {
                    (y_ - P.get_y()) * (y_ - P.get_y()));
 };
 
-// void operator=(Point p1, Point p2) { p1{p2.get_x(), p2.get_y()}; };
-Point& operator=(const Point& p) {
-  if (this != &p) {  // Evita l'autoassegnamento
-    x = p.get_x();
-    y = p.get_y();
-  }
-  return *this;
-};
+// Point& Point::operator=(const Point& p) {
+//   if (this != &p) {  // Evita l'autoassegnamento
+//     x = p.get_x();
+//     y = p.get_y();
+//   }
+//   return *this;
+// };
+
+// Point operator+=(const Point& a, const Point& b) {
+//   Point p{a.get_x() += b.get_x(), a.get_y() += b.get_y()};
+//   return p;
+// }
+
+Point& Point::operator+=(const Point& a) {
+    x_ += a.get_x();
+    y_ += a.get_y();
+    return *this;
+}
 
 Point operator+(const Point& a, const Point& b) {
   Point sum{a.get_x() + b.get_x(), a.get_y() + b.get_y()};
   return sum;
 };
+
 Point operator-(const Point& a, const Point& b) {
   Point diff{a.get_x() - b.get_x(), a.get_y() - b.get_y()};
   return diff;
