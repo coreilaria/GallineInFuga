@@ -13,7 +13,6 @@ Point velocity;
 public:
 
 //static void AddBoid (const Boids*);
-Point::
 };
 
 #endif

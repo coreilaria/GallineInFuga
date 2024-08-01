@@ -3,7 +3,7 @@
 
 class Point{
 private:
-double m_x;
+double x;
 double m_y;
 
 public:
