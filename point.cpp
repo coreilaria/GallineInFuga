@@ -14,18 +14,6 @@ double Point::distance(const Point& P) const {
                    (y_ - P.get_y()) * (y_ - P.get_y()));
 };
 
-// Point& Point::operator=(const Point& p) {
-//   if (this != &p) {  // Evita l'autoassegnamento
-//     x = p.get_x();
-//     y = p.get_y();
-//   }
-//   return *this;
-// };
-
-// Point operator+=(const Point& a, const Point& b) {
-//   Point p{a.get_x() += b.get_x(), a.get_y() += b.get_y()};
-//   return p;
-// }
 
 Point& Point::operator+=(const Point& a) {
     x_ += a.get_x();

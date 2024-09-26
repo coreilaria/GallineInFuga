@@ -12,8 +12,8 @@ class Boid {
   double d_separation_;
   double distance_;
 
-  static std::vector<Boid*> flock_;
-  static std::vector<Boid*> near_;
+  // std::vector<Boid*> flock_;
+  // std::vector<Boid*> near_;
 
  public:
   Boid();
@@ -24,12 +24,12 @@ class Boid {
 
   Point get_position(); const
   Point get_velocity(); const
-  Point separation(double);
-  Point alignment(double);
-  Point cohesion(double);
+  Point separation(double, std::vector<Boid>);
+  Point alignment(double, std::vector<Boid>);
+  Point cohesion(double, std::vector<Boid>);
 
-  static void addBoid(Point const&, Point const&);
-  void update(double, double, double);
+  static void addBoid(Boid, std::vector<Boid>);
+  void update(double, double, double, std::vector<Boid>, std::vector<Boid>);
   void border(); // da implementare per decidere il comportamento ai bordi
 };
 

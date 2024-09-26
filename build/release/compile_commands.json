@@ -1,0 +1,22 @@
+[
+{
+  "directory": "/home/alida/prog/GallineInFuga/build/release",
+  "command": "/usr/bin/c++    -Wall -Wextra -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/Boids.dir/point.cpp.o -c /home/alida/prog/GallineInFuga/point.cpp",
+  "file": "/home/alida/prog/GallineInFuga/point.cpp"
+},
+{
+  "directory": "/home/alida/prog/GallineInFuga/build/release",
+  "command": "/usr/bin/c++    -Wall -Wextra -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/Boids.dir/boid.cpp.o -c /home/alida/prog/GallineInFuga/boid.cpp",
+  "file": "/home/alida/prog/GallineInFuga/boid.cpp"
+},
+{
+  "directory": "/home/alida/prog/GallineInFuga/build/release",
+  "command": "/usr/bin/c++    -Wall -Wextra -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/Boids.dir/quadtree.cpp.o -c /home/alida/prog/GallineInFuga/quadtree.cpp",
+  "file": "/home/alida/prog/GallineInFuga/quadtree.cpp"
+},
+{
+  "directory": "/home/alida/prog/GallineInFuga/build/release",
+  "command": "/usr/bin/c++    -Wall -Wextra -O3 -DNDEBUG -std=gnu++17 -o CMakeFiles/Boids.dir/simulation.cpp.o -c /home/alida/prog/GallineInFuga/simulation.cpp",
+  "file": "/home/alida/prog/GallineInFuga/simulation.cpp"
+}
+]
