@@ -8,17 +8,15 @@ Point::Point(double x, double y) : x_{x}, y_{y} {};
 double Point::get_x() const { return x_; };
 double Point::get_y() const { return y_; };
 
-double Point::distance() const { return std::sqrt(x_ * x_ + y_ * y_); };
+double Point::module() const { return std::sqrt(x_ * x_ + y_ * y_); };
 double Point::distance(const Point& P) const {
-  return std::sqrt((x_ - P.get_x()) * (x_ - P.get_x()) +
-                   (y_ - P.get_y()) * (y_ - P.get_y()));
+  return std::sqrt((x_ - P.get_x()) * (x_ - P.get_x()) + (y_ - P.get_y()) * (y_ - P.get_y()));
 };
 
-
 Point& Point::operator+=(const Point& a) {
-    x_ += a.get_x();
-    y_ += a.get_y();
-    return *this;
+  x_ += a.get_x();
+  y_ += a.get_y();
+  return *this;
 }
 
 Point operator+(const Point& a, const Point& b) {

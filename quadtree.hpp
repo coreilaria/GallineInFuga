@@ -2,6 +2,7 @@
 #define QUADTREE_HPP
 
 #include <vector>
+
 #include "boid.hpp"
 #include "point.hpp"
 

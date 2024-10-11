@@ -1,37 +1,41 @@
 #include "boid.hpp"
-#include "point.hpp"
+
+#include <iostream>
+
 #include "constants.hpp"
+#include "point.hpp"
 
 Boid::Boid() : position_{0., 0.}, velocity_{0., 0.} {};
 Boid::Boid(Point const& pos, Point const& vel)
-    : position_{pos.get_x(), pos.get_y()},
-      velocity_{vel.get_x(), vel.get_y()} {};
+    : position_{pos.get_x(), pos.get_y()}, velocity_{vel.get_x(), vel.get_y()} {};
 
-void Boid::set_separation(double ds) {
-  d_separation_ = ds;
-};  // TODO  mettere assert: ds < d, assert
+// void Boid::set_separation(double ds) {
+//   d_separation_ = ds;
+// };  // TODO  mettere assert: ds < d, assert
 
-void Boid::set_distance(double d) { distance_ = d; };
+// void Boid::set_distance(double d) { distance_ = d; };
 
-Point Boid::get_position() { return position_; } const
+Point Boid::get_position() { return position_; }
+const Point Boid::get_velocity() { return velocity_; }
+const
 
-Point Boid::get_velocity() { return velocity_; } const
-
-Point Boid::separation(double s, std::vector<Boid> near) {
+    Point
+    Boid::separation(std::vector<Boid> near) {
   Point v1{0., 0.};
 
   // using static_cast to convert from unsign int to int
   for (int i = 0; i < static_cast<int>(near.size()); ++i) {
     Point x1 = near[i].get_position();
 
-    // stiamo supponendo che dentro a near_ non ci sia il boid stesso
-    if (x1.distance(position_) < d_separation_)
-      v1 += -s * (x1 - position_);  // chissà se funziona l'operatore +=
+    // We are supposing that the near vector does not contain the current boid,
+    // for this reason we implemented the flight rules with near.size() instead of near.size()-1
+
+    if (x1.distance(position_) < ds) v1 += -s * (x1 - position_);  // chissà se funziona l'operatore +=
   }
   return v1;
 }
 
-Point Boid::alignment(double a, std::vector<Boid> near) {
+Point Boid::alignment(std::vector<Boid> near) {
   Point sum{0., 0.};
   for (int i = 0; i < static_cast<int>(near.size()); ++i) {
     sum += near[i].get_velocity();  // chissà se funziona l'operatore +=
@@ -40,10 +44,10 @@ Point Boid::alignment(double a, std::vector<Boid> near) {
 
   // Subtracting from the nearest boids' mean velocity the current boid's one
   // and then multiplying for an alignment factor
-  return a * ((1 / (near.size() - 1)) * sum - velocity_);
+  return a * (sum / near.size() - velocity_);
 };
 
-Point Boid::cohesion(double c, std::vector<Boid> near) {
+Point Boid::cohesion(std::vector<Boid> near) {
   Point sum{0., 0.};
 
   for (int i = 0; i < static_cast<int>(near.size()); ++i) {
@@ -51,30 +55,43 @@ Point Boid::cohesion(double c, std::vector<Boid> near) {
   }
   // Subtracting from the nearest boids' center of mass the current boid's
   // position and then multiplying for a cohesion factor
-  return c * ((1 / (near.size() - 1)) * sum  - position_);
+
+  return c * (sum / near.size() - position_);
   // TODO mettere assert: near_.size() > 1
 };
 
-void Boid::addBoid(Boid b, std::vector<Boid> flock) {
-  flock.push_back(b);
-};
+void Boid::update(std::vector<Boid> flock, std::vector<Boid> near) {
+  // USARE ALGORITMO SE NON USIAMO QUAD-TREE
+  for (int i = 0; i < static_cast<int>(flock.size()); ++i) {
+    std::cout << "this: " << this << '\n';
+    std::cout << "&flock" << &flock[i] << '\n';
 
-void Boid::update(double s, double a, double c, std::vector<Boid> flock, std::vector<Boid> near) {
-  
-  for (int i=0; i < static_cast<int>(flock.size()); ++i)
-  {
-    if (position_.distance(flock[i].get_position()) < distance_)
-      near.push_back(flock[i]);
+    if (position_.distance(flock[i].get_position()) < d) {
+      std::cout << "sono nell'if uno, vicini" << '\n';
+      std::cout << "sono nell'if uno, vicini" << '\n';
+      std::cout << "sono nell'if uno, vicini, indice " << i << '\n';
+
+      if (&flock[i] != this) {
+        near.push_back(flock[i]);
+        std::cout << '\n' << "size near uno " << near.size();
+        std::cout << "sono nell'if uno, vicini, diversi " << '\n';
+        std::cout << "sono nell'if uno, vicini, diversi, indice " << i << '\n';
+      }
+    }
   }
-  velocity_ += separation(s, near) + alignment(a, near) +
-               cohesion(c, near);  // chissà se funziona l'operatore +=
 
-  position_ = position_ +  dt * velocity_;
+  if (near.empty() == false) {
+    std::cout << '\n' << "sono nell'if due" << '\n';
+    std::cout << '\n' << "size near due" << near.size();
+
+    velocity_ += separation(near) + alignment(near) + cohesion(near);  // chissà se funziona l'operatore +=
+    std::cout << '\n' << "v_x = " << velocity_.get_x();
+    std::cout << '\n' << "v_y = " << velocity_.get_y();
+  }
+
+  position_ = position_ + dt * velocity_;
 
   // TODO svuotare vettore near
 };
 
-
 void Boid::border() {};  // da IMPLEMENTARE
-
-//ricordarsi che adesso add boid vuole un boide già formato (nel main)

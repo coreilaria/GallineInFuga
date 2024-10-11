@@ -7,21 +7,15 @@
 Rectangle::Rectangle(Point center, double width, double height)
     : center_{center.get_x(), center.get_y()},
       // : center_= center,
-      width_{width},
-      height_{height} {};
+      width_{width}, height_{height} {};
 
-Rectangle::Rectangle(double x, double y, double w, double h)
-    : center_{x, y}, width_{w}, height_{h} {};
+Rectangle::Rectangle(double x, double y, double w, double h) : center_{x, y}, width_{w}, height_{h} {};
 
 double Rectangle::get_width() const { return width_; };
 double Rectangle::get_height() const { return height_; };
 
-double Rectangle::get_xcenter() const {
-  return center_.get_x();
-};  // forse non serve
-double Rectangle::get_ycenter() const {
-  return center_.get_y();
-};  // forse non serve
+double Rectangle::get_xcenter() const { return center_.get_x(); };  // forse non serve
+double Rectangle::get_ycenter() const { return center_.get_y(); };  // forse non serve
 
 Point Rectangle::get_center() const {
   Point p{center_.get_x(), center_.get_y()};
@@ -29,8 +23,7 @@ Point Rectangle::get_center() const {
 };
 
 bool Rectangle::contains(Point p) {
-  return (std::abs(p.get_x() - center_.get_x()) <= width_ &&
-          std::abs(p.get_y() - center_.get_y()) <= height_);
+  return (std::abs(p.get_x() - center_.get_x()) <= width_ && std::abs(p.get_y() - center_.get_y()) <= height_);
 }
 
 // Rectangle& Rectangle::operator=(const Rectangle& r) {
@@ -43,10 +36,7 @@ bool Rectangle::contains(Point p) {
 // };
 
 QuadTree::QuadTree(Rectangle boundary, double capacity)
-    : boundary_{boundary.get_center(), boundary.get_width(),
-                boundary.get_height()},
-      capacity_{capacity},
-      boids_{},
+    : boundary_{boundary.get_center(), boundary.get_width(), boundary.get_height()}, capacity_{capacity}, boids_{},
       divided_{false} {};
 
 bool QuadTree::insert(Boid* b) {
@@ -63,16 +53,14 @@ bool QuadTree::insert(Boid* b) {
 
     // Inserting the boid in one of the children QuadTrees, depending on his
     // position within the previous boundary
-    return (northwest->insert(b)) || (northeast->insert(b)) ||
-           (southeast->insert(b)) || (southwest->insert(b));
+    return (northwest->insert(b)) || (northeast->insert(b)) || (southeast->insert(b)) || (southwest->insert(b));
   }
 }
 
 ;
 
 void QuadTree::subdivide() {
-  double x =
-      boundary_.get_xcenter();  // pensare se questi metodi ci servano davvero
+  double x = boundary_.get_xcenter();  // pensare se questi metodi ci servano davvero
   double y = boundary_.get_ycenter();
   double w = boundary_.get_width();
   double h = boundary_.get_height();
