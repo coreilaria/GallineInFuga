@@ -1,14 +1,14 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-constexpr double dt = 0.00001;
+constexpr double dt = 0.001;
 constexpr double N = 200;
 
 constexpr double s = 0.5;
 constexpr double a = 0.2;
 constexpr double c = 0.02;
 
-constexpr double d = 40.;
+constexpr double d = 100.;
 constexpr double ds = 15.;
 
 constexpr double maxPos = 50.;

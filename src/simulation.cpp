@@ -1,3 +1,4 @@
+#include <SFML/Graphics.hpp>
 #include <algorithm>
 #include <chrono>
 #include <random>
@@ -8,9 +9,6 @@
 #include "../include/point.hpp"
 #include "../include/quadtree.hpp"
 #include "../include/sfml.hpp"
-
-#include <SFML/Graphics.hpp>
-
 
 int main() {
   std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -30,7 +28,6 @@ int main() {
   window.setFramerateLimit(60);
   sf::Event event{};
 
-
   sf::VertexBuffer points{sf::Points};
   points.create(N);
   points.setUsage(sf::VertexBuffer::Usage::Dynamic);
@@ -43,9 +40,7 @@ int main() {
         case sf::Event::Closed:
           window.close();
           break;
-        // case sf::Event::KeyPressed:
-        //   handleKeyPress(event, dt, mu);
-        //   break;
+
         default:
           break;
       }
@@ -58,11 +53,11 @@ int main() {
     });
 
     // .data() ritorna il puntatore all'array nativo sotto std::array
-    points.update(vertices.data()); 
+    points.update(vertices.data());
 
     window.clear();
 
-    window.draw(points); //BUFFER
+    window.draw(points);  // BUFFER
 
     window.display();
 

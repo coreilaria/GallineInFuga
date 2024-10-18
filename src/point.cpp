@@ -46,3 +46,6 @@ sf::Vertex Point::operator()() const {
 
     return out;
 };
+
+
+ 

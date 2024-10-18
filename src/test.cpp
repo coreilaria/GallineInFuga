@@ -4,20 +4,19 @@
 #include <random>
 #include <vector>
 
+#include "../doctest.h"
 #include "../include/boid.hpp"
 #include "../include/point.hpp"
-
-#include "../doctest.h"
-
+#include "../include/sfml.hpp"
 
 TEST_CASE("Testing Point class") {
   Point p0;
   Point p1(1., 1.);
   Point p2(-5.2, 3.75);
 
-  double s0 = 0.;
-  double s1 = 7.;
-  double s2 = -11.;
+  double scalar0 = 0.;
+  double scalar1 = 7.;
+  double scalar2 = -11.;
 
   SUBCASE("Testing getters") {
     CHECK(p0.get_x() == 0.);
@@ -90,17 +89,17 @@ TEST_CASE("Testing Point class") {
   }
 
   SUBCASE("Testing operator *") {
-    Point prod1 = s0 * p0;
-    Point prod2 = s0 * p1;
-    Point prod3 = s0 * p2;
+    Point prod1 = scalar0 * p0;
+    Point prod2 = scalar0 * p1;
+    Point prod3 = scalar0 * p2;
 
-    Point prod4 = s1 * p0;
-    Point prod5 = s1 * p1;
-    Point prod6 = s1 * p2;
+    Point prod4 = scalar1 * p0;
+    Point prod5 = scalar1 * p1;
+    Point prod6 = scalar1 * p2;
 
-    Point prod7 = s2 * p0;
-    Point prod8 = s2 * p1;
-    Point prod9 = s2 * p2;
+    Point prod7 = scalar2 * p0;
+    Point prod8 = scalar2 * p1;
+    Point prod9 = scalar2 * p2;
 
     CHECK(prod1.get_x() == doctest::Approx(0.));
     CHECK(prod1.get_y() == doctest::Approx(0.));
@@ -131,13 +130,11 @@ TEST_CASE("Testing Point class") {
   }
 
   SUBCASE("Testing operator /") {
-    Point div2 = p1 / s1;
-    Point div3 = p1 / s2;
-    Point div4 = p0 / s1;
-    Point div5 = p2 / s1;
-    Point div6 = p2 / s2;
-
-    // CHECK_THROWS_AS(div1.get_x(10, "NonExistentParticle"), std::runtime_error);  da capire come gestire test /0
+    Point div2 = p1 / scalar1;
+    Point div3 = p1 / scalar2;
+    Point div4 = p0 / scalar1;
+    Point div5 = p2 / scalar1;
+    Point div6 = p2 / scalar2;
 
     CHECK(div2.get_x() == doctest::Approx(0.142857));
     CHECK(div2.get_y() == doctest::Approx(0.142857));
@@ -161,26 +158,42 @@ TEST_CASE("Testing Point class") {
     start0 += p1;
     start1 += p2;
 
-    CHECK(start0.get_x() == 1.);
-    CHECK(start0.get_y() == 1.);
+    CHECK(start0.get_x() == doctest::Approx(1.));
+    CHECK(start0.get_y() == doctest::Approx(1.));
 
-    CHECK(start1.get_x() == 2.8);
-    CHECK(start1.get_y() == -2.25);
+    CHECK(start1.get_x() == doctest::Approx(2.8));
+    CHECK(start1.get_y() == doctest::Approx(-2.25));
+  }
+
+  SUBCASE("Testing operator ()") {
+    sf::Vertex v0, v1, v2;
+    v0 = p0();
+    v1 = p1();
+    v2 = p2();
+
+    CHECK(v0.position.x == doctest::Approx(p0.get_x()));
+    CHECK(v0.position.y == doctest::Approx(p0.get_y()));
+
+    CHECK(v1.position.x == doctest::Approx(p1.get_x()));
+    CHECK(v1.position.y == doctest::Approx(p1.get_y()));
+
+    CHECK(v2.position.x == doctest::Approx(p2.get_x()));
+    CHECK(v2.position.y == doctest::Approx(p2.get_y()));
   }
 };
 
 TEST_CASE("Testing Boid class") {
-  Point pos1(3., -2.);
+  Point poscalar1(3., -2.);
   Point vel1(5., -1.);
 
-  double x = pos1.get_x();
-  double y = pos1.get_y();
+  double x = poscalar1.get_x();
+  double y = poscalar1.get_y();
 
   double sep1_x, sep1_y, sep2_x, sep2_y, sep3_x, sep3_y, sep4_x, sep4_y;
   double coh1_x, coh1_y, coh2_x, coh2_y, coh3_x, coh3_y, coh4_x, coh4_y;
   double al1_x, al1_y, al2_x, al2_y, al3_x, al3_y, al4_x, al4_y;
 
-  Point pos2(x + ds / 3, y);
+  Point poscalar2(x + ds / 3, y);
   Point vel2(-8.5, -6.);
 
   Point pos3(x, y + ds / 8);
@@ -195,8 +208,8 @@ TEST_CASE("Testing Boid class") {
   Point vel5(-5., -3.2);
 
   Boid b0;
-  Boid b1(pos1, vel1);
-  Boid b2(pos2, vel2);
+  Boid b1(poscalar1, vel1);
+  Boid b2(poscalar2, vel2);
   Boid b3(pos3, vel3);
   Boid b4(pos4, vel4);
   Boid b5(pos5, vel5);
@@ -311,35 +324,113 @@ TEST_CASE("Testing Boid class") {
     CHECK(b4.alignment(near_b4).get_y() == doctest::Approx(al4_y));
   }
 
-  SUBCASE("Testing update method") {
+  SUBCASE("Testing update_boid method") {
     std::vector<Boid> near1, near2, near3, near4;
 
-    Boid u0, u1, u2, u3;
-    u0 = flock[0].update_boid(flock, near1);
-    u1 = flock[1].update_boid(flock, near2);
-    u2 = flock[2].update_boid(flock, near3);
-    u3 = flock[3].update_boid(flock, near4);
-    
-    // b1.update(flock, near1);
-    // b2.update(flock, near2);
-    // b3.update(flock, near3);
-    // b4.update(flock, near4);
+    Boid u1, u2, u3, u4;
+    u1 = flock[0].update_boid(flock, near1);
+    u2 = flock[1].update_boid(flock, near2);
+    u3 = flock[2].update_boid(flock, near3);
+    u4 = flock[3].update_boid(flock, near4);
 
     CHECK(static_cast<int>(near1.size()) == 3);
     CHECK(static_cast<int>(near2.size()) == 3);
     CHECK(static_cast<int>(near3.size()) == 3);
     CHECK(static_cast<int>(near4.size()) == 3);
 
-    CHECK(u0.get_velocity().get_x() == doctest::Approx(vel1.get_x() + sep1_x + coh1_x + al1_x));
-    CHECK(u0.get_velocity().get_y() == doctest::Approx(vel1.get_y() + sep1_y + coh1_y + al1_y));
+    CHECK(u1.get_velocity().get_x() == doctest::Approx(vel1.get_x() + sep1_x + coh1_x + al1_x));
+    CHECK(u1.get_velocity().get_y() == doctest::Approx(vel1.get_y() + sep1_y + coh1_y + al1_y));
+    CHECK(u1.get_position().get_x() ==
+          doctest::Approx(poscalar1.get_x() + dt * (vel1.get_x() + sep1_x + coh1_x + al1_x)));
+    CHECK(u1.get_position().get_y() ==
+          doctest::Approx(poscalar1.get_y() + dt * (vel1.get_y() + sep1_y + coh1_y + al1_y)));
 
-    CHECK(u1.get_velocity().get_x() == doctest::Approx(vel2.get_x() + sep2_x + coh2_x + al2_x));
-    CHECK(u1.get_velocity().get_y() == doctest::Approx(vel2.get_y() + sep2_y + coh2_y + al2_y));
+    CHECK(u2.get_velocity().get_x() == doctest::Approx(vel2.get_x() + sep2_x + coh2_x + al2_x));
+    CHECK(u2.get_velocity().get_y() == doctest::Approx(vel2.get_y() + sep2_y + coh2_y + al2_y));
+    CHECK(u2.get_position().get_x() ==
+          doctest::Approx(poscalar2.get_x() + dt * (vel2.get_x() + sep2_x + coh2_x + al2_x)));
+    CHECK(u2.get_position().get_y() ==
+          doctest::Approx(poscalar2.get_y() + dt * (vel2.get_y() + sep2_y + coh2_y + al2_y)));
 
-    CHECK(u2.get_velocity().get_x() == doctest::Approx(vel3.get_x() + sep3_x + coh3_x + al3_x));
-    CHECK(u2.get_velocity().get_y() == doctest::Approx(vel3.get_y() + sep3_y + coh3_y + al3_y));
+    CHECK(u3.get_velocity().get_x() == doctest::Approx(vel3.get_x() + sep3_x + coh3_x + al3_x));
+    CHECK(u3.get_velocity().get_y() == doctest::Approx(vel3.get_y() + sep3_y + coh3_y + al3_y));
+    CHECK(u3.get_position().get_x() == doctest::Approx(pos3.get_x() + dt * (vel3.get_x() + sep3_x + coh3_x + al3_x)));
+    CHECK(u3.get_position().get_y() == doctest::Approx(pos3.get_y() + dt * (vel3.get_y() + sep3_y + coh3_y + al3_y)));
 
-    CHECK(u3.get_velocity().get_x() == doctest::Approx(vel4.get_x() + sep4_x + coh4_x + al4_x));
-    CHECK(u3.get_velocity().get_y() == doctest::Approx(vel4.get_y() + sep4_y + coh4_y + al4_y));
+    CHECK(u4.get_velocity().get_x() == doctest::Approx(vel4.get_x() + sep4_x + coh4_x + al4_x));
+    CHECK(u4.get_velocity().get_y() == doctest::Approx(vel4.get_y() + sep4_y + coh4_y + al4_y));
+    CHECK(u4.get_position().get_x() == doctest::Approx(pos4.get_x() + dt * (vel4.get_x() + sep4_x + coh4_x + al4_x)));
+    CHECK(u4.get_position().get_y() == doctest::Approx(pos4.get_y() + dt * (vel4.get_y() + sep4_y + coh4_y + al4_y)));
   }
+
+  SUBCASE("Testing evolve method") {
+    Boid::evolve(flock);
+
+    CHECK(flock[0].get_velocity().get_x() == doctest::Approx(vel1.get_x() + sep1_x + coh1_x + al1_x));
+    CHECK(flock[0].get_velocity().get_y() == doctest::Approx(vel1.get_y() + sep1_y + coh1_y + al1_y));
+    CHECK(flock[0].get_position().get_x() ==
+          doctest::Approx(poscalar1.get_x() + dt * (vel1.get_x() + sep1_x + coh1_x + al1_x)));
+    CHECK(flock[0].get_position().get_y() ==
+          doctest::Approx(poscalar1.get_y() + dt * (vel1.get_y() + sep1_y + coh1_y + al1_y)));
+
+    CHECK(flock[1].get_velocity().get_x() == doctest::Approx(vel2.get_x() + sep2_x + coh2_x + al2_x));
+    CHECK(flock[1].get_velocity().get_y() == doctest::Approx(vel2.get_y() + sep2_y + coh2_y + al2_y));
+    CHECK(flock[1].get_position().get_x() ==
+          doctest::Approx(poscalar2.get_x() + dt * (vel2.get_x() + sep2_x + coh2_x + al2_x)));
+    CHECK(flock[1].get_position().get_y() ==
+          doctest::Approx(poscalar2.get_y() + dt * (vel2.get_y() + sep2_y + coh2_y + al2_y)));
+
+    CHECK(flock[2].get_velocity().get_x() == doctest::Approx(vel3.get_x() + sep3_x + coh3_x + al3_x));
+    CHECK(flock[2].get_velocity().get_y() == doctest::Approx(vel3.get_y() + sep3_y + coh3_y + al3_y));
+    CHECK(flock[2].get_position().get_x() ==
+          doctest::Approx(pos3.get_x() + dt * (vel3.get_x() + sep3_x + coh3_x + al3_x)));
+    CHECK(flock[2].get_position().get_y() ==
+          doctest::Approx(pos3.get_y() + dt * (vel3.get_y() + sep3_y + coh3_y + al3_y)));
+
+    CHECK(flock[3].get_velocity().get_x() == doctest::Approx(vel4.get_x() + sep4_x + coh4_x + al4_x));
+    CHECK(flock[3].get_velocity().get_y() == doctest::Approx(vel4.get_y() + sep4_y + coh4_y + al4_y));
+    CHECK(flock[3].get_position().get_x() ==
+          doctest::Approx(pos4.get_x() + dt * (vel4.get_x() + sep4_x + coh4_x + al4_x)));
+    CHECK(flock[3].get_position().get_y() ==
+          doctest::Approx(pos4.get_y() + dt * (vel4.get_y() + sep4_y + coh4_y + al4_y)));
+
+    CHECK(flock[4].get_velocity().get_x() == doctest::Approx(vel5.get_x()));
+    CHECK(flock[4].get_velocity().get_y() == doctest::Approx(vel5.get_y()));
+    CHECK(flock[4].get_position().get_x() == doctest::Approx(pos5.get_x() + dt * vel5.get_x()));
+    CHECK(flock[4].get_position().get_y() == doctest::Approx(pos5.get_y() + dt * vel5.get_y()));
+  }
+};
+
+TEST_CASE("Testing toSfmlCoord function") {
+  sf::Vertex v1{sf::Vector2f(20.f, -35.f)};
+  sf::Vertex v2{sf::Vector2f(-5.f, 100.f)};
+  sf::Vertex v3{sf::Vector2f(200.f, 15.f)};
+  sf::Vertex v4{sf::Vector2f(0.f, 0.f)};
+  sf::Vertex v5{sf::Vector2f(static_cast<float>(minPos), static_cast<float>(maxPos))};
+  sf::Vertex v6{sf::Vector2f(static_cast<float>(maxPos), static_cast<float>(minPos))};
+
+  toSfmlCoord(v1);
+  toSfmlCoord(v2);
+  toSfmlCoord(v3);
+  toSfmlCoord(v4);
+  toSfmlCoord(v5);
+  toSfmlCoord(v6);
+
+  CHECK(v1.position.x == doctest::Approx(windowWidth * (20.f / (2 * maxPos) + 0.5)));
+  CHECK(v1.position.y == doctest::Approx(windowHeight * (0.5 - (-35.f) / (2 * maxPos))));
+
+  CHECK(v2.position.x == doctest::Approx(windowWidth * ((-5.f) / (2 * maxPos) + 0.5)));
+  CHECK(v2.position.y == doctest::Approx(windowHeight * (0.5 - 100.f / (2 * maxPos))));
+
+  CHECK(v3.position.x == doctest::Approx(windowWidth * (200.f / (2 * maxPos) + 0.5)));
+  CHECK(v3.position.y == doctest::Approx(windowHeight * (0.5 - 15.f / (2 * maxPos))));
+
+  CHECK(v4.position.x == doctest::Approx(static_cast<float>(windowWidth / 2)));
+  CHECK(v4.position.y == doctest::Approx(static_cast<float>(windowHeight / 2)));
+
+  CHECK(v5.position.x == doctest::Approx(0.f));
+  CHECK(v5.position.y == doctest::Approx(0.f));
+
+  CHECK(v6.position.x == doctest::Approx(static_cast<float>(windowWidth)));
+  CHECK(v6.position.y == doctest::Approx(static_cast<float>(windowHeight)));
 }
