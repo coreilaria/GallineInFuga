@@ -52,23 +52,29 @@ Point Boid::cohesion(std::vector<Boid>& near) {
   // TODO mettere assert: near_.size() > 1
 };
 
-// void Boid::update(std::vector<Boid>& flock, std::vector<Boid>& near) {
-//   // USARE ALGORITMO SE NON USIAMO QUAD-TREE
-//   for (int i = 0; i < static_cast<int>(flock.size()); ++i) {
-//     if (position_.distance(flock[i].get_position()) < d && &flock[i] != this) {
-//       near.push_back(flock[i]);
-//     }
-//   }
+Point Boid::border() {
+  double v4_x{0.};
+  double v4_y{0.};
 
-//   if (near.empty() == false) {
-//     velocity_ += separation(near) + alignment(near) + cohesion(near);
-//   }
+  if (std::abs(position_.get_x()) < maxPos - d / 12) {
+    if (position_.get_x() < 0) {
+      v4_x = -b * (minPos - position_.get_x());
+    } else {
+      v4_x = -b * (maxPos - position_.get_x());
+    }
+  }
 
-//   position_ = position_ + dt * velocity_;
+  if (std::abs(position_.get_y()) < maxPos - d / 12) {
+    if (position_.get_y() < 0) {
+      v4_y = -b * (minPos - position_.get_y());
+    } else {
+      v4_y = -b * (maxPos - position_.get_y());
+    }
+  }
+  return Point(v4_x, v4_y);
+};
 
-//   // TODO svuotare vettore near
-// };
-
+Point friction(Point velocity)
 
 Boid Boid::update_boid(std::vector<Boid>& flock_in, std::vector<Boid>& near) {
   // USARE ALGORITMO SE NON USIAMO QUAD-TREE
@@ -84,11 +90,11 @@ Boid Boid::update_boid(std::vector<Boid>& flock_in, std::vector<Boid>& near) {
 
   if (near.empty() == false) {
     v += separation(near) + alignment(near) + cohesion(near);
-    std::cout<<"v_x = "<<v.get_x()<<'\n';
-    std::cout<<"v_y = "<<v.get_y()<<'\n';
-
   }
+  v += border();
 
+  v += friction (v);
+  
   p += dt * v;
 
   return Boid(p, v);
@@ -103,5 +109,3 @@ void Boid::evolve(std::vector<Boid>& flock_in) {
   }
   flock_in = flock_out;
 };
-
-// void Boid::border() {};  // da IMPLEMENTARE

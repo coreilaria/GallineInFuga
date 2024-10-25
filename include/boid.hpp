@@ -25,7 +25,7 @@ class Boid {
   Boid update_boid(std::vector<Boid> &, std::vector<Boid> &);
   static void evolve(std::vector<Boid> &);
 
-  // void border();  // da implementare per decidere il comportamento ai bordi
+  Point border();  // da implementare per decidere il comportamento ai bordi
 };
 
 #endif
