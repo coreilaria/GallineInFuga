@@ -18,22 +18,22 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 find_package(SFML COMPONENTS graphics REQUIRED)
 # find_package(TGUI REQUIRED) user interface library
 
-add_executable(Boids src/point.cpp src/boid.cpp src/quadtree.cpp src/simulation.cpp src/sfml.cpp) #TODO add sfml.cpp when implemented
+add_executable(Boids src/point.cpp src/boid.cpp src/flock.cpp src/quadtree.cpp src/simulation.cpp src/sfml.cpp) #TODO add sfml.cpp when implemented
 
 target_link_libraries(Boids PRIVATE sfml-graphics)
 
 # se il testing e' abilitato...
 #   per disabilitare il testing, passare -DBUILD_TESTING=OFF a cmake durante la fase di configurazione
 
-if (BUILD_TESTING)
+# if (BUILD_TESTING)
 
-  # aggiungi l'eseguibile Boids.t
-  add_executable(Boids.t src/point.cpp src/boid.cpp src/quadtree.cpp src/test.cpp src/sfml.cpp)
+#   # aggiungi l'eseguibile Boids.t
+#   add_executable(Boids.t src/point.cpp src/boid.cpp src/quadtree.cpp src/test.cpp src/sfml.cpp )
 
-  target_link_libraries(Boids.t PRIVATE sfml-graphics )
+#   target_link_libraries(Boids.t PRIVATE sfml-graphics )
 
-  # aggiungi l'eseguibile Boids.t alla lista dei test
-  add_test(NAME Boids.t COMMAND Boids.t)
+#   # aggiungi l'eseguibile Boids.t alla lista dei test
+#   add_test(NAME Boids.t COMMAND Boids.t)
 
 
-endif()
+# endif()

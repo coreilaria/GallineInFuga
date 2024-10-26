@@ -5,6 +5,8 @@
 
 #include <SFML/Graphics.hpp>
 
+using namespace graphic_par;
+
 
 //il vertex è inizializzato con la posizione del boide in coordinate cartesiane
 void toSfmlCoord(sf::Vertex &vertex){

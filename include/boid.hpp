@@ -2,6 +2,8 @@
 #define BOID_HPP
 
 #include <vector>
+#include <algorithm>
+#include <numeric>
 
 #include "../include/constants.hpp"
 #include "../include/point.hpp"
@@ -17,15 +19,12 @@ class Boid {
 
   Point get_position() const;
   Point get_velocity() const;
-  Point separation(std::vector<Boid> &);
-  Point alignment(std::vector<Boid> &);
-  Point cohesion(std::vector<Boid> &);
-  void friction (Point &);
-  // void update(std::vector<Boid> &, std::vector<Boid> &);
-  Boid update_boid(std::vector<Boid> &, std::vector<Boid> &);
-  static void evolve(std::vector<Boid> &);
+  Point separation(const double, const double, std::vector<Boid *> &);
+  Point alignment(const double, std::vector<Boid *> &);
+  Point cohesion(const double, std::vector<Boid *> &);
 
-  Point border(Point);  // da implementare per decidere il comportamento ai bordi
+  void friction(const double, Point &);
+  Point border(const double, const double, Point);  // da implementare per decidere il comportamento ai bordi
 };
 
 #endif
