@@ -20,12 +20,12 @@ class Boid {
   Point separation(std::vector<Boid> &);
   Point alignment(std::vector<Boid> &);
   Point cohesion(std::vector<Boid> &);
-
+  void friction (Point &);
   // void update(std::vector<Boid> &, std::vector<Boid> &);
   Boid update_boid(std::vector<Boid> &, std::vector<Boid> &);
   static void evolve(std::vector<Boid> &);
 
-  Point border();  // da implementare per decidere il comportamento ai bordi
+  Point border(Point);  // da implementare per decidere il comportamento ai bordi
 };
 
 #endif

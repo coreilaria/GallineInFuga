@@ -12,14 +12,18 @@
 
 int main() {
   std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch().count());
-  std::uniform_real_distribution<double> dist_pos(minPos, maxPos);
+  // std::uniform_real_distribution<double> dist_pos_x(minPos, maxPos);
+  // std::uniform_real_distribution<double> dist_pos_y(minPos, maxPos);
+
+  std::uniform_real_distribution<double> dist_pos_x(0., windowWidth);
+  std::uniform_real_distribution<double> dist_pos_y(0., windowHeight);
   std::uniform_real_distribution<double> dist_vel(minVel, maxVel);
 
   std::vector<Boid> flock(N);
   std::vector<Boid> flock_out(N);
 
   std::generate(flock.begin(), flock.end(),
-                [&]() { return Boid(Point(dist_pos(rng), dist_pos(rng)), Point(dist_vel(rng), dist_vel(rng))); });
+                [&]() { return Boid(Point(dist_pos_x(rng), dist_pos_y(rng)), Point(dist_vel(rng), dist_vel(rng))); });
 
   // int c = 0;
 
@@ -27,6 +31,17 @@ int main() {
                           "flock simulation", sf::Style::Titlebar);
   window.setFramerateLimit(60);
   sf::Event event{};
+
+  sf::VertexBuffer Margin{sf::Lines};
+  Margin.create(8);
+  Margin.setUsage(sf::VertexBuffer::Usage::Static);
+  Margin.update(std::array<sf::Vertex, 8>{
+        sf::Vertex({margin, margin}), sf::Vertex({windowWidth - margin, margin}),
+        sf::Vertex({margin, margin}), sf::Vertex({margin, windowHeight - margin}),
+        sf::Vertex({windowWidth - margin, margin}), sf::Vertex({windowWidth - margin, windowHeight - margin}),
+        sf::Vertex({margin, windowHeight - margin}), sf::Vertex({windowWidth - margin, windowHeight - margin}),
+
+    }.data()); 
 
   sf::VertexBuffer points{sf::Points};
   points.create(N);
@@ -48,7 +63,7 @@ int main() {
 
     std::for_each(flock.begin(), flock.end(), [&, i = 0](Boid &boid) mutable {
       vertices[i] = boid.get_position()();
-      toSfmlCoord(vertices[i]);
+      // toSfmlCoord(vertices[i]);
       ++i;
     });
 
@@ -57,7 +72,8 @@ int main() {
 
     window.clear();
 
-    window.draw(points);  // BUFFER
+    window.draw(points); 
+    window.draw(Margin);  // BUFFER
 
     window.display();
 

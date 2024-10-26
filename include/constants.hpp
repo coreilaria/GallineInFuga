@@ -1,25 +1,26 @@
 #ifndef CONSTANTS_HPP
 #define CONSTANTS_HPP
 
-constexpr double dt = 0.05;
-constexpr double N = 200;
+constexpr double dt = 0.35;
+constexpr double N = 100;
 
-constexpr double s = 0.8;
-constexpr double a = 1;
-constexpr double c = 0.075;
-constexpr double b= 10;
+constexpr double s = 0.7;
+constexpr double a = 0.05;
+constexpr double c = 0.015;
 
+constexpr double d = 90.;
+constexpr double ds = 20.;
 
-
-constexpr double d = 200.;
-constexpr double ds = 50.;
-
-constexpr double maxPos = 900.;
+constexpr double maxPos = 300.;
 constexpr double minPos = -maxPos;
 constexpr double maxVel = 10.;
-constexpr double minVel = -10.;
+constexpr double minVel = -maxVel;
+constexpr double turn_factor = 0.25;
 
-constexpr float windowWidth = 900.f;
+constexpr double margin = 100.;
+
+constexpr double velMax = 50;
+constexpr float windowWidth = 1200.f;
 constexpr float windowHeight = 900.f;
 
 #endif

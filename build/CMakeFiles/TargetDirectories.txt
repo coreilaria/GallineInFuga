@@ -1,3 +1,0 @@
-/home/alida/prog/GallineInFuga/build/CMakeFiles/Boids.dir
-/home/alida/prog/GallineInFuga/build/CMakeFiles/edit_cache.dir
-/home/alida/prog/GallineInFuga/build/CMakeFiles/rebuild_cache.dir

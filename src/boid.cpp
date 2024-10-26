@@ -1,6 +1,7 @@
 #include "../include/boid.hpp"
 
-#include <iostream>
+#include <cmath>
+#include <numbers>
 
 #include "../include/constants.hpp"
 #include "../include/point.hpp"
@@ -52,35 +53,53 @@ Point Boid::cohesion(std::vector<Boid>& near) {
   // TODO mettere assert: near_.size() > 1
 };
 
-Point Boid::border() {
-  double v4_x{0.};
-  double v4_y{0.};
+// Point Boid::border() {
+//   double v4_x{0.};
+//   double v4_y{0.};
 
-  if (std::abs(position_.get_x()) < maxPos - d / 12) {
-    if (position_.get_x() < 0) {
-      v4_x = -b * (minPos - position_.get_x());
-    } else {
-      v4_x = -b * (maxPos - position_.get_x());
-    }
-  }
+//   if (std::abs(position_.get_x()) < maxPos - d / 12) {
+//     if (position_.get_x() < 0) {
+//       v4_x = -b * (minPos - position_.get_x());
+//     } else {
+//       v4_x = -b * (maxPos - position_.get_x());
+//     }
+//   }
 
-  if (std::abs(position_.get_y()) < maxPos - d / 12) {
-    if (position_.get_y() < 0) {
-      v4_y = -b * (minPos - position_.get_y());
-    } else {
-      v4_y = -b * (maxPos - position_.get_y());
-    }
+//   if (std::abs(position_.get_y()) < maxPos - d / 12) {
+//     if (position_.get_y() < 0) {
+//       v4_y = -b * (minPos - position_.get_y());
+//     } else {
+//       v4_y = -b * (maxPos - position_.get_y());
+//     }
+//   }
+//   return Point(v4_x, v4_y);
+// };
+
+void Boid::friction(Point& velocity) {
+  if (velocity.module() > velMax) {
+    velocity = velMax * (velocity / velocity.module());
   }
-  return Point(v4_x, v4_y);
 };
-
-Point friction(Point velocity)
 
 Boid Boid::update_boid(std::vector<Boid>& flock_in, std::vector<Boid>& near) {
   // USARE ALGORITMO SE NON USIAMO QUAD-TREE
   Point p, v;
   p = position_;
   v = velocity_;
+
+  // double theta;
+
+  // if (velocity_.get_x() <= 0) {
+  //   if (velocity_.get_x() == 0) {
+  //     theta = M_PI();
+  //   } else {
+  //     theta{std::atan(velocity_.get_y() / velocity_.get_x())};
+  //   }
+
+  // } else {
+  //   theta{std::atan(velocity_.get_y() / velocity_.get_x() +
+  //                   M_PI())};  // pensare se c'è un altro modo per inserire il pi greco
+  // }
 
   for (int i = 0; i < static_cast<int>(flock_in.size()); ++i) {
     if (position_.distance(flock_in[i].get_position()) < d && &flock_in[i] != this) {
@@ -91,10 +110,9 @@ Boid Boid::update_boid(std::vector<Boid>& flock_in, std::vector<Boid>& near) {
   if (near.empty() == false) {
     v += separation(near) + alignment(near) + cohesion(near);
   }
-  v += border();
+   v = border(v);
+  //  friction(v);
 
-  v += friction (v);
-  
   p += dt * v;
 
   return Boid(p, v);
@@ -108,4 +126,26 @@ void Boid::evolve(std::vector<Boid>& flock_in) {
     flock_out[i] = flock_in[i].update_boid(flock_in, near);
   }
   flock_in = flock_out;
+};
+
+Point Boid::border(Point v) {
+  double v4_x{v.get_x()};
+  double v4_y{v.get_y()};
+
+  if (position_.get_x() < margin) {
+    v4_x += turn_factor;
+  }
+
+  if (position_.get_x() > (windowWidth - margin)) {
+    v4_x -= turn_factor;
+  }
+
+  if (position_.get_y() < margin) {
+    v4_y += turn_factor;
+  }
+
+  if (position_.get_y() > (windowHeight - margin)) {
+    v4_y -= turn_factor;
+  }
+  return Point(v4_x, v4_y);
 };
