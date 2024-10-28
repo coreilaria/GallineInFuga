@@ -19,10 +19,10 @@ int main() {
   flock.generateBoid();
   flock.print();
   
-  // sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
-  //                         "Flock simulation", sf::Style::Titlebar);
-  // window.setFramerateLimit(60);
-  // sf::Event event{};
+  sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
+                          "Flock simulation", sf::Style::Titlebar);
+  window.setFramerateLimit(60);
+  sf::Event event{};
 
   // // sf::VertexBuffer Margin{sf::Lines};
   // // Margin.create(8);
@@ -33,38 +33,38 @@ int main() {
   // //       sf::Vertex({windowWidth - margin, margin}), sf::Vertex({windowWidth - margin, windowHeight - margin}),
   // //       sf::Vertex({margin, windowHeight - margin}), sf::Vertex({windowWidth - margin, windowHeight - margin}),
 
-  // //   }.data()); 
+  //   }.data()); 
 
-  // sf::VertexBuffer points{sf::Points};
-  // points.create(flock.get_size());
-  // points.setUsage(sf::VertexBuffer::Usage::Dynamic);
+  sf::VertexBuffer points{sf::Points};
+  points.create(flock.get_size());
+  points.setUsage(sf::VertexBuffer::Usage::Dynamic);
 
-  // std::vector<sf::Vertex> vertices(flock.get_size());
+  std::vector<sf::Vertex> vertices(flock.get_size());
 
-  // while (window.isOpen()) {
-  //   while (window.pollEvent(event)) {
-  //     switch (event.type) {
-  //       case sf::Event::Closed:
-  //         window.close();
-  //         break;
+  while (window.isOpen()) {
+    while (window.pollEvent(event)) {
+      switch (event.type) {
+        case sf::Event::Closed:
+          window.close();
+          break;
 
-  //       default:
-  //         break;
-  //     }
-  //   }
+        default:
+          break;
+      }
+    }
 
-  //   flock.vertex(vertices);
+    flock.vertex(vertices);
 
-  //   // .data() ritorna il puntatore all'array nativo sotto std::array
-  //   points.update(vertices.data());
+    // .data() ritorna il puntatore all'array nativo sotto std::array
+    points.update(vertices.data());
 
-  //   window.clear();
+    window.clear();
 
-  //   window.draw(points); // BUFFER
-  //   // window.draw(Margin);  
+    window.draw(points); // BUFFER
+    // window.draw(Margin);  
 
-  //   window.display();
+    window.display();
 
-  //   flock.evolve();
-  // }
+    flock.evolve();
+  }
 }

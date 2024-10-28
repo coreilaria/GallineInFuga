@@ -16,7 +16,7 @@
 
 using namespace graphic_par;
 
-Flock::Flock() : flock_(N_) {};
+Flock::Flock() {flock_.resize(N_);};
 // Flock::Flock(std::vector<std::unique_ptr<Boid>> flock) { flock_.assign(flock.begin(), flock.end()); };
 
 int Flock::get_size() const { return N_; };
@@ -47,7 +47,8 @@ int Flock::get_size() const { return N_; };
 //         std::vector<Boid*> near;
 
 //         // Usa std::copy_if per trovare i Boid vicini
-//         std::copy_if(flock_.begin(), flock_.end(), std::back_inserter(near), [&](const std::unique_ptr<Boid>& other) {
+//         std::copy_if(flock_.begin(), flock_.end(), std::back_inserter(near), [&](const std::unique_ptr<Boid>& other)
+//         {
 //             return target.get() != other.get() && target->get_position().distance(other->get_position()) < d_;
 //         });
 
@@ -59,18 +60,17 @@ int Flock::get_size() const { return N_; };
 
 //         return near_raw;
 //     };
-
 std::vector<Boid*> Flock::findNear(std::unique_ptr<Boid>& target) {
-    std::vector<Boid*> near;
-
-    // Usa std::copy_if per trovare i Boid vicini
-    std::copy_if(flock_.begin(), flock_.end(), std::back_inserter(near), [&](const std::unique_ptr<Boid>& other) {
-        // Usando target.get() e other.get() per confrontare i puntatori
-        return target.get() != other.get() && target->get_position().distance(other->get_position()) < d_;
-    });
-
-    // Non c'è bisogno di near_raw, `near` è già di tipo std::vector<Boid*>
-    return near;  // Restituisce il vettore di puntatori
+  std::vector<Boid*> near;
+  // Usa std::copy_if per trovare i Boid vicini
+  Boid* target_ptr = target.get();
+  for (int i=0; i < N_; ++i ){
+    if (target_ptr != flock_[i].get() && target_ptr->get_position().distance(flock_[i].get()->get_position()) < d_){
+      near.push_back(flock_[i].get());
+    }
+  }
+  return near;
+  // Restituisce il vettore di puntatori
 };
 
 std::unique_ptr<Boid> Flock::update_boid(std::unique_ptr<Boid>& b) {
@@ -121,17 +121,17 @@ std::unique_ptr<Boid> Flock::update_boid(std::unique_ptr<Boid>& b) {
 // };
 
 void Flock::evolve() {
-    std::vector<std::unique_ptr<Boid>> flock_out;
-    flock_out.reserve(N_);  // Prealloca spazio per evitare riallocazioni
+  std::vector<std::unique_ptr<Boid>> flock_out;
+  flock_out.reserve(N_);  // Prealloca spazio per evitare riallocazioni
 
-    for (int i = 0; i < static_cast<int>(N_); ++i) {
-        // Aggiorna il Boid esistente e crea un nuovo unique_ptr con il risultato
-        std::unique_ptr<Boid> updated_boid = this->update_boid(flock_[i]); 
-        flock_out.push_back(std::move(updated_boid));
-    }
+  for (int i = 0; i < static_cast<int>(N_); ++i) {
+    // Aggiorna il Boid esistente e crea un nuovo unique_ptr con il risultato
+    std::unique_ptr<Boid> updated_boid = this->update_boid(flock_[i]);
+    flock_out.push_back(std::move(updated_boid));
+  }
 
-    // Sostituisci flock_ con flock_out
-    flock_ = std::move(flock_out);
+  // Sostituisci flock_ con flock_out
+  flock_ = std::move(flock_out);
 }
 
 void Flock::generateBoid() {
