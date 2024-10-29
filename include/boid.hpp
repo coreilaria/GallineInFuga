@@ -1,11 +1,10 @@
 #ifndef BOID_HPP
 #define BOID_HPP
 
-#include <vector>
 #include <algorithm>
 #include <numeric>
+#include <vector>
 
-#include "../include/constants.hpp"
 #include "../include/point.hpp"
 
 class Boid {
@@ -24,6 +23,8 @@ class Boid {
   Point cohesion(const double, std::vector<Boid *> &);
 
   void friction(const double, Point &);
+  void boost(const double, Point &);
+  
   Point border(const double, const double, Point);  // da implementare per decidere il comportamento ai bordi
 };
 

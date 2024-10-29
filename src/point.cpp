@@ -13,6 +13,10 @@ double Point::distance(const Point& P) const {
   return std::sqrt((x_ - P.get_x()) * (x_ - P.get_x()) + (y_ - P.get_y()) * (y_ - P.get_y()));
 };
 
+float Point::angle() { return std::atan2(y_ ,x_); };
+//std::atan2 tiene conto dei segni di velocity.x e velocity.y e fornisce il risultato corretto in radianti.
+
+
 Point& Point::operator+=(const Point& a) {
   x_ += a.get_x();
   y_ += a.get_y();
@@ -41,11 +45,8 @@ Point operator/(const Point& a,
 };
 
 sf::Vertex Point::operator()() const {
-    sf::Vertex out = {sf::Vector2f(static_cast<float>(x_), static_cast<float>(y_))};
-    out.color = sf::Color::White;
+  sf::Vertex out = {sf::Vector2f(static_cast<float>(x_), static_cast<float>(y_))};
+  out.color = sf::Color::White;
 
-    return out;
+  return out;
 };
-
-
- 

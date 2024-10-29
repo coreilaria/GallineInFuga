@@ -14,8 +14,7 @@ class Point {
 
   double module() const;
   double distance(const Point&) const;
-  // double distance(double, double) const;
-
+  float angle();
   double get_x() const;
   double get_y() const;
 

@@ -7,7 +7,7 @@
 #include "../doctest.h"
 #include "../include/boid.hpp"
 #include "../include/point.hpp"
-#include "../include/sfml.hpp"
+#include "../include/namespace.hpp"
 
 TEST_CASE("Testing Point class") {
   Point p0;
