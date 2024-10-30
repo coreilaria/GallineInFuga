@@ -126,3 +126,5 @@ Point Boid::border(const double margin, const double turn_factor, Point v) {
   }
   return Point(v4_x, v4_y);
 };
+
+

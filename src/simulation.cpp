@@ -40,25 +40,13 @@ int main() {
       }
     }
 
-    // std::vector<sf::VertexArray> triangles(flock.get_size());
-    // triangles = flock.createTriangle(vertices);
-
-    // // .data() ritorna il puntatore all'array nativo sotto std::array
-
-    // window.clear();
-    // for (int i = 0; i < static_cast<int>(triangles.size()); ++i) {
-    //   points.update(triangles[i].data());
-    //   window.draw(points);  // BUFFER
-    // }
-
-    // window.display();
-
     std::vector<sf::VertexArray> triangles = flock.createTriangle(vertices);
 
     window.clear();
     for (auto& triangle : triangles) {
       window.draw(triangle);  // Draw each triangle directly
     }
+    
     window.display();
 
     flock.evolve();

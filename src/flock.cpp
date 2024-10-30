@@ -95,7 +95,7 @@ void Flock::print() {
   }
 };
 
-std::vector<sf::VertexArray> Flock::createTriangle(std::vector<sf::Vertex>& vertices) {
+std::vector<sf::VertexArray> Flock::createTriangle( std::vector<sf::Vertex>& vertices) {
   this->vertex(vertices);
 
   sf::VertexArray triangle(sf::Triangles, 3);
@@ -109,7 +109,7 @@ std::vector<sf::VertexArray> Flock::createTriangle(std::vector<sf::Vertex>& vert
     triangle[2].position =
         vertices[i].position + sf::Vector2f(baseWidth_ / 2, height_ / 2);  // Vertice in basso a destra
 
-    float theta = -1 * ( flock_[i]->get_velocity().angle()); 
+    float theta = flock_[i]->get_velocity().angle(); 
 
     // Ruota il triangolo attorno al centro
     for (int j = 0; j < 3; ++j) {
@@ -118,8 +118,8 @@ std::vector<sf::VertexArray> Flock::createTriangle(std::vector<sf::Vertex>& vert
                                                                  pos.x * std::sin(theta) + pos.y * std::cos(theta));
       triangle[j].color = color_;
     }
-    triangle_vec.push_back(triangle);
+    triangle_vec[i] = triangle;
   }
 
   return triangle_vec;
-}
+};

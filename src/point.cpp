@@ -13,9 +13,8 @@ double Point::distance(const Point& P) const {
   return std::sqrt((x_ - P.get_x()) * (x_ - P.get_x()) + (y_ - P.get_y()) * (y_ - P.get_y()));
 };
 
-float Point::angle() { return std::atan2(y_ ,x_); };
-//std::atan2 tiene conto dei segni di velocity.x e velocity.y e fornisce il risultato corretto in radianti.
-
+float Point::angle() { return std::atan2(y_, x_) + M_PI / 2; };
+// std::atan2 tiene conto dei segni di velocity.x e velocity.y e fornisce il risultato corretto in radianti.
 
 Point& Point::operator+=(const Point& a) {
   x_ += a.get_x();

@@ -29,10 +29,9 @@ class Flock {
   const double turnFactor_ = 1;
   const double margin_ = 200.;
 
-  const sf::Color color_= sf::Color::Blue;
+  const sf::Color color_ = sf::Color::Blue;
   const float baseWidth_ = 7;
-  const float height_= 15;
-
+  const float height_ = 15;
 
  public:
   Flock();
