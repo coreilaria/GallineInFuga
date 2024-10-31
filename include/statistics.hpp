@@ -11,7 +11,7 @@ struct Statistics{
     Statistics(double, double, double, double);
 
 
-}
+};
 
 
 
