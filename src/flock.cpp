@@ -12,6 +12,8 @@
 #include "../include/boid.hpp"
 #include "../include/namespace.hpp"
 #include "../include/point.hpp"
+#include "../include/statistics.hpp"
+
 
 using namespace graphic_par;
 
@@ -122,4 +124,37 @@ std::vector<sf::VertexArray> Flock::createTriangle( std::vector<sf::Vertex>& ver
   }
 
   return triangle_vec;
+};
+
+Statistics Flock::statistics(){
+  double mean_dist {0.};
+  for(std::vector<int>::iterator it = flock_.begin(); it != flock_.end(); ++it){
+    Point p;
+
+    p= (*it)->get_position();
+    double sum= std::accumulate(it, flock_.end(), double{0.},
+                              [](double acc, std::unique_ptr<Boid> boid) { return acc + (boid->get_position().distance(p))/(N_*(N_-1)/2);});
+  mean_dist += sum; 
+  } 
+
+  double mean_dist2 {0.};
+  for(std::vector<int>::iterator it = flock_.begin(); it != flock_.end(); ++it){
+    double sum2= std::accumulate(it, flock_.end(), double{0.},
+                              [](double acc, std::unique_ptr<Boid> boid) { return acc + std::pow(boid->get_position().distance((*it)->get_position()),2)/(N_*(N_-1)/2);});
+  mean_dist2 += sum2; 
+  } 
+
+  double dev_dist = std::sqrt((mean_dist2-std::pow(mean_dist, 2)));
+
+  double mean_speed = std::accumulate(flock_.begin(), flock_.end(), double{0.},
+                              [](double acc, std::unique_ptr<Boid> boid) { return acc + (boid->get_velocity().module())/N_; });
+  
+
+  double mean_speed2 = std::accumulate(flock_.begin(), flock_.end(), double{0.},
+                              [](double acc, std::unique_ptr<Boid> boid) { return acc + std::pow(boid->get_velocity().module(), 2)/N_; });
+
+  double dev_speed = std::sqrt((mean_speed2)- (std::pow(mean_speed,2)));
+
+  return Statistics(mean_dist, dev_dist, mean_speed, dev_speed);
+
 };

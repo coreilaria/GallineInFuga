@@ -9,6 +9,8 @@
 
 #include "../include/boid.hpp"
 #include "../include/point.hpp"
+#include "../include/statistics.hpp"
+
 
 class Flock {
  private:
@@ -47,5 +49,7 @@ class Flock {
   std::vector<sf::VertexArray> createTriangle(std::vector<sf::Vertex> &);
 
   void print();
+
+  Statistics statistics();
 };
 #endif
