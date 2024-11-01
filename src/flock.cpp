@@ -14,7 +14,6 @@
 #include "../include/point.hpp"
 #include "../include/statistics.hpp"
 
-
 using namespace graphic_par;
 
 Flock::Flock() { flock_.resize(N_); };
@@ -97,7 +96,7 @@ void Flock::print() {
   }
 };
 
-std::vector<sf::VertexArray> Flock::createTriangle( std::vector<sf::Vertex>& vertices) {
+std::vector<sf::VertexArray> Flock::createTriangle(std::vector<sf::Vertex>& vertices) {
   this->vertex(vertices);
 
   sf::VertexArray triangle(sf::Triangles, 3);
@@ -111,7 +110,7 @@ std::vector<sf::VertexArray> Flock::createTriangle( std::vector<sf::Vertex>& ver
     triangle[2].position =
         vertices[i].position + sf::Vector2f(baseWidth_ / 2, height_ / 2);  // Vertice in basso a destra
 
-    float theta = flock_[i]->get_velocity().angle(); 
+    float theta = flock_[i]->get_velocity().angle();
 
     // Ruota il triangolo attorno al centro
     for (int j = 0; j < 3; ++j) {
@@ -126,32 +125,79 @@ std::vector<sf::VertexArray> Flock::createTriangle( std::vector<sf::Vertex>& ver
   return triangle_vec;
 };
 
-Statistics Flock::statistics(){
-  double mean_dist {0.};
-  for(std::vector<std::unique_ptr<Boid>>::iterator it = flock_.begin(); it != flock_.end(); ++it){
-    double sum= (std::accumulate(it, flock_.end(), double{0.},
-                              [&it](double acc, const std::unique_ptr<Boid>& boid) { return acc + (boid->get_position().distance((*it)->get_position()));}))/(N_*(N_-1)/2);
-  mean_dist += sum; 
-  } 
+Statistics Flock::statistics() {
+  double mean_dist{0.};
+  for (std::vector<std::unique_ptr<Boid>>::iterator it = flock_.begin(); it != flock_.end(); ++it) {
+    double sum = (std::accumulate(it, flock_.end(), double{0.},
+                                  [&it](double acc, const std::unique_ptr<Boid>& boid) {
+                                    return acc + (boid->get_position().distance((*it)->get_position()));
+                                  })) /
+                 (N_ * (N_ - 1) / 2);
+    mean_dist += sum;
+  }
 
-  double mean_dist2 {0.};
-  for(std::vector<std::unique_ptr<Boid>>::iterator it = flock_.begin(); it != flock_.end(); ++it){
-    double sum2= (std::accumulate(it, flock_.end(), double{0.},
-                              [&it](double acc, const std::unique_ptr<Boid>& boid) { return acc + std::pow(boid->get_position().distance((*it)->get_position()),2);}))/(N_*(N_-1)/2);
-  mean_dist2 += sum2; 
-  } 
+  double mean_dist2{0.};
+  for (std::vector<std::unique_ptr<Boid>>::iterator it = flock_.begin(); it != flock_.end(); ++it) {
+    double sum2 = (std::accumulate(it, flock_.end(), double{0.},
+                                   [&it](double acc, const std::unique_ptr<Boid>& boid) {
+                                     return acc + std::pow(boid->get_position().distance((*it)->get_position()), 2);
+                                   })) /
+                  (N_ * (N_ - 1) / 2);
+    mean_dist2 += sum2;
+  }
 
-  double dev_dist = std::sqrt((mean_dist2-std::pow(mean_dist, 2)));
+  double dev_dist = std::sqrt((mean_dist2 - std::pow(mean_dist, 2)));
 
   double mean_speed = (std::accumulate(flock_.begin(), flock_.end(), double{0.},
-                              [](double acc, const std::unique_ptr<Boid>& boid) { return acc + (boid->get_velocity().module()); }))/N_;
-  
+                                       [](double acc, const std::unique_ptr<Boid>& boid) {
+                                         return acc + (boid->get_velocity().module());
+                                       })) /
+                      N_;
 
   double mean_speed2 = (std::accumulate(flock_.begin(), flock_.end(), double{0.},
-                              [](double acc, const std::unique_ptr<Boid>& boid) { return acc + std::pow(boid->get_velocity().module(), 2); }))/N_;
+                                        [](double acc, const std::unique_ptr<Boid>& boid) {
+                                          return acc + std::pow(boid->get_velocity().module(), 2);
+                                        })) /
+                       N_;
 
-  double dev_speed = std::sqrt((mean_speed2)- (std::pow(mean_speed,2)));
+  double dev_speed = std::sqrt((mean_speed2) - (std::pow(mean_speed, 2)));
 
   return Statistics(mean_dist, dev_dist, mean_speed, dev_speed);
+};
 
+// evito di chiamare 4 volte accumulate
+Statistics Flock::statistics() {
+  double mean_dist{0.};
+  double mean_dist2{0.};
+
+  for (std::vector<std::unique_ptr<Boid>>::iterator it = flock_.begin(); it != flock_.end(); ++it) {
+    std::vector<double> sum = std::accumulate(
+        it, flock_.end(), double{0., 0.}, [&it](std::vector<double> acc, const std::unique_ptr<Boid>& boid) {
+          acc[0] += (boid->get_position().distance((*it)->get_position()));
+          acc[1] += std::pow(boid->get_position().distance((*it)->get_position()), 2);
+          return acc;
+        });
+    mean_dist += sum[0] / (N_ * (N_ - 1) / 2);
+    mean_dist2 += sum[1] / (N_ * (N_ - 1) / 2);
+  }
+
+  double dev_dist = std::sqrt((mean_dist2 - std::pow(mean_dist, 2)));
+
+  double mean_speed{0.};
+  double mean_speed2{0.};
+
+  std::vector<double> sum = std::accumulate(flock_.begin(), flock_.end(), double{0., 0.},
+                                            [](std::vector<double> acc, const std::unique_ptr<Boid>& boid) {
+                                              acc[0] += boid->get_velocity().module();
+                                              acc[1] += std::pow(boid->get_velocity().module(), 2);
+
+                                              return acc;
+                                            });
+
+  mean_speed = sum[0] / N_;
+  mean_speed2 = sum[1] / N_;
+
+  double dev_speed = std::sqrt((mean_speed2) - (std::pow(mean_speed, 2)));
+
+  return Statistics(mean_dist, dev_dist, mean_speed, dev_speed);
 };
