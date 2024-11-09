@@ -109,7 +109,7 @@ Point Boid::border(const double margin, const double turn_factor, Point v) {
   double v4_x{v.get_x()};
   double v4_y{v.get_y()};
 
-  if (position_.get_x() < margin) {
+  if (position_.get_x() < graphic_par::statsWidth + margin) {
     v4_x += turn_factor;
   }
 
@@ -126,5 +126,3 @@ Point Boid::border(const double margin, const double turn_factor, Point v) {
   }
   return Point(v4_x, v4_y);
 };
-
-
