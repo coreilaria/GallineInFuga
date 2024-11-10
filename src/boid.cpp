@@ -1,11 +1,11 @@
 #include "../include/boid.hpp"
 
-#include <algorithm>
 #include <cmath>
-#include <numbers>
+#include <memory>
 #include <numeric>
 #include <vector>
 
+#include "../include/boid.hpp"
 #include "../include/namespace.hpp"
 #include "../include/point.hpp"
 
@@ -17,26 +17,23 @@ Point Boid::get_position() const { return position_; }
 Point Boid::get_velocity() const { return velocity_; }
 
 Point Boid::separation(const double s, const double ds, std::vector<Boid*>& near) {
-  Point v1{0., 0.};
-
-  for (int i = 0; i < static_cast<int>(near.size()); ++i) {
-    Point x1 = near[i]->get_position();
-
-    // We are supposing that the near vector does not contain the current boid,
-    // for this reason we implemented the flight rules with near.size() instead of near.size()-1
-
-    // if (x1.distance(position_) < ds) {
-    //   if (x1.distance(position_) < (ds /2)) {
-    //     v1 += -s * (x1 - position_);
-    //   } else {
-    //     v1 += -s * ((x1 - position_) / (x1 - position_).module());
-    //   }
-    // }
-
-    if (x1.distance(position_) < ds) {
-      v1 += -s * (x1 - position_);
+  Point v1 = std::accumulate(near.begin(), near.end(), Point(0., 0.), [ this, s, ds](Point acc, Boid* boid) {
+    if (boid->get_position().distance(position_) < ds) {
+      acc += -s * (boid->get_position() - position_);
     }
-  }
+    return acc + boid->get_velocity();
+  });
+
+  // for (int i = 0; i < static_cast<int>(near.size()); ++i) {
+  //   Point x1 = near[i]->get_position();
+
+  //   // We are supposing that the near vector does not contain the current boid,
+  //   // for this reason we implemented the flight rules with near.size() instead of near.size()-1
+
+  //   if (x1.distance(position_) < ds) {
+  //     v1 += -s * (x1 - position_);
+  //   }
+  // }
   return v1;
 };
 
@@ -49,48 +46,18 @@ Point Boid::alignment(const double a, std::vector<Boid*>& near) {
   // Subtracting from the nearest boids' mean velocity the current boid's one
   // and then multiplying for an alignment factor
   return a * (sum / near.size() - velocity_);
-
-  // for (int i = 0; i < static_cast<int>(near.size()); ++i) {
-  //   sum += near[i].get_velocity();
 };
 
 Point Boid::cohesion(const double c, std::vector<Boid*>& near) {
-  // Point sum{0., 0.};
-
   Point sum = std::accumulate(near.begin(), near.end(), Point(0., 0.),
                               [](Point acc, Boid* boid) { return acc + boid->get_position(); });
 
-  // for (int i = 0; i < static_cast<int>(near.size()); ++i) {
-  //   sum += near[i].get_position();
-  // }
   // Subtracting from the nearest boids' center of mass the current boid's
   // position and then multiplying for a cohesion factor
 
   return c * (sum / near.size() - position_);
   // TODO mettere assert: near_.size() > 1
 };
-
-// Point Boid::border() {
-//   double v4_x{0.};
-//   double v4_y{0.};
-
-//   if (std::abs(position_.get_x()) < maxPos - d / 12) {
-//     if (position_.get_x() < 0) {
-//       v4_x = -b * (minPos - position_.get_x());
-//     } else {
-//       v4_x = -b * (maxPos - position_.get_x());
-//     }
-//   }
-
-//   if (std::abs(position_.get_y()) < maxPos - d / 12) {
-//     if (position_.get_y() < 0) {
-//       v4_y = -b * (minPos - position_.get_y());
-//     } else {
-//       v4_y = -b * (maxPos - position_.get_y());
-//     }
-//   }
-//   return Point(v4_x, v4_y);
-// };
 
 void Boid::friction(const double maxSpeed, Point& velocity) {
   if (velocity.module() > maxSpeed) {

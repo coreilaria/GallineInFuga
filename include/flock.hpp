@@ -1,16 +1,10 @@
 #ifndef FLOCK_HPP
 #define FLOCK_HPP
 
-#include <algorithm>
-#include <chrono>
-#include <numeric>
-#include <random>
+// #include <memory>
 #include <vector>
 
 #include "../include/boid.hpp"
-#include "../include/point.hpp"
-#include "../include/statistics.hpp"
-
 
 class Flock {
  private:
@@ -45,11 +39,8 @@ class Flock {
   void evolve();
 
   int get_size() const;
+  const std::vector<std::unique_ptr<Boid>> &get_flock() const;
   void vertex(std::vector<sf::Vertex> &);
   std::vector<sf::VertexArray> createTriangle(std::vector<sf::Vertex> &);
-
-  void print();
-
-  Statistics statistics();
 };
 #endif

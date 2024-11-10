@@ -8,6 +8,7 @@
 
 #include "../include/flock.hpp"
 #include "../include/namespace.hpp"
+#include "../include/statistics.hpp"
 
 using namespace graphic_par;
 
@@ -39,6 +40,17 @@ int main() {
 
   std::vector<sf::Vertex> vertices(flock.get_size());
 
+  sf::Font font;
+  sf::Text text;
+  if (!font.loadFromFile("../arial.ttf")) {
+    std::cerr << "Errore: Impossibile caricare il font.\n";
+    return -1;
+  }
+  text.setFont(font);
+  text.setPosition(sf::Vector2f(10, 10));
+
+  std::array<sf::Sprite, 2> histogramSprites;
+
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
       switch (event.type) {
@@ -53,42 +65,35 @@ int main() {
 
     std::vector<sf::VertexArray> triangles = flock.createTriangle(vertices);
 
-    sf::Text text;
-    sf::Font font;
-    if (!font.loadFromFile("../arial.ttf")) {
-      std::cerr << "Errore: Impossibile caricare il font.\n";
-      return -1;
-    }
-
-    text.setFont(font);
-    text.setPosition(sf::Vector2f(10, 10));
-
     std::string text_display;
 
     if (counter % 15 == 0) {
-      statistics = flock.statistics();
-    }
-    text_display = "Mean distance: " + std::to_string(statistics.dev_dist) + "\n" +
-                   "Dinstance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
-                   "Mean speed: " + std::to_string(statistics.mean_speed) + "\n" +
-                   "Speed standard deviation: " + std::to_string(statistics.dev_speed);
-    text.setString(text_display);
-    text.setCharacterSize(24);  // in pixels
-    text.setFillColor(sf::Color::White);
+      statistics = statistics.flockStatistics(flock);
 
-    // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
-    ++counter;
+      text_display = "Mean distance: " + std::to_string(statistics.dev_dist) + "\n" +
+                     "Dinstance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
+                     "Mean speed: " + std::to_string(statistics.mean_speed) + "\n" +
+                     "Speed standard deviation: " + std::to_string(statistics.dev_speed);
+      text.setString(text_display);
+      text.setCharacterSize(24);  // in pixels
+      text.setFillColor(sf::Color::White);
+      float textHeight = text.getGlobalBounds().height;
+      histogramSprites = statistics.drawHisto(textHeight);
+    }
+
     window.clear();
 
     for (auto& triangle : triangles) {
       window.draw(triangle);  // Draw each triangle directly
     }
-
     window.draw(rectangle);
     window.draw(text);
+    for (sf::Sprite& sprite : histogramSprites) {
+      window.draw(sprite);
+    }
 
     window.display();
-
     flock.evolve();
+    ++counter;  // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
   }
 }

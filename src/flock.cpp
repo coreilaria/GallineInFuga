@@ -20,6 +20,7 @@ using namespace graphic_par;
 Flock::Flock() { flock_.resize(N_); };
 
 int Flock::get_size() const { return N_; };
+const std::vector<std::unique_ptr<Boid>>& Flock::get_flock() const { return flock_; };
 
 std::vector<Boid*> Flock::findNear(std::unique_ptr<Boid>& target) {
   std::vector<Boid*> near;
@@ -85,18 +86,6 @@ void Flock::vertex(std::vector<sf::Vertex>& vertices) {
   });
 };
 
-void Flock::print() {
-  if (flock_.empty() == true) {
-    std::cout << "E' VUOTO AAAAAAAH";
-  } else {
-    std::cout << "Contenuto del flock_: ";
-    for (size_t i = 0; i < flock_.size(); ++i) {
-      std::cout << flock_[i].get() << " ";
-    }
-    std::cout << std::endl;
-  }
-};
-
 std::vector<sf::VertexArray> Flock::createTriangle(std::vector<sf::Vertex>& vertices) {
   this->vertex(vertices);
 
@@ -124,42 +113,4 @@ std::vector<sf::VertexArray> Flock::createTriangle(std::vector<sf::Vertex>& vert
   }
 
   return triangle_vec;
-};
-
-// evito di chiamare 4 volte accumulate
-Statistics Flock::statistics() {
-  double mean_dist{0.};
-  double mean_dist2{0.};
-
-  for (std::vector<std::unique_ptr<Boid>>::iterator it = flock_.begin(); it != flock_.end(); ++it) {
-    std::array<double, 2> sum = std::accumulate(it, flock_.end(), std::array<double, 2>{0., 0.},
-                                                [&it](std::array<double, 2>& acc, const std::unique_ptr<Boid>& boid) {
-                                                  acc[0] += (boid->get_position().distance((*it)->get_position()));
-                                                  acc[1] +=
-                                                      std::pow(boid->get_position().distance((*it)->get_position()), 2);
-                                                  return acc;
-                                                });
-    mean_dist += sum[0] / (N_ * (N_ - 1) / 2);
-    mean_dist2 += sum[1] / (N_ * (N_ - 1) / 2);
-  }
-
-  double dev_dist = std::sqrt((mean_dist2 - std::pow(mean_dist, 2)));
-
-  double mean_speed{0.};
-  double mean_speed2{0.};
-
-  std::array<double, 2> sum = std::accumulate(flock_.begin(), flock_.end(), std::array<double, 2>{0., 0.},
-                                              [](std::array<double, 2>& acc, const std::unique_ptr<Boid>& boid) {
-                                                acc[0] += boid->get_velocity().module();
-                                                acc[1] += std::pow(boid->get_velocity().module(), 2);
-
-                                                return acc;
-                                              });
-
-  mean_speed = sum[0] / N_;
-  mean_speed2 = sum[1] / N_;
-
-  double dev_speed = std::sqrt((mean_speed2) - (std::pow(mean_speed, 2)));
-
-  return Statistics(mean_dist, dev_dist, mean_speed, dev_speed);
 };
