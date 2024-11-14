@@ -17,6 +17,7 @@ class Flock {
   std::vector<std::unique_ptr<Boid>> flock_;
 
   const double N_ = 200;
+  const sf::Color color_ = sf::Color::Blue;
 
   const double maxSpeed_ = 10.;
   const double minSpeed_ = 8.;
@@ -31,7 +32,6 @@ class Flock {
   const double turnFactor_ = 1;
   const double margin_ = 200.;
 
-  const sf::Color color_ = sf::Color::Blue;
   const float baseWidth_ = 7;
   const float height_ = 15;
 

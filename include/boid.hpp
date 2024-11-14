@@ -28,4 +28,5 @@ class Boid {
   Point border(const double, const double, Point);  // da implementare per decidere il comportamento ai bordi
 };
 
+
 #endif
