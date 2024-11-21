@@ -7,14 +7,21 @@
 #include <vector>
 
 #include "../include/flock.hpp"
-#include "../include/namespace.hpp"
+#include "../include/graphic.hpp"
 
 using namespace graphic_par;
 
 int main() {
   Flock flock;
   Statistics statistics;
-  flock.generateBoid();
+  flock.generateBirds();
+  
+  if (flock.getFlockSize() == 0) {
+    std::cerr << "fucks";
+  } else {
+    std::cout << "La size di flock è " << flock.getFlockSize();
+  }
+  std::vector<sf::VertexArray> triangles;
 
   unsigned int counter{0};
   sf::RectangleShape rectangle(sf::Vector2f(statsWidth, windowHeight));
@@ -23,7 +30,6 @@ int main() {
 
   sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
                           "Flock simulation", sf::Style::Titlebar);
-
   window.setPosition(sf::Vector2i(10, 50));
   window.setFramerateLimit(60);
   // this feature is implemented by SFML itself, using a combination of sf::Clock and sf::sleep.
@@ -34,10 +40,9 @@ int main() {
   sf::Event event{};
 
   sf::VertexBuffer points{sf::Points};
-  points.create(flock.get_size());
+  points.create(flock.getFlockSize());
   points.setUsage(sf::VertexBuffer::Usage::Dynamic);
-
-  std::vector<sf::Vertex> vertices(flock.get_size());
+  std::vector<sf::Vertex> vertices(flock.getFlockSize());
 
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
@@ -50,8 +55,7 @@ int main() {
           break;
       }
     }
-
-    std::vector<sf::VertexArray> triangles = flock.createTriangle(vertices);
+    // PENSARE AD UN MODO INTELLIGENTE PER RIEMPIRE TRIANGLES
 
     sf::Text text;
     sf::Font font;
@@ -84,11 +88,12 @@ int main() {
       window.draw(triangle);  // Draw each triangle directly
     }
 
+    window.draw(points);
     window.draw(rectangle);
     window.draw(text);
 
     window.display();
 
-    flock.evolve();
+    flock.evolve(triangles);
   }
 }

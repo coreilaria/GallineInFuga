@@ -18,7 +18,7 @@ string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-o
 find_package(SFML COMPONENTS graphics REQUIRED)
 # find_package(TGUI REQUIRED) user interface library
 
-add_executable(Boids src/point.cpp src/boid.cpp src/flock.cpp src/quadtree.cpp src/statistics.cpp src/simulation.cpp) #TODO add sfml.cpp when implemented
+add_executable(Boids src/point.cpp src/bird.cpp src/flock.cpp src/quadtree.cpp src/statistics.cpp src/simulation.cpp src/graphic.cpp) 
 
 target_link_libraries(Boids PRIVATE sfml-graphics)
 

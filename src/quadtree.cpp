@@ -2,7 +2,7 @@
 
 #include <cmath>
 
-#include "../include/boid.hpp"
+#include "../include/bird.hpp"
 
 Rectangle::Rectangle(Point center, double width, double height)
     : center_{center.get_x(), center.get_y()},
