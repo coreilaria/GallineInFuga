@@ -1,38 +1,59 @@
 #include "../include/graphic.hpp"
 
 #include <cmath>
+
+#include "../include/flock.hpp"
+
 namespace triangles {
-sf::VertexArray createTriangle(std::shared_ptr<Bird>& bird) {
-  sf::Vertex vertex{bird->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
-  sf::VertexArray triangle(sf::Triangles, 3);
+void createTriangles(const Flock& flock, sf::VertexArray& triangles) {
+  for (int i = 0; i < flock.getFlockSize(); ++i) {
+    const int j = 3 * i;
+    sf::Vertex vertex{
+        flock.getFlock()[i]->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
 
-  if (dynamic_cast<Boid*>(bird.get())) {
-    triangle[0].position = vertex.position + sf::Vector2f(0, -height_ / 2);  // Vertice superiore (centrato)
-    triangle[1].position = vertex.position + sf::Vector2f(-baseWidth_ / 2, height_ / 2);  // Vertice in basso a sinistra
-    triangle[2].position = vertex.position + sf::Vector2f(baseWidth_ / 2, height_ / 2);   // Vertice in basso a destra
+    if (i < flock.getBoidsNum()) {
+      triangles[j].position = vertex.position + sf::Vector2f(0, -height_ / 2);  // Vertice superiore (centrato)
+      triangles[j].color = sf::Color::Blue;
+      triangles[j + 1].position =
+          vertex.position + sf::Vector2f(-baseWidth_ / 2, height_ / 2);  // Vertice in basso a sinistra
+      triangles[j+1].color = sf::Color::Blue;
 
-  } 
-   if (dynamic_cast<Predator*>(bird.get())) {
-    triangle[0].position = vertex.position + sf::Vector2f(0, -(height_ + 2) / 2);  // Vertice superiore (centrato)
-    triangle[1].position =
-        vertex.position + sf::Vector2f(-(baseWidth_ + 2) / 2, (height_ + 2) / 2);  // Vertice in basso a sinistra
-    triangle[2].position =
-        vertex.position + sf::Vector2f((baseWidth_ + 2) / 2, (height_ + 2) / 2);  // Vertice in basso a destra
+      triangles[j + 2].position =
+          vertex.position + sf::Vector2f(baseWidth_ / 2, height_ / 2);  // Vertice in basso a destra
+      triangles[j+2].color = sf::Color::Blue;
+
+    } else {
+      triangles[j].position = vertex.position + sf::Vector2f(0, -(height_ + 2) / 2);  // Vertice superiore (centrato)
+      triangles[j].color = sf::Color::Red;
+
+      triangles[j + 1].position =
+          vertex.position + sf::Vector2f(-(baseWidth_ + 2) / 2, (height_ + 2) / 2);  // Vertice in basso a sinistra
+      triangles[j+1].color = sf::Color::Red;
+
+      triangles[j + 2].position =
+          vertex.position + sf::Vector2f((baseWidth_ + 2) / 2, (height_ + 2) / 2);  // Vertice in basso a destra
+      triangles[j+2].color = sf::Color::Red;
+
+    }
   }
-  return triangle;
 }
 
-void rotateTriangle(std::shared_ptr<Bird>& bird, sf::VertexArray& triangle, double delta_theta) {
-  sf::Vertex vertex{bird->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
+void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangle, const double delta_theta,
+                    const int i) {
+  const sf::Vertex vertex{bird->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
 
-  for (int i = 0; i < 3; ++i) {
-    const sf::Vector2f& pos =
-        triangle[i].position -
-        vertex
-            .position;  // Posizione relativa al centro, alias (necessaria const reference poichè è oggetto temporaneo)
-    triangle[i].position =
-        vertex.position + sf::Vector2f(pos.x * std::cos(delta_theta) - pos.y * std::sin(delta_theta),
-                                       pos.x * std::sin(delta_theta) + pos.y * std::cos(delta_theta));
+  // for (int j = 3 * i; j < 3 * i + 3; ++j) {
+  //   const sf::Vector2f pos = triangle[j].position - vertex.position;  // Posizione relativa al centro
+  //   triangle[j].position =
+  //       vertex.position + sf::Vector2f(pos.x * std::cos(delta_theta) - pos.y * std::sin(delta_theta),
+  //                                      pos.x * std::sin(delta_theta) + pos.y * std::cos(delta_theta));
+  // }
+const double theta = bird->get_velocity().angle();
+  for (int j = 3 * i; j < 3 * i + 3; ++j) {
+    const sf::Vector2f pos = triangle[j].position - vertex.position;  // Posizione relativa al centro
+    triangle[j].position =
+        vertex.position + sf::Vector2f(pos.x * std::cos(theta) - pos.y * std::sin(theta),
+                                       pos.x * std::sin(theta) + pos.y * std::cos(theta));
   }
 }
-};  // namespace triangles
+}  // namespace triangles

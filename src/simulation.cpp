@@ -1,32 +1,33 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "../include/flock.hpp"
 #include "../include/graphic.hpp"
 
 using namespace graphic_par;
+using namespace triangles;
 
 int main() {
   Flock flock;
   Statistics statistics;
   flock.generateBirds();
-  
-  if (flock.getFlockSize() == 0) {
-    std::cerr << "fucks";
-  } else {
-    std::cout << "La size di flock è " << flock.getFlockSize();
-  }
-  std::vector<sf::VertexArray> triangles;
+
+  sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
+
+  createTriangles(flock, triangles);
 
   unsigned int counter{0};
-  sf::RectangleShape rectangle(sf::Vector2f(statsWidth, windowHeight));
-  rectangle.setFillColor(sf::Color(50, 50, 50));
-  rectangle.setPosition(sf::Vector2f(0., 0.));
+
+  sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
+  sf::Vertex v[4]{sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., windowHeight)),
+                  sf::Vertex(sf::Vector2f(statsWidth, 0.)), sf::Vertex(sf::Vector2f(statsWidth, windowHeight))};
+  for (auto & i : v) {
+    i.color = sf::Color(50, 50, 50);
+  }
+  rectangle.update(v);
 
   sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
                           "Flock simulation", sf::Style::Titlebar);
@@ -39,10 +40,10 @@ int main() {
 
   sf::Event event{};
 
-  sf::VertexBuffer points{sf::Points};
-  points.create(flock.getFlockSize());
-  points.setUsage(sf::VertexBuffer::Usage::Dynamic);
-  std::vector<sf::Vertex> vertices(flock.getFlockSize());
+  sf::VertexBuffer points{sf::Triangles, sf::VertexBuffer::Usage::Dynamic};
+  points.create(triangles.getVertexCount());
+  // points.setUsage(sf::VertexBuffer::Usage::Dynamic);
+  // std::vector<sf::Vertex> vertices(flock.getFlockSize());
 
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
@@ -55,7 +56,6 @@ int main() {
           break;
       }
     }
-    // PENSARE AD UN MODO INTELLIGENTE PER RIEMPIRE TRIANGLES
 
     sf::Text text;
     sf::Font font;
@@ -73,7 +73,7 @@ int main() {
       statistics = flock.statistics();
     }
     text_display = "Mean distance: " + std::to_string(statistics.dev_dist) + "\n" +
-                   "Dinstance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
+                   "Distance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
                    "Mean speed: " + std::to_string(statistics.mean_speed) + "\n" +
                    "Speed standard deviation: " + std::to_string(statistics.dev_speed);
     text.setString(text_display);
@@ -84,16 +84,12 @@ int main() {
     ++counter;
     window.clear();
 
-    for (auto& triangle : triangles) {
-      window.draw(triangle);  // Draw each triangle directly
-    }
+    flock.evolve(triangles);
 
-    window.draw(points);
+    window.draw(triangles);
     window.draw(rectangle);
     window.draw(text);
 
     window.display();
-
-    flock.evolve(triangles);
   }
 }

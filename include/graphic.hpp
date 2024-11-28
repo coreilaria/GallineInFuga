@@ -5,6 +5,7 @@
 #include <memory>
 
 #include "../include/bird.hpp"
+#include "../include/flock.hpp"
 
 namespace graphic_par {
 const double dt = 0.7;
@@ -25,8 +26,8 @@ namespace triangles {  // è meglio un unico namespace?
 const float baseWidth_ = 7;
 const float height_ = 15;
 
-sf::VertexArray createTriangle(std::shared_ptr<Bird>&);
-void rotateTriangle(std::shared_ptr<Bird>& bird, sf::VertexArray&, double);
+void createTriangles(const Flock& , sf::VertexArray& );
+void rotateTriangle(const std::shared_ptr<Bird> & , sf::VertexArray&,  double,  int); // const-qualification of parameters only has an effect in function definitions
 
 }  // namespace triangles
 
