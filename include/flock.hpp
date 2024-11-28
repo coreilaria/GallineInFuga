@@ -17,7 +17,6 @@ class Flock {
 
   std::vector<std::shared_ptr<Bird>> flock_;
 
-
   const sf::Color bColor_ = sf::Color::Blue;
   const sf::Color pColor_ = sf::Color::Red;
 
@@ -37,15 +36,16 @@ class Flock {
  public:
   Flock();
   void generateBirds();
-  std::vector<std::shared_ptr<Bird>> findNearBoids(Bird&);
-  std::vector<std::shared_ptr<Bird>> findNearPredators(Bird&);
+  std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &);
+  std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &);
 
-  std::array<Point, 2> updateBird(std::shared_ptr<Bird>, sf::VertexArray &, int);
-  void evolve(std::vector<sf::VertexArray> &);
+  std::array<Point, 2> updateBird(const std::shared_ptr<Bird>&, sf::VertexArray &, int);
+  void evolve(sf::VertexArray &);
 
   int getBoidsNum() const;
   int getPredatorsNum() const;
   int getFlockSize() const;
+  std::vector<std::shared_ptr<Bird>> getFlock() const;
 
   // void vertex(std::vector<sf::Vertex> &);
 

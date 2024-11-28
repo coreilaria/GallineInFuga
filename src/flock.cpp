@@ -20,14 +20,14 @@ using namespace triangles;
 
 Flock::Flock() {
   flock_.resize(nBoids_ + nPredators_);
-  // predators_.resize(nPredators_);
 };
 
+std::vector<std::shared_ptr<Bird>> Flock::getFlock() const { return flock_; };
 int Flock::getBoidsNum() const { return nBoids_; };
 int Flock::getPredatorsNum() const { return nPredators_; };
 int Flock::getFlockSize() const { return (nPredators_ + nBoids_); };
 
-std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(Bird& target) {
+std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target) {
   std::vector<std::shared_ptr<Bird>> near;
 
   for (int i = 0; i < nBoids_; ++i) {
@@ -37,7 +37,7 @@ std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(Bird& target) {
   }
   return near;
 };
-std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(Bird& target) {
+std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) {
   std::vector<std::shared_ptr<Bird>> near;
 
   for (int i = nBoids_; i < nBoids_ + nPredators_; ++i) {
@@ -48,10 +48,9 @@ std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(Bird& target) {
   return near;
 };
 
-std::array<Point, 2> Flock::updateBird(std::shared_ptr<Bird> b, sf::VertexArray& triangle, int i) {
-  Point p, v;
-  p = b->get_position();
-  v = b->get_velocity();
+std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::VertexArray& triangle, const int i) {
+  Point p = b->get_position();
+  Point v = b->get_velocity();
 
   std::vector<std::shared_ptr<Bird>> near_boids{this->findNearBoids(*b)};
   std::vector<std::shared_ptr<Bird>> near_predators{this->findNearPredators(*b)};
@@ -70,7 +69,7 @@ std::array<Point, 2> Flock::updateBird(std::shared_ptr<Bird> b, sf::VertexArray&
       // implementare funzione chase, da capire
     }
     if (!near_predators.empty()) {
-      v += std::dynamic_pointer_cast<Boid>(b)->separation(s_, ds_, near_predators);
+      v += std::dynamic_pointer_cast<Predator>(b)->separation(s_, ds_, near_predators);
     }
   }
 
@@ -78,19 +77,19 @@ std::array<Point, 2> Flock::updateBird(std::shared_ptr<Bird> b, sf::VertexArray&
   b->friction(maxSpeed_, v);
   b->boost(minSpeed_, v);
 
-  double d_theta{b->get_velocity().angle() - v.angle()};  // controllare segno
-  rotateTriangle(b, triangle, d_theta);
+  const double d_theta{-1*(b->get_velocity().angle() - v.angle())};  // controllare segno
+  // rotateTriangle(b, triangle, d_theta, i);
   p += dt * v;
-  return {p, v};  // tornare a vector di istanze
+  return {p, v};
 };
 
-void Flock::evolve(std::vector<sf::VertexArray>& triangles) {
+void Flock::evolve(sf::VertexArray& triangles) {
   std::vector<Point> pos;
   std::vector<Point> vel;
 
   for (int i = 0; i < nBoids_ + nPredators_; ++i) {
     // Aggiorna il Boid esistente e crea un nuovo shared_ptr con il risultato
-    std::array<Point, 2> p = this->updateBird(flock_[i], triangles[i], i);
+    std::array<Point, 2> p = this->updateBird(flock_[i], triangles, i);
     pos.push_back(p[0]);
     vel.push_back(p[1]);
   }
@@ -111,10 +110,11 @@ void Flock::generateBirds() {
   std::vector<Predator> predators;
   // emplace_back viene utilizzato per costruire direttamente gli oggetti all'interno dei vettori
   // senza creare copie temporanee
+  boids.reserve(nBoids_);
   for (int i = 0; i < nBoids_; ++i) {
     boids.emplace_back(Point(dist_pos_x(rng), dist_pos_y(rng)), Point(dist_vel_x(rng), dist_vel_y(rng)));
   }
-
+  predators.reserve(nPredators_);
   for (int i = 0; i < nPredators_; ++i) {
     predators.emplace_back(Point(dist_pos_x(rng), dist_pos_y(rng)), Point(dist_vel_x(rng), dist_vel_y(rng)));
   }
@@ -132,24 +132,8 @@ void Flock::generateBirds() {
       std::cerr << "flock_[" << i << "] è nullo!" << std::endl;
     }
   }
-  // int counter{0};
-  // std::generate(flock_.begin(), flock_.end(), [&]()->Bird  {
-  //   if (counter < nBoids_) {
-  //     return Boid(Point(dist_pos_x(rng), dist_pos_y(rng)), Point(dist_vel_x(rng), dist_vel_y(rng)));
-  //   } else {
-  //     return Predator(Point(dist_pos_x(rng), dist_pos_y(rng)),
-  //                                       Point(dist_vel_x(rng), dist_vel_y(rng)));
-  //   }
-  //   ++counter;
-  // });
+}
 
-  // // std::generate(predators_.begin(), predators_.end(), [&]() {
-  // //   return std::make_shared<Predator>(Point(dist_pos_x(rng), dist_pos_y(rng)), Point(dist_vel_x(rng),
-  // //   dist_vel_y(rng)));
-  // // });
-};
-
-// evito di chiamare 4 volte accumulate
 Statistics Flock::statistics() {
   double meanBoids_dist{0.};
   double meanBoids_dist2{0.};
@@ -166,23 +150,24 @@ Statistics Flock::statistics() {
     meanBoids_dist2 += sum[1] / (nBoids_ * (nBoids_ - 1) / 2.);
   }
 
-  double dev_dist = std::sqrt((meanBoids_dist2 - std::pow(meanBoids_dist, 2)));
+  const double dev_dist = std::sqrt((meanBoids_dist2 - std::pow(meanBoids_dist, 2)));
 
   double meanBoids_speed{0.};
   double meanBoids_speed2{0.};
 
-  std::array<double, 2> sum = std::accumulate(flock_.begin(), flock_.begin() + nBoids_, std::array<double, 2>{0., 0.},
-                                              [](std::array<double, 2>& acc, std::shared_ptr<Bird>& bird) {
-                                                acc[0] += bird->get_velocity().module();
-                                                acc[1] += std::pow(bird->get_velocity().module(), 2);
+  const std::array<double, 2> sum =
+      std::accumulate(flock_.begin(), flock_.begin() + nBoids_, std::array<double, 2>{0., 0.},
+                      [](std::array<double, 2>& acc, const std::shared_ptr<Bird>& bird) {
+                        acc[0] += bird->get_velocity().module();
+                        acc[1] += std::pow(bird->get_velocity().module(), 2);
 
-                                                return acc;
-                                              });
+                        return acc;
+                      });
 
   meanBoids_speed = sum[0] / nBoids_;
   meanBoids_speed2 = sum[1] / nBoids_;
 
   double dev_speed = std::sqrt((meanBoids_speed2) - (std::pow(meanBoids_speed, 2)));
 
-  return Statistics(meanBoids_dist, dev_dist, meanBoids_speed, dev_speed);
+  return {meanBoids_dist, dev_dist, meanBoids_speed, dev_speed};
 };
