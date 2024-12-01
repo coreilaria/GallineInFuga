@@ -77,9 +77,9 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   b->friction(maxSpeed_, v);
   b->boost(minSpeed_, v);
 
-  const double d_theta{-1*(b->get_velocity().angle() - v.angle())};  // controllare segno
-  // rotateTriangle(b, triangle, d_theta, i);
+  const double d_theta{b->get_velocity().angle() - v.angle()};  // controllare segno
   p += dt * v;
+  rotateTriangle(b, triangle, d_theta, i);
   return {p, v};
 };
 
@@ -140,7 +140,7 @@ Statistics Flock::statistics() {
 
   for (std::vector<std::shared_ptr<Bird>>::iterator it = flock_.begin(); it != flock_.begin() + nBoids_; ++it) {
     std::array<double, 2> sum = std::accumulate(it, flock_.begin() + nBoids_, std::array<double, 2>{0., 0.},
-                                                [&it](std::array<double, 2>& acc, std::shared_ptr<Bird>& bird) {
+                                                [&it](std::array<double, 2>& acc, const std::shared_ptr<Bird>& bird) {
                                                   acc[0] += (bird->get_position().distance((*it)->get_position()));
                                                   acc[1] +=
                                                       std::pow(bird->get_position().distance((*it)->get_position()), 2);
