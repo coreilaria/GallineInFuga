@@ -67,7 +67,7 @@ Point Boid::separation(const double s, const double ds, std::vector<std::shared_
   return (-s) * sum;
 };
 
-Point Boid::alignment(const double a, std::vector<std::shared_ptr<Bird>>& near) {
+Point Boid::alignment(const double a, std::vector<std::shared_ptr<Bird>>& near) const {
   const Point sum =
       std::accumulate(near.begin(), near.end(), Point(0., 0.),
                       [](const Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->get_velocity(); });
@@ -79,7 +79,7 @@ Point Boid::alignment(const double a, std::vector<std::shared_ptr<Bird>>& near) 
   return a * (sum / near.size() - velocity_);
 };
 
-Point Boid::cohesion(const double c, std::vector<std::shared_ptr<Bird>>& near) {
+Point Boid::cohesion(const double c, std::vector<std::shared_ptr<Bird>>& near) const {
   const Point sum =
       std::accumulate(near.begin(), near.end(), Point(0., 0.),
                       [](const Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->get_position(); });
