@@ -91,17 +91,30 @@ Point Boid::cohesion(const double c, std::vector<std::shared_ptr<Bird>>& near) c
   // TODO mettere assert: near_.size() > 1
 };
 
+Point Boid::repel(const double s, std::vector<std::shared_ptr<Bird>>& near)  {
+  const Point sum =
+      std::accumulate(near.begin(), near.end(), Point(0., 0.),
+                      [](const Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->get_position(); });
+
+  return (-s*5) * sum;
+}
+
 // Implementation of Predator class
 Predator::Predator() : Bird() {};
 Predator::Predator(Point const& pos, Point const& vel) : Bird(pos, vel) {};
 
 Point Predator::separation(const double s, const double ds, std::vector<std::shared_ptr<Bird>>& near) {
-  const Point sum = std::accumulate(near.begin(), near.end(), Point(0., 0.),
-                                    [this, ds](Point acc, const std::shared_ptr<Bird>& boid) {
-                                      if (boid->get_position().distance(position_) < ds) {
-                                        acc += boid->get_position() - position_;
-                                      }
-                                      return acc;
-                                    });
-  return (-s * 0.02) * sum;
+  const Point sum =
+      std::accumulate(near.begin(), near.end(), Point(0., 0.), [this](Point acc, const std::shared_ptr<Bird>& boid) {
+        acc += boid->get_position() - position_;
+        return acc;
+      });
+  return (-s * 0.05) * sum;
+};
+Point Predator::chase(const double c, std::vector<std::shared_ptr<Bird>>& near_boids) {
+  const Point sum =
+      std::accumulate(near_boids.begin(), near_boids.end(), Point(0., 0.),
+                      [](const Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->get_position(); });
+
+  return c * 2 * (sum / near_boids.size() - position_);
 };

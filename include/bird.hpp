@@ -39,6 +39,8 @@ class Boid final : public Bird {
   Point separation(double, double, std::vector<std::shared_ptr<Bird>> &) override;
   Point alignment(double, std::vector<std::shared_ptr<Bird>> &) const;
   Point cohesion(double, std::vector<std::shared_ptr<Bird>> &) const;
+  Point repel(double, std::vector<std::shared_ptr<Bird>> &);
+
 };
 
 class Predator final : public Bird {
@@ -46,6 +48,8 @@ class Predator final : public Bird {
   Predator();
   Predator(Point const &, Point const &);
   Point separation(double, double, std::vector<std::shared_ptr<Bird>> &) override;
+  Point chase(double, std::vector<std::shared_ptr<Bird>> &);
+
 };
 
 #endif
