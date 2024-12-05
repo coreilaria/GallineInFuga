@@ -36,10 +36,10 @@ class Flock {
  public:
   Flock();
   void generateBirds();
-  std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &);
-  std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &);
+  std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &, int) const;
+  std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &) const;
 
-  std::array<Point, 2> updateBird(const std::shared_ptr<Bird>&, sf::VertexArray &, int);
+  std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int);
   void evolve(sf::VertexArray &);
 
   int getBoidsNum() const;

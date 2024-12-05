@@ -18,26 +18,31 @@
 using namespace graphic_par;
 using namespace triangles;
 
-Flock::Flock() {
-  flock_.resize(nBoids_ + nPredators_);
-};
+Flock::Flock() { flock_.resize(nBoids_ + nPredators_); };
 
 std::vector<std::shared_ptr<Bird>> Flock::getFlock() const { return flock_; };
 int Flock::getBoidsNum() const { return nBoids_; };
 int Flock::getPredatorsNum() const { return nPredators_; };
 int Flock::getFlockSize() const { return (nPredators_ + nBoids_); };
 
-std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target) {
+// ha senso passare uno shared ptr by reference?
+std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, const int i) const {
   std::vector<std::shared_ptr<Bird>> near;
 
-  for (int i = 0; i < nBoids_; ++i) {
-    if (&target != flock_[i].get() && target.get_position().distance(flock_[i]->get_position()) < d_) {
-      near.push_back(flock_[i]);
+  for (int j = 0; j < nBoids_; ++j) {
+    if (i<nBoids_) {
+      if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_) {
+        near.push_back(flock_[j]);
+      }
+    } else {
+      if (&target!= flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_ * 3.5) {
+        near.push_back(flock_[j]);
+      }
     }
   }
   return near;
 };
-std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) {
+std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) const{
   std::vector<std::shared_ptr<Bird>> near;
 
   for (int i = nBoids_; i < nBoids_ + nPredators_; ++i) {
@@ -52,7 +57,7 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   Point p = b->get_position();
   Point v = b->get_velocity();
 
-  std::vector<std::shared_ptr<Bird>> near_boids{this->findNearBoids(*b)};
+  std::vector<std::shared_ptr<Bird>> near_boids{this->findNearBoids(*b, i)};
   std::vector<std::shared_ptr<Bird>> near_predators{this->findNearPredators(*b)};
 
   if (i < nBoids_) {
@@ -62,14 +67,15 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
     }
 
     if (!near_predators.empty()) {
+      v+=std::dynamic_pointer_cast<Boid>(b)->repel(s_, near_predators);
       // implementare funzione repel dai predatori, potrebbe essere separation, da capire
     }
   } else {
     if (!near_boids.empty()) {
-      // implementare funzione chase, da capire
+      v += std::dynamic_pointer_cast<Predator>(b)->chase(c_, near_boids);
     }
     if (!near_predators.empty()) {
-      v += std::dynamic_pointer_cast<Predator>(b)->separation(s_, ds_, near_predators);
+      v += b->separation(s_, ds_, near_predators);
     }
   }
 
