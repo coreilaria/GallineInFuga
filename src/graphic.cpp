@@ -1,6 +1,7 @@
 #include "../include/graphic.hpp"
 
 #include <cmath>
+#include <iostream>
 
 #include "../include/flock.hpp"
 
@@ -23,15 +24,16 @@ void createTriangles(const Flock& flock, sf::VertexArray& triangles) {
       triangles[j + 2].color = sf::Color::Blue;
 
     } else {
-      triangles[j].position = vertex.position + sf::Vector2f(0, -(height_ *2) / 2);  // Vertice superiore (centrato)
+      triangles[j].position =
+          vertex.position + sf::Vector2f(0, -(height_ * 3 / 2) / 2);  // Vertice superiore (centrato)
       triangles[j].color = sf::Color::Red;
 
-      triangles[j + 1].position =
-          vertex.position + sf::Vector2f(-(baseWidth_ *2) / 2, (height_ *2) / 2);  // Vertice in basso a sinistra
+      triangles[j + 1].position = vertex.position + sf::Vector2f(-(baseWidth_ * 3 / 2) / 2,
+                                                                 (height_ * 3 / 2) / 2);  // Vertice in basso a sinistra
       triangles[j + 1].color = sf::Color::Red;
 
       triangles[j + 2].position =
-          vertex.position + sf::Vector2f((baseWidth_*2) / 2, (height_ *2) / 2);  // Vertice in basso a destra
+          vertex.position + sf::Vector2f((baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2);  // Vertice in basso a destra
       triangles[j + 2].color = sf::Color::Red;
     }
   }
@@ -41,30 +43,30 @@ void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangle
                     const int i) {
   const sf::Vertex vertex{bird->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
 
-  // for (int j = 3 * i; j < 3 * i + 3; ++j) {
-  //   const sf::Vector2f pos = triangle[j].position - vertex.position;  // Posizione relativa al centro
-  //   triangle[j].position =
-  //       vertex.position + sf::Vector2f(pos.x * std::cos(delta_theta) - pos.y * std::sin(delta_theta),
-  //                                      pos.x * std::sin(delta_theta) + pos.y * std::cos(delta_theta));
-  // }
-
-  if (std::static_pointer_cast<Boid>(bird)) {
-    triangle[3 * i].position = vertex.position + sf::Vector2f(0, -height_ / 2);
-    triangle[3 * i + 1].position = vertex.position + sf::Vector2f(-baseWidth_ / 2, height_ / 2);
-    triangle[3 * i + 2].position = vertex.position + sf::Vector2f(baseWidth_ / 2, height_ / 2);
-  } else {
-    triangle[3 * i].position = vertex.position + sf::Vector2f(0, (-height_ *2) / 2);
-    triangle[3 * i + 1].position = vertex.position + sf::Vector2f((-baseWidth_*2) / 2, (height_*2) / 2);
-    triangle[3 * i + 2].position = vertex.position + sf::Vector2f((baseWidth_ *2) / 2, (height_*2) / 2);
-
-  }
   const double theta = bird->get_velocity().angle();
-  for (int j = 3 * i; j < 3 * i + 3; ++j) {
-    const sf::Vector2f relative_position = triangle[j].position - vertex.position;  // Posizione relativa al centro
-    triangle[j].position = vertex.position + sf::Vector2f(relative_position.x * std::cos(theta + delta_theta) -
-                                                              relative_position.y * std::sin(theta + delta_theta),
-                                                          relative_position.x * std::sin(theta + delta_theta) +
-                                                              relative_position.y * std::cos(theta + delta_theta));
+
+  const sf::Vector2f relative_position[6] = {sf::Vector2f(0, -height_ / 2),
+                                             sf::Vector2f(-baseWidth_ / 2, height_ / 2),
+                                             sf::Vector2f(baseWidth_ / 2, height_ / 2),
+                                             sf::Vector2f(0, (-height_ * 3 / 2) / 2),
+                                             sf::Vector2f((-baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2),
+                                             sf::Vector2f((baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2)};
+  const int j = 3 * i;
+
+  for (int k = j; k < j + 3; ++k) {
+    if (std::dynamic_pointer_cast<Boid>(bird)) {
+      triangle[k].position =
+          vertex.position + sf::Vector2f(relative_position[k - j].x * std::cos(theta + delta_theta) -
+                                             relative_position[k - j].y * std::sin(theta + delta_theta),
+                                         relative_position[k - j].x * std::sin(theta + delta_theta) +
+                                             relative_position[k - j].y * std::cos(theta + delta_theta));
+    } else if (std::dynamic_pointer_cast<Predator>(bird)) {
+      triangle[k].position =
+          vertex.position + sf::Vector2f(relative_position[k - j + 3].x * std::cos(theta + delta_theta) -
+                                             relative_position[k - j + 3].y * std::sin(theta + delta_theta),
+                                         relative_position[k - j + 3].x * std::sin(theta + delta_theta) +
+                                             relative_position[k - j + 3].y * std::cos(theta + delta_theta));
+    }
   }
 }
 }  // namespace triangles
