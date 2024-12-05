@@ -14,19 +14,18 @@ int main() {
   Flock flock;
   Statistics statistics;
   flock.generateBirds();
-
-  sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
-
-  createTriangles(flock, triangles);
-
   unsigned int counter{0};
 
+  sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
+  createTriangles(flock, triangles);
+
   sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
-  sf::Vertex v[4]{sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., windowHeight)),
+  sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., windowHeight)),
                   sf::Vertex(sf::Vector2f(statsWidth, 0.)), sf::Vertex(sf::Vector2f(statsWidth, windowHeight))};
   for (auto & i : v) {
-    i.color = sf::Color(50, 50, 50);
+    i.color= sf::Color(50, 50, 50);
   }
+  rectangle.create(4);
   rectangle.update(v);
 
   sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
@@ -39,11 +38,6 @@ int main() {
   // and can be as high as 10 or 15 milliseconds. Don't rely on this feature to implement precise timing.
 
   sf::Event event{};
-
-  sf::VertexBuffer points{sf::Triangles, sf::VertexBuffer::Usage::Dynamic};
-  points.create(triangles.getVertexCount());
-  // points.setUsage(sf::VertexBuffer::Usage::Dynamic);
-  // std::vector<sf::Vertex> vertices(flock.getFlockSize());
 
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
@@ -80,8 +74,7 @@ int main() {
     text.setCharacterSize(24);  // in pixels
     text.setFillColor(sf::Color::White);
 
-    // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
-    ++counter;
+    ++counter;     // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
     window.clear();
 
     flock.evolve(triangles);
