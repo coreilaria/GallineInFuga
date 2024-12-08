@@ -20,13 +20,12 @@ class Bird {
 
   virtual void set_position(Point);
   virtual void set_velocity(Point);
-
-  virtual void friction(double, Point &);
-  virtual void boost(double, Point &);
   virtual Point border(double, double, Point);
   // virtual void rotateTriangle(sf::VertexArray &, double) ;
 
-  virtual Point separation(double, double, std::vector<std::shared_ptr<Bird>> &) = 0;
+  virtual Point separation(double, double, std::vector<std::shared_ptr<Bird>> &);
+  virtual void friction(const double[2], Point &) = 0;
+  virtual void boost( const double[2], Point &) = 0;
 
   virtual ~Bird();
 };
@@ -36,20 +35,23 @@ class Boid final : public Bird {
   Boid();
   Boid(Point const &, Point const &);  // dentro chiama Bird()
 
-  Point separation(double, double, std::vector<std::shared_ptr<Bird>> &) override;
+  void friction(const double[2], Point &) override;
+  void boost(const double[2], Point &) override;
+
   Point alignment(double, std::vector<std::shared_ptr<Bird>> &) const;
   Point cohesion(double, std::vector<std::shared_ptr<Bird>> &) const;
   Point repel(double, std::vector<std::shared_ptr<Bird>> &);
-
 };
 
 class Predator final : public Bird {
  public:
   Predator();
   Predator(Point const &, Point const &);
-  Point separation(double, double, std::vector<std::shared_ptr<Bird>> &) override;
-  Point chase(double, std::vector<std::shared_ptr<Bird>> &);
 
+  void friction(const double[2], Point &) override;
+  void boost(const double[2], Point &) override;
+
+  Point chase(double, std::vector<std::shared_ptr<Bird>> &) const;
 };
 
 #endif
