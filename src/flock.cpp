@@ -3,8 +3,8 @@
 
 #include <SFML/Graphics/VertexArray.hpp>
 #include <array>
+#include <cassert>
 #include <chrono>
-#include <iostream>
 #include <memory>
 #include <numeric>
 #include <random>
@@ -30,19 +30,19 @@ std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, cons
   std::vector<std::shared_ptr<Bird>> near;
 
   for (int j = 0; j < nBoids_; ++j) {
-    if (i<nBoids_) {
+    if (i < nBoids_) {
       if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_) {
         near.push_back(flock_[j]);
       }
     } else {
-      if (&target!= flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_ * 3.5) {
+      if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_ * 3.5) {
         near.push_back(flock_[j]);
       }
     }
   }
   return near;
 };
-std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) const{
+std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) const {
   std::vector<std::shared_ptr<Bird>> near;
 
   for (int i = nBoids_; i < nBoids_ + nPredators_; ++i) {
@@ -53,7 +53,7 @@ std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) 
   return near;
 };
 
-std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::VertexArray& triangle, const int i) {
+std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::VertexArray& triangle, const int i) const {
   Point p = b->get_position();
   Point v = b->get_velocity();
 
@@ -61,21 +61,19 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   std::vector<std::shared_ptr<Bird>> near_predators{this->findNearPredators(*b)};
 
   if (i < nBoids_) {
+    if (!near_predators.empty()) {
+      v += std::dynamic_pointer_cast<Boid>(b)->repel(s_, near_predators);
+    }
     if (!near_boids.empty()) {
       v += b->separation(s_, ds_, near_boids) + std::dynamic_pointer_cast<Boid>(b)->alignment(a_, near_boids) +
            std::dynamic_pointer_cast<Boid>(b)->cohesion(c_, near_boids);
     }
-
-    if (!near_predators.empty()) {
-      v+=std::dynamic_pointer_cast<Boid>(b)->repel(s_, near_predators);
-      // implementare funzione repel dai predatori, potrebbe essere separation, da capire
-    }
   } else {
+    if (!near_predators.empty()) {
+      v += b->separation(s_ * 0.1, d_ * 0.5, near_predators);
+    }
     if (!near_boids.empty()) {
       v += std::dynamic_pointer_cast<Predator>(b)->chase(c_, near_boids);
-    }
-    if (!near_predators.empty()) {
-      v += b->separation(s_, ds_, near_predators);
     }
   }
 
@@ -89,7 +87,7 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   return {p, v};
 };
 
-void Flock::evolve(sf::VertexArray& triangles) {
+void Flock::evolve(sf::VertexArray& triangles) const {
   std::vector<Point> pos;
   std::vector<Point> vel;
 
@@ -133,10 +131,9 @@ void Flock::generateBirds() {
   for (const auto& predator : predators) {
     flock_.push_back(std::make_shared<Predator>(predator));  // Usa std::make_shared per creare shared_ptr
   }
-  for (size_t i = 0; i < flock_.size(); ++i) {
-    if (!flock_[i]) {
-      std::cerr << "flock_[" << i << "] è nullo!" << std::endl;
-    }
+  assert(!flock_.empty());
+  for (const auto& bird : flock_) {
+    assert((bird != nullptr) && "Nullptr found in flock_ vector");
   }
 }
 
@@ -144,7 +141,7 @@ Statistics Flock::statistics() {
   double meanBoids_dist{0.};
   double meanBoids_dist2{0.};
 
-  for (std::vector<std::shared_ptr<Bird>>::iterator it = flock_.begin(); it != flock_.begin() + nBoids_; ++it) {
+  for (auto it = flock_.begin(); it != flock_.begin() + nBoids_; ++it) {
     std::array<double, 2> sum = std::accumulate(it, flock_.begin() + nBoids_, std::array<double, 2>{0., 0.},
                                                 [&it](std::array<double, 2>& acc, const std::shared_ptr<Bird>& bird) {
                                                   acc[0] += (bird->get_position().distance((*it)->get_position()));
@@ -152,11 +149,12 @@ Statistics Flock::statistics() {
                                                       std::pow(bird->get_position().distance((*it)->get_position()), 2);
                                                   return acc;
                                                 });
+    assert(nBoids_ > 1 && "Flock must contain at least two elements");
     meanBoids_dist += sum[0] / (nBoids_ * (nBoids_ - 1) / 2.);
     meanBoids_dist2 += sum[1] / (nBoids_ * (nBoids_ - 1) / 2.);
   }
 
-  const double dev_dist = std::sqrt((meanBoids_dist2 - std::pow(meanBoids_dist, 2)));
+  const double dev_dist = std::sqrt(meanBoids_dist2 - meanBoids_dist * meanBoids_dist);
 
   double meanBoids_speed{0.};
   double meanBoids_speed2{0.};
@@ -169,11 +167,11 @@ Statistics Flock::statistics() {
 
                         return acc;
                       });
-
+  assert(nBoids_ > 1 && "Flock must contain at least two elements");
   meanBoids_speed = sum[0] / nBoids_;
   meanBoids_speed2 = sum[1] / nBoids_;
 
-  double dev_speed = std::sqrt((meanBoids_speed2) - (std::pow(meanBoids_speed, 2)));
+  double dev_speed = std::sqrt((meanBoids_speed2) - (meanBoids_speed * meanBoids_speed));
 
   return {meanBoids_dist, dev_dist, meanBoids_speed, dev_speed};
 };

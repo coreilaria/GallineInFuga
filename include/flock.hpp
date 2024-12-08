@@ -10,28 +10,24 @@
 
 class Flock {
  private:
-  // std::vector<std::unique_ptr<Predator>> predators_;
-
   const int nBoids_ = 200;
   const int nPredators_ = 3;
 
   std::vector<std::shared_ptr<Bird>> flock_;
 
-  const sf::Color bColor_ = sf::Color::Blue;
-  const sf::Color pColor_ = sf::Color::Red;
+  const double maxSpeed_[2]{10., 8.};
+  const double minSpeed_[2]{7., 6.};
 
-  const double maxSpeed_ = 10.;
-  const double minSpeed_ = 8.;
+  // const double s_ = 0.6;
+  double a_ = 0.6;
+  double s_ = 0.6;
+  double c_ = 0.001;
 
-  const double s_ = 0.6;
-  const double a_ = 0.6;
-  const double c_ = 0.001;
+  double d_ = 75.;
+  double ds_ = 20.;
 
-  const double d_ = 75.;
-  const double ds_ = 20.;
-
-  const double turnFactor_ = 1;
-  const double margin_ = 200.;
+  double turnFactor_ = 1.5;
+  double margin_ = 200.;
 
  public:
   Flock();
@@ -39,15 +35,13 @@ class Flock {
   std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &, int) const;
   std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &) const;
 
-  std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int);
-  void evolve(sf::VertexArray &);
+  std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int) const;
+  void evolve(sf::VertexArray &) const;
 
   int getBoidsNum() const;
   int getPredatorsNum() const;
   int getFlockSize() const;
   std::vector<std::shared_ptr<Bird>> getFlock() const;
-
-  // void vertex(std::vector<sf::Vertex> &);
 
   Statistics statistics();
 };
