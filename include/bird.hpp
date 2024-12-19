@@ -10,9 +10,10 @@ class Bird {
  protected:
   Point position_;
   Point velocity_;
+  double sightAngle_{};
 
  public:
-  Bird();
+  Bird() = default;
   Bird(Point const &, Point const &);
 
   virtual Point get_position() const;
@@ -21,7 +22,6 @@ class Bird {
   virtual void set_position(Point);
   virtual void set_velocity(Point);
   virtual Point border(double, double, Point);
-  // virtual void rotateTriangle(sf::VertexArray &, double) ;
 
   virtual Point separation(double, double, std::vector<std::shared_ptr<Bird>> &);
   virtual void friction(const double[2], Point &) = 0;
@@ -40,7 +40,7 @@ class Boid final : public Bird {
 
   Point alignment(double, std::vector<std::shared_ptr<Bird>> &) const;
   Point cohesion(double, std::vector<std::shared_ptr<Bird>> &) const;
-  Point repel(double, std::vector<std::shared_ptr<Bird>> &);
+  Point repel(double, std::vector<std::shared_ptr<Bird>> &) const;
 };
 
 class Predator final : public Bird {

@@ -15,8 +15,8 @@ class Flock {
 
   std::vector<std::shared_ptr<Bird>> flock_;
 
-  const double maxSpeed_[2]{10., 8.};
-  const double minSpeed_[2]{7., 6.};
+  const double maxSpeed_[2]{12., 8.};
+  const double minSpeed_[2]{7., 5.};
 
   // const double s_ = 0.6;
   double a_ = 0.6;
@@ -27,13 +27,13 @@ class Flock {
   double ds_ = 20.;
 
   double turnFactor_ = 1.5;
-  double margin_ = 200.;
+  double margin_ = 80.;
 
  public:
   Flock();
   void generateBirds();
   std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &, int) const;
-  std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &) const;
+  std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &, int) const;
 
   std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int) const;
   void evolve(sf::VertexArray &) const;
