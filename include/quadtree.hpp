@@ -3,7 +3,7 @@
 
 #include <vector>
 
-#include "../include/boid.hpp"
+#include "../include/bird.hpp"
 #include "../include/point.hpp"
 
 class Rectangle {

@@ -1,54 +1,47 @@
 #ifndef FLOCK_HPP
 #define FLOCK_HPP
 
-#include <algorithm>
-#include <chrono>
-#include <numeric>
-#include <random>
+#include <SFML/Graphics/VertexArray.hpp>
+#include <memory>
 #include <vector>
 
-#include "../include/boid.hpp"
-#include "../include/point.hpp"
+#include "../include/bird.hpp"
 #include "../include/statistics.hpp"
-
 
 class Flock {
  private:
-  std::vector<std::unique_ptr<Boid>> flock_;
+  const int nBoids_ = 200;
+  const int nPredators_ = 3;
 
-  const double N_ = 200;
-  const sf::Color color_ = sf::Color::Blue;
+  std::vector<std::shared_ptr<Bird>> flock_;
 
-  const double maxSpeed_ = 10.;
-  const double minSpeed_ = 8.;
+  const double maxSpeed_[2]{10., 8.};
+  const double minSpeed_[2]{7., 6.};
 
-  const double s_ = 0.6;
-  const double a_ = 0.6;
-  const double c_ = 0.001;
+  // const double s_ = 0.6;
+  double a_ = 0.6;
+  double s_ = 0.6;
+  double c_ = 0.001;
 
-  const double d_ = 75.;
-  const double ds_ = 20.;
+  double d_ = 75.;
+  double ds_ = 20.;
 
-  const double turnFactor_ = 1;
-  const double margin_ = 200.;
-
-  const float baseWidth_ = 7;
-  const float height_ = 15;
+  double turnFactor_ = 1.5;
+  double margin_ = 200.;
 
  public:
   Flock();
+  void generateBirds();
+  std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &, int) const;
+  std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &) const;
 
-  std::unique_ptr<Boid> update_boid(std::unique_ptr<Boid> &);
-  std::vector<Boid *> findNear(std::unique_ptr<Boid> &);
+  std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int) const;
+  void evolve(sf::VertexArray &) const;
 
-  void generateBoid();
-  void evolve();
-
-  int get_size() const;
-  void vertex(std::vector<sf::Vertex> &);
-  std::vector<sf::VertexArray> createTriangle(std::vector<sf::Vertex> &);
-
-  void print();
+  int getBoidsNum() const;
+  int getPredatorsNum() const;
+  int getFlockSize() const;
+  std::vector<std::shared_ptr<Bird>> getFlock() const;
 
   Statistics statistics();
 };

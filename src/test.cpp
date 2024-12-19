@@ -1,11 +1,10 @@
 #define DOCTEST_CONFIG_IMPLEMENT_WITH_MAIN
 
 #include <cmath>
-#include <random>
 #include <vector>
 
 #include "../doctest.h"
-#include "../include/boid.hpp"
+#include "../include/bird.hpp"
 #include "../include/point.hpp"
 #include "../include/namespace.hpp"
 

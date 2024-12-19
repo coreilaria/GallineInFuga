@@ -1,29 +1,35 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
-#include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/System/Vector2.hpp>
 #include <iostream>
 #include <string>
-#include <vector>
 
 #include "../include/flock.hpp"
-#include "../include/namespace.hpp"
+#include "../include/graphic.hpp"
 
 using namespace graphic_par;
+using namespace triangles;
 
 int main() {
   Flock flock;
   Statistics statistics;
-  flock.generateBoid();
-
+  flock.generateBirds();
   unsigned int counter{0};
-  sf::RectangleShape rectangle(sf::Vector2f(statsWidth, windowHeight));
-  rectangle.setFillColor(sf::Color(50, 50, 50));
-  rectangle.setPosition(sf::Vector2f(0., 0.));
+
+  sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
+  createTriangles(flock, triangles);
+
+  sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
+  sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., windowHeight)),
+                  sf::Vertex(sf::Vector2f(statsWidth, 0.)), sf::Vertex(sf::Vector2f(statsWidth, windowHeight))};
+  for (auto & i : v) {
+    i.color= sf::Color(50, 50, 50);
+  }
+  rectangle.create(4);
+  rectangle.update(v);
 
   sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
                           "Flock simulation", sf::Style::Titlebar);
-
   window.setPosition(sf::Vector2i(10, 50));
   window.setFramerateLimit(60);
   // this feature is implemented by SFML itself, using a combination of sf::Clock and sf::sleep.
@@ -32,12 +38,6 @@ int main() {
   // and can be as high as 10 or 15 milliseconds. Don't rely on this feature to implement precise timing.
 
   sf::Event event{};
-
-  sf::VertexBuffer points{sf::Points};
-  points.create(flock.get_size());
-  points.setUsage(sf::VertexBuffer::Usage::Dynamic);
-
-  std::vector<sf::Vertex> vertices(flock.get_size());
 
   while (window.isOpen()) {
     while (window.pollEvent(event)) {
@@ -50,8 +50,6 @@ int main() {
           break;
       }
     }
-
-    std::vector<sf::VertexArray> triangles = flock.createTriangle(vertices);
 
     sf::Text text;
     sf::Font font;
@@ -69,26 +67,22 @@ int main() {
       statistics = flock.statistics();
     }
     text_display = "Mean distance: " + std::to_string(statistics.dev_dist) + "\n" +
-                   "Dinstance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
+                   "Distance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
                    "Mean speed: " + std::to_string(statistics.mean_speed) + "\n" +
                    "Speed standard deviation: " + std::to_string(statistics.dev_speed);
     text.setString(text_display);
     text.setCharacterSize(24);  // in pixels
     text.setFillColor(sf::Color::White);
 
-    // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
-    ++counter;
+    ++counter;     // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
     window.clear();
 
-    for (auto& triangle : triangles) {
-      window.draw(triangle);  // Draw each triangle directly
-    }
+    flock.evolve(triangles);
 
+    window.draw(triangles);
     window.draw(rectangle);
     window.draw(text);
 
     window.display();
-
-    flock.evolve();
   }
 }
