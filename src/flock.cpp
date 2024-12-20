@@ -29,25 +29,55 @@ int Flock::getFlockSize() const { return (nPredators_ + nBoids_); };
 std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, const int i) const {
   std::vector<std::shared_ptr<Bird>> near;
 
+  const double beta {target.get_velocity().angle()};
+  double alpha {};
+
+  // trova i boids vicini per i boids e per i predatori
   for (int j = 0; j < nBoids_; ++j) {
     if (i < nBoids_) {
+      // boid vede altri boid vicini
       if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_) {
-        near.push_back(flock_[j]);
+      alpha = (target.get_position() - flock_[j]->get_position()).angle();
+
+        if ((alpha - beta) < (2. / 3 * M_PI) || (alpha - beta) > (2 * M_PI - 2. / 3 * M_PI)) {
+          near.push_back(flock_[j]);
+        }
       }
     } else {
+      //predatore che vede i boids vicini
       if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_ * 3.5) {
-        near.push_back(flock_[j]);
+        alpha = (target.get_position() - flock_[j]->get_position()).angle();
+
+        if ((alpha - beta) < (1./2* M_PI) || (alpha - beta) > (2 * M_PI - 1./2 * M_PI)) {
+          near.push_back(flock_[j]);
+        }
       }
     }
   }
   return near;
 };
-std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target) const {
+std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target, const int i) const {
   std::vector<std::shared_ptr<Bird>> near;
+  const double beta {target.get_velocity().angle()};
+  double alpha {};
 
-  for (int i = nBoids_; i < nBoids_ + nPredators_; ++i) {
-    if (&target != flock_[i].get() && target.get_position().distance(flock_[i]->get_position()) < d_) {
-      near.push_back(flock_[i]);
+  for (int j = nBoids_; j < nBoids_ + nPredators_; ++j) {
+    if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_) {
+      alpha = (target.get_position() - flock_[j]->get_position()).angle();
+
+      if (i < nBoids_) {
+        //boid che vede predatore vicino
+      if ((alpha - beta) < (2. / 3 * M_PI) || (alpha - beta) > (2 * M_PI - 2. / 3 * M_PI)) {
+        near.push_back(flock_[j]);
+      }
+
+      } else {
+        //predatore che vede predatore vicino
+        if ((alpha - beta) < (1./2* M_PI) || (alpha - beta) > (2 * M_PI - 1./2 * M_PI)) {
+          near.push_back(flock_[j]);
+        }
+      }
+
     }
   }
   return near;
@@ -58,7 +88,7 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   Point v = b->get_velocity();
 
   std::vector<std::shared_ptr<Bird>> near_boids{this->findNearBoids(*b, i)};
-  std::vector<std::shared_ptr<Bird>> near_predators{this->findNearPredators(*b)};
+  std::vector<std::shared_ptr<Bird>> near_predators{this->findNearPredators(*b, i)};
 
   if (i < nBoids_) {
     if (!near_predators.empty()) {
