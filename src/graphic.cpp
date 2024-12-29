@@ -37,7 +37,7 @@ void createTriangles(const Flock& flock, sf::VertexArray& triangles) {
       triangles[j + 2].color = sf::Color::Red;
     }
   }
-  assert(triangles.getVertexCount() == flock.getFlockSize() * 3);
+  assert(static_cast<int>(triangles.getVertexCount()) == flock.getFlockSize() * 3);
 }
 
 void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangle, const double delta_theta,
