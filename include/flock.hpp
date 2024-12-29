@@ -10,8 +10,8 @@
 
 class Flock {
  private:
-  const int nBoids_ = 200;
-  const int nPredators_ = 3;
+  const int nBoids_ = 300;
+  const int nPredators_ = 1;
 
   std::vector<std::shared_ptr<Bird>> flock_;
 
@@ -26,11 +26,17 @@ class Flock {
   double d_ = 75.;
   double ds_ = 20.;
 
-  double turnFactor_ = 1.5;
-  double margin_ = 80.;
+  double turnFactor_ = 20.;
+  double margin_ = 50.;
 
  public:
   Flock();
+
+  int getBoidsNum() const;
+  int getPredatorsNum() const;
+  int getFlockSize() const;
+  std::vector<std::shared_ptr<Bird>> getFlock() const;
+
   void generateBirds();
   std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &, int) const;
   std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &, int) const;
@@ -38,10 +44,6 @@ class Flock {
   std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int) const;
   void evolve(sf::VertexArray &) const;
 
-  int getBoidsNum() const;
-  int getPredatorsNum() const;
-  int getFlockSize() const;
-  std::vector<std::shared_ptr<Bird>> getFlock() const;
 
   Statistics statistics();
 };

@@ -90,6 +90,8 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   std::vector<std::shared_ptr<Bird>> near_boids{this->findNearBoids(*b, i)};
   std::vector<std::shared_ptr<Bird>> near_predators{this->findNearPredators(*b, i)};
 
+  v = b->border(margin_, turnFactor_, v);
+
   if (i < nBoids_) {
     if (!near_predators.empty()) {
       v += std::dynamic_pointer_cast<Boid>(b)->repel(s_, near_predators);
@@ -107,7 +109,6 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
     }
   }
 
-  v = b->border(margin_, turnFactor_, v);
   b->friction(maxSpeed_, v);
   b->boost(minSpeed_, v);
 

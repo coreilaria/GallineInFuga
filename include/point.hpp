@@ -12,11 +12,11 @@ class Point {
   Point();
   Point(double, double);
 
-  double module() const;
-  double distance(const Point&) const;
-  float angle();
   double get_x() const;
   double get_y() const;
+  double module() const;
+  double distance(const Point&) const;
+  float angle() const;
 
   // Point& operator=(const Point& p);
   Point& operator+=(const Point&);
@@ -26,8 +26,8 @@ class Point {
 
 Point operator+(const Point&, const Point&);
 Point operator-(const Point&, const Point&);
-Point operator*(const double, const Point&);
-Point operator/(const Point&, const double);
+Point operator*(double, const Point&);
+Point operator/(const Point&, double);
 
 
 #endif

@@ -3,7 +3,7 @@
 #include <cmath>
 
 Point::Point() : x_{0.}, y_{0.} {};
-Point::Point(double x, double y) : x_{x}, y_{y} {};
+Point::Point(const double x, const double y) : x_{x}, y_{y} {};
 
 double Point::get_x() const { return x_; };
 double Point::get_y() const { return y_; };
@@ -13,7 +13,7 @@ double Point::distance(const Point& P) const {
   return std::sqrt((x_ - P.get_x()) * (x_ - P.get_x()) + (y_ - P.get_y()) * (y_ - P.get_y()));
 };
 
-float Point::angle() { return std::atan2(y_, x_) + M_PI / 2; };
+float Point::angle() const { return static_cast<float>(std::atan2(y_, x_) + M_PI / 2); };
 // std::atan2 tiene conto dei segni di velocity.x e velocity.y e fornisce il risultato corretto in radianti.
 
 Point& Point::operator+=(const Point& a) {
@@ -23,23 +23,23 @@ Point& Point::operator+=(const Point& a) {
 }
 
 Point operator+(const Point& a, const Point& b) {
-  Point sum{a.get_x() + b.get_x(), a.get_y() + b.get_y()};
+  const Point sum{a.get_x() + b.get_x(), a.get_y() + b.get_y()};
   return sum;
 };
 
 Point operator-(const Point& a, const Point& b) {
-  Point diff{a.get_x() - b.get_x(), a.get_y() - b.get_y()};
+  const Point diff{a.get_x() - b.get_x(), a.get_y() - b.get_y()};
   return diff;
 };
 
 Point operator*(const double scalar, const Point& a) {
-  Point mult{scalar * a.get_x(), scalar * a.get_y()};
+  const Point mult{scalar * a.get_x(), scalar * a.get_y()};
   return mult;
 };
 
 Point operator/(const Point& a,
                 const double scalar) {  // aggiungere assert scalar !=0
-  Point div{a.get_x() / scalar, a.get_y() / scalar};
+  const Point div{a.get_x() / scalar, a.get_y() / scalar};
   return div;
 };
 
