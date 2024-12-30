@@ -129,8 +129,8 @@ void Flock::evolve(sf::VertexArray& triangles) const {
     vel.push_back(p[1]);
   }
   for (int i = 0; i < nBoids_ + nPredators_; ++i) {
-    flock_[i]->set_position(pos[i]);
-    flock_[i]->set_velocity(vel[i]);
+    flock_[i]->set_bird(pos[i], vel[i]);
+    // flock_[i]->set_bird(vel[i]);
   }
 };
 
