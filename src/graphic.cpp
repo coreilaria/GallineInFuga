@@ -2,7 +2,6 @@
 
 #include <cassert>
 #include <cmath>
-#include <iostream>
 
 #include "../include/flock.hpp"
 namespace triangles {
