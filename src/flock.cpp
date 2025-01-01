@@ -1,4 +1,3 @@
-
 #include "../include/flock.hpp"
 
 #include <SFML/Graphics/VertexArray.hpp>
@@ -18,37 +17,44 @@
 using namespace graphic_par;
 using namespace triangles;
 
-Flock::Flock() { flock_.resize(nBoids_ + nPredators_); };
+Flock::Flock() : nBoids_(0), nPredators_(0) {};
+Flock::Flock(const int nBoids, const int nPredators) : nBoids_(nBoids), nPredators_(nPredators) {
+  flock_.resize(nBoids_ + nPredators_);
+};
 
 std::vector<std::shared_ptr<Bird>> Flock::getFlock() const { return flock_; };
 int Flock::getBoidsNum() const { return nBoids_; };
 int Flock::getPredatorsNum() const { return nPredators_; };
-int Flock::getFlockSize() const { return (nPredators_ + nBoids_); };
+int Flock::getFlockSize() const { return nPredators_ + nBoids_; };
 
-// ha senso passare uno shared ptr by reference?
+void Flock::setFlock(const std::vector<std::shared_ptr<Bird>>& flock) {
+  assert(nBoids_ + nPredators_ == static_cast<int>(flock.size()));
+  flock_ = flock;
+};
+
 std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, const int i) const {
   std::vector<std::shared_ptr<Bird>> near;
 
-  const double beta {target.get_velocity().angle()};
-  double alpha {};
+  const double beta{target.get_velocity().angle()};
+  double alpha{};
 
   // trova i boids vicini per i boids e per i predatori
   for (int j = 0; j < nBoids_; ++j) {
     if (i < nBoids_) {
       // boid vede altri boid vicini
       if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_) {
-      alpha = (target.get_position() - flock_[j]->get_position()).angle();
+        alpha = (target.get_position() - flock_[j]->get_position()).angle();
 
-        if ((alpha - beta) < (2. / 3 * M_PI) || (alpha - beta) > (2 * M_PI - 2. / 3 * M_PI)) {
+        if (alpha - beta < 2. / 3 * M_PI || alpha - beta > 2 * M_PI - 2. / 3 * M_PI) {
           near.push_back(flock_[j]);
         }
       }
     } else {
-      //predatore che vede i boids vicini
+      // predatore che vede i boids vicini
       if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_ * 3.5) {
         alpha = (target.get_position() - flock_[j]->get_position()).angle();
 
-        if ((alpha - beta) < (1./2* M_PI) || (alpha - beta) > (2 * M_PI - 1./2 * M_PI)) {
+        if (alpha - beta < 1. / 2 * M_PI || alpha - beta > 2 * M_PI - 1. / 2 * M_PI) {
           near.push_back(flock_[j]);
         }
       }
@@ -56,28 +62,27 @@ std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, cons
   }
   return near;
 };
+
 std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target, const int i) const {
   std::vector<std::shared_ptr<Bird>> near;
-  const double beta {target.get_velocity().angle()};
-  double alpha {};
+  const double beta{target.get_velocity().angle()};
+  double alpha{};
 
   for (int j = nBoids_; j < nBoids_ + nPredators_; ++j) {
     if (&target != flock_[j].get() && target.get_position().distance(flock_[j]->get_position()) < d_) {
       alpha = (target.get_position() - flock_[j]->get_position()).angle();
 
       if (i < nBoids_) {
-        //boid che vede predatore vicino
-      if ((alpha - beta) < (2. / 3 * M_PI) || (alpha - beta) > (2 * M_PI - 2. / 3 * M_PI)) {
-        near.push_back(flock_[j]);
-      }
-
+        // boid che vede predatore vicino
+        if (alpha - beta < 2. / 3 * M_PI || alpha - beta > 2 * M_PI - 2. / 3 * M_PI) {
+          near.push_back(flock_[j]);
+        }
       } else {
-        //predatore che vede predatore vicino
-        if ((alpha - beta) < (1./2* M_PI) || (alpha - beta) > (2 * M_PI - 1./2 * M_PI)) {
+        // predatore che vede predatore vicino
+        if (alpha - beta < 1. / 2 * M_PI || alpha - beta > 2 * M_PI - 1. / 2 * M_PI) {
           near.push_back(flock_[j]);
         }
       }
-
     }
   }
   return near;
@@ -112,9 +117,10 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   b->friction(maxSpeed_, v);
   b->boost(minSpeed_, v);
 
-  const double d_theta{b->get_velocity().angle() - v.angle()};  // controllare segno
+  // const double d_theta{b->get_velocity().angle() - v.angle()};  // controllare segno
+  const double theta{v.angle()};
   p += dt * v;
-  rotateTriangle(b, triangle, d_theta, i);
+  rotateTriangle(b, triangle, theta, i);
   return {p, v};
 };
 
@@ -130,7 +136,6 @@ void Flock::evolve(sf::VertexArray& triangles) const {
   }
   for (int i = 0; i < nBoids_ + nPredators_; ++i) {
     flock_[i]->set_bird(pos[i], vel[i]);
-    // flock_[i]->set_bird(vel[i]);
   }
 };
 
@@ -164,7 +169,7 @@ void Flock::generateBirds() {
   }
   assert(!flock_.empty());
   for (const auto& bird : flock_) {
-    assert((bird != nullptr) && "Nullptr found in flock_ vector");
+    assert(bird != nullptr && "Nullptr found in flock_ vector");
   }
 }
 
@@ -195,7 +200,6 @@ Statistics Flock::statistics() {
                       [](std::array<double, 2>& acc, const std::shared_ptr<Bird>& bird) {
                         acc[0] += bird->get_velocity().module();
                         acc[1] += std::pow(bird->get_velocity().module(), 2);
-
                         return acc;
                       });
   assert(nBoids_ > 1 && "Flock must contain at least two elements");
