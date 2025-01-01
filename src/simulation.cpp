@@ -11,7 +11,9 @@ using namespace graphic_par;
 using namespace triangles;
 
 int main() {
-  Flock flock;
+
+  Flock flock(200,2);
+
   Statistics statistics;
   flock.generateBirds();
   unsigned int counter{0};
