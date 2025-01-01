@@ -15,8 +15,7 @@ string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra")
 string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer")
 string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer")
 
-find_package(SFML COMPONENTS graphics REQUIRED)
-# find_package(TGUI REQUIRED) user interface library
+find_package(SFML COMPONENTS graphics REQUIRED)# find_package(TGUI REQUIRED) user interface library
 
 add_executable(Boids src/point.cpp src/bird.cpp src/flock.cpp src/statistics.cpp src/simulation.cpp src/graphic.cpp)
 
