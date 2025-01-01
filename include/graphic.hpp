@@ -21,13 +21,22 @@ constexpr double maxVel_y = 3;
 constexpr double minVel_y = -maxVel_y;
 }  // namespace graphic_par
 
-namespace triangles {  // è meglio un unico namespace?
+namespace triangles {
 
 constexpr float baseWidth_ = 7;
 constexpr float height_ = 15;
+const sf::Vector2f relative_position[6] = {sf::Vector2f(0, -height_ / 2),
+                                           sf::Vector2f(-baseWidth_ / 2, height_ / 2),
+                                           sf::Vector2f(baseWidth_ / 2, height_ / 2),
+                                           sf::Vector2f(0, (-height_ * 3 / 2) / 2),
+                                           sf::Vector2f((-baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2),
+                                           sf::Vector2f((baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2)};
 
 void createTriangles(const Flock& , sf::VertexArray& );
 void rotateTriangle(const std::shared_ptr<Bird> & , sf::VertexArray&,  double,  int); // const-qualification of parameters only has an effect in function definitions
+
+float getBaseWidth();
+float getHeight();
 
 }  // namespace triangles
 
