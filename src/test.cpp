@@ -313,6 +313,50 @@ TEST_CASE("Testing Boid class") {
 
     CHECK(v5 == Point(-5., -3.2));
   }
+
+  SUBCASE("Testing border method") {
+    constexpr double margin{100.};
+    constexpr double turn_factor{1.5};
+
+    Boid boid0;
+    Boid boid1(Point(graphic_par::statsWidth + margin + 2., margin / 2.), vel1);
+    Boid boid2(Point(graphic_par::statsWidth + margin + 2., graphic_par::windowHeight - margin / 2.), vel2);
+    Boid boid3(Point(graphic_par::statsWidth + margin / 2., margin + 5.), vel3);
+    Boid boid4(Point(graphic_par::windowWidth - margin / 2., margin + 5.), vel4);
+    Boid boid5(Point(graphic_par::windowWidth / 2., graphic_par::windowHeight / 2.), vel5);
+
+    Point velocity0;
+    Point velocity1;
+    Point velocity2;
+    Point velocity3;
+    Point velocity4;
+    Point velocity5;
+
+    velocity0 += boid0.border(margin, turn_factor);
+    velocity1 += boid1.border(margin, turn_factor);
+    velocity2 += boid2.border(margin, turn_factor);
+    velocity3 += boid3.border(margin, turn_factor);
+    velocity4 += boid4.border(margin, turn_factor);
+    velocity5 += boid5.border(margin, turn_factor);
+
+    CHECK(velocity0.getX() == doctest::Approx(turn_factor));
+    CHECK(velocity0.getY() == doctest::Approx(turn_factor));
+
+    CHECK(velocity1.getX() == doctest::Approx(vel1.getX()));
+    CHECK(velocity1.getY() == doctest::Approx(vel1.getY() + turn_factor));
+
+    CHECK(velocity2.getX() == doctest::Approx(vel2.getX()));
+    CHECK(velocity2.getY() == doctest::Approx(vel2.getY() - turn_factor));
+
+    CHECK(velocity3.getX() == doctest::Approx(vel3.getX() + turn_factor));
+    CHECK(velocity3.getY() == doctest::Approx(vel3.getY()));
+
+    CHECK(velocity4.getX() == doctest::Approx(vel4.getX() - turn_factor));
+    CHECK(velocity4.getY() == doctest::Approx(vel4.getY()));
+
+    CHECK(velocity5.getX() == doctest::Approx(vel5.getX()));
+    CHECK(velocity5.getY() == doctest::Approx(vel5.getY()));
+  }
 };
 
 //======================================================================================================================
@@ -463,38 +507,38 @@ TEST_CASE("Testing functions in namespace triangles::") {
     triangles::rotateTriangle(p1, triangles, theta2, 2);
 
     CHECK(triangles[0].position ==
-           v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[0].x * std::cos(theta1) -
-                                                         triangles::relative_position[0].y * std::sin(theta1)),
-                                      static_cast<float>(triangles::relative_position[0].x * std::sin(theta1) +
-                                                         triangles::relative_position[0].y * std::cos(theta1))));
+          v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[0].x * std::cos(theta1) -
+                                                        triangles::relative_position[0].y * std::sin(theta1)),
+                                     static_cast<float>(triangles::relative_position[0].x * std::sin(theta1) +
+                                                        triangles::relative_position[0].y * std::cos(theta1))));
     CHECK(triangles[1].position ==
-           v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[1].x * std::cos(theta1) -
-                                                         triangles::relative_position[1].y * std::sin(theta1)),
-                                      static_cast<float>(triangles::relative_position[1].x * std::sin(theta1) +
-                                                         triangles::relative_position[1].y * std::cos(theta1))));
+          v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[1].x * std::cos(theta1) -
+                                                        triangles::relative_position[1].y * std::sin(theta1)),
+                                     static_cast<float>(triangles::relative_position[1].x * std::sin(theta1) +
+                                                        triangles::relative_position[1].y * std::cos(theta1))));
 
     CHECK(triangles[2].position ==
-           v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[2].x * std::cos(theta1) -
-                                                         triangles::relative_position[2].y * std::sin(theta1)),
-                                      static_cast<float>(triangles::relative_position[2].x * std::sin(theta1) +
-                                                         triangles::relative_position[2].y * std::cos(theta1))));
+          v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[2].x * std::cos(theta1) -
+                                                        triangles::relative_position[2].y * std::sin(theta1)),
+                                     static_cast<float>(triangles::relative_position[2].x * std::sin(theta1) +
+                                                        triangles::relative_position[2].y * std::cos(theta1))));
 
     CHECK(triangles[6].position ==
-           v2.position + sf::Vector2f(static_cast<float>(triangles::relative_position[3].x * std::cos(theta2) -
-                                                         triangles::relative_position[3].y * std::sin(theta2)),
-                                      static_cast<float>(triangles::relative_position[3].x * std::sin(theta2) +
-                                                         triangles::relative_position[3].y * std::cos(theta2))));
+          v2.position + sf::Vector2f(static_cast<float>(triangles::relative_position[3].x * std::cos(theta2) -
+                                                        triangles::relative_position[3].y * std::sin(theta2)),
+                                     static_cast<float>(triangles::relative_position[3].x * std::sin(theta2) +
+                                                        triangles::relative_position[3].y * std::cos(theta2))));
 
     CHECK(triangles[7].position ==
-           v2.position + sf::Vector2f(static_cast<float>(triangles::relative_position[4].x * std::cos(theta2) -
-                                                         triangles::relative_position[4].y * std::sin(theta2)),
-                                      static_cast<float>(triangles::relative_position[4].x * std::sin(theta2) +
-                                                         triangles::relative_position[4].y * std::cos(theta2))));
+          v2.position + sf::Vector2f(static_cast<float>(triangles::relative_position[4].x * std::cos(theta2) -
+                                                        triangles::relative_position[4].y * std::sin(theta2)),
+                                     static_cast<float>(triangles::relative_position[4].x * std::sin(theta2) +
+                                                        triangles::relative_position[4].y * std::cos(theta2))));
     CHECK(triangles[8].position ==
-           v2.position + sf::Vector2f(static_cast<float>(triangles::relative_position[5].x * std::cos(theta2) -
-                                                         triangles::relative_position[5].y * std::sin(theta2)),
-                                      static_cast<float>(triangles::relative_position[5].x * std::sin(theta2) +
-                                                         triangles::relative_position[5].y * std::cos(theta2))));
+          v2.position + sf::Vector2f(static_cast<float>(triangles::relative_position[5].x * std::cos(theta2) -
+                                                        triangles::relative_position[5].y * std::sin(theta2)),
+                                     static_cast<float>(triangles::relative_position[5].x * std::sin(theta2) +
+                                                        triangles::relative_position[5].y * std::cos(theta2))));
   }
 }
 
@@ -575,11 +619,11 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    Point v_boid = vel1 + b1->border(border_params[0], border_params[1], v_boid) + b1->separation(s, ds, nearBoids1) +
+    Point v_boid = b1->border(border_params[0], border_params[1]) + b1->separation(s, ds, nearBoids1) +
                    b1->alignment(a, nearBoids1) + b1->cohesion(c, nearBoids1) + b1->repel(s, nearPredators1);
     b1->friction(maxSpeed, v_boid);
     b1->boost(minSpeed, v_boid);
-    Point p_boid = pos1 + graphic_par::dt * v_boid;
+    Point p_boid = b1->getPosition() + graphic_par::dt * v_boid;
 
     CHECK(update_boid[0].getX() == doctest::Approx(p_boid.getX()));
     CHECK(update_boid[0].getY() == doctest::Approx(p_boid.getY()));
@@ -594,12 +638,12 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    Point v_predator = vel3 + p1->border(border_params[0], border_params[1], v_predator) +
+    Point v_predator = p1->border(border_params[0], border_params[1]) +
                        p1->separation(s * 0.1, d * 0.5, nearPredators2) + p1->chase(c, nearBoids2);
 
     p1->friction(maxSpeed, v_predator);
     p1->boost(minSpeed, v_predator);
-    Point p_predator = pos3 + graphic_par::dt * v_predator;
+    Point p_predator = p1->getPosition() + graphic_par::dt * v_predator;
 
     CHECK(update_predator[0].getX() == doctest::Approx(p_predator.getX()));
     CHECK(update_predator[0].getY() == doctest::Approx(p_predator.getY()));
@@ -643,7 +687,7 @@ TEST_CASE("Testing Flock class") {
     double mean_speed2 = (speed1 * speed1 + speed2 * speed2) / 2.;
 
     CHECK(stats.mean_dist ==
-           doctest::Approx(flock1.getFlock()[0]->getPosition().distance(flock1.getFlock()[1]->getPosition())));
+          doctest::Approx(flock1.getFlock()[0]->getPosition().distance(flock1.getFlock()[1]->getPosition())));
     CHECK(stats.mean_speed == doctest::Approx(mean_speed));
     CHECK(stats.dev_dist == doctest::Approx(0.));
     CHECK(stats.dev_speed == doctest::Approx(std::sqrt(mean_speed2 - mean_speed * mean_speed)));
