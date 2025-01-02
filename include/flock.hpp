@@ -1,10 +1,6 @@
 #ifndef FLOCK_HPP
 #define FLOCK_HPP
 
-// #define TEST_PRIVATE       \
-// struct test_inspector_t; \
-// friend test_inspector_t;
-
 #include <SFML/Graphics/VertexArray.hpp>
 #include <memory>
 #include <vector>
@@ -19,8 +15,8 @@ class Flock {
 
   std::vector<std::shared_ptr<Bird>> flock_;
 
-  const double maxSpeed_[2]{12., 8.};
-  const double minSpeed_[2]{7., 5.};
+  double maxSpeed_[2];
+  double minSpeed_[2];
 
   double a_ = 0.6;
   double s_ = 0.6;
@@ -29,10 +25,9 @@ class Flock {
   double d_ = 75.;
   double ds_ = 20.;
 
-  double turnFactor_ = 20.;
-  double margin_ = 50.;
+  double turnFactor_ = 5.;
+  double margin_ = 100.;
 
-  // TEST_PRIVATE
  public:
   Flock();
   Flock(int, int);
@@ -41,8 +36,11 @@ class Flock {
   int getPredatorsNum() const;
   int getFlockSize() const;
   std::vector<std::shared_ptr<Bird>> getFlock() const;
+  std::array<double, 2> getBorderParams() const;
 
-  void setFlock(const std::vector<std::shared_ptr<Bird>>&);
+  void setFlock(const std::vector<std::shared_ptr<Bird>> &);
+  void setMaxSpeed(double, double);
+  void setMinSpeed(double, double);
 
   void generateBirds();
   std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &, int) const;
