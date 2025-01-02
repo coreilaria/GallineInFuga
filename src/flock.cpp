@@ -148,7 +148,7 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
   std::vector<std::shared_ptr<Bird>> near_boids{findNearBoids(*b, i)};
   std::vector<std::shared_ptr<Bird>> near_predators{findNearPredators(*b, i)};
 
-  v = b->border(margin_, turnFactor_, v);
+  v = b->border(margin_, turnFactor_);
 
   if (i < nBoids_) {
     if (!near_predators.empty()) {

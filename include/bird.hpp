@@ -24,7 +24,7 @@ class Bird {
 
   virtual void setBird(Point, Point);
 
-  virtual Point border(double, double, Point);
+  virtual Point border(double, double);
   virtual Point separation(double, double, std::vector<std::shared_ptr<Bird>> &);
 
   virtual void friction(const double[2], Point &) = 0;

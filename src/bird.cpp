@@ -38,12 +38,12 @@ Point Bird::separation(const double s, const double ds, std::vector<std::shared_
   return (-s) * sum;
 }
 
-Point Bird::border(const double margin, const double turn_factor, const Point v) {
+Point Bird::border(const double margin, const double turn_factor) {
   assert(margin > 0 && margin < graphic_par::statsWidth && margin <= graphic_par::windowHeight);
   assert(turn_factor > 0);
 
-  double v4_x{v.getX()};
-  double v4_y{v.getY()};
+  double v4_x{velocity_.getX()};
+  double v4_y{velocity_.getY()};
 
   if (position_.getX() < graphic_par::statsWidth + margin) {
     v4_x += turn_factor;
