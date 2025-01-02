@@ -4,12 +4,13 @@
 #include <cmath>
 
 #include "../include/flock.hpp"
+
 namespace triangles {
 void createTriangles(const Flock& flock, sf::VertexArray& triangles) {
   for (int i = 0; i < flock.getFlockSize(); ++i) {
     const int j = 3 * i;
     sf::Vertex vertex{
-        flock.getFlock()[i]->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
+        flock.getFlock()[i]->getPosition()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
 
     if (i < flock.getBoidsNum()) {
       triangles[j].position = vertex.position + sf::Vector2f(0, -height_ / 2);  // Vertice superiore (centrato)
@@ -40,7 +41,7 @@ void createTriangles(const Flock& flock, sf::VertexArray& triangles) {
 }
 
 void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangle, const double theta, const int i) {
-  const sf::Vertex vertex{bird->get_position()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
+  const sf::Vertex vertex{bird->getPosition()()};  // l'operatore () restituisce la conversione da Point a sf::Vertex
 
   const int j = 3 * i;
 
@@ -63,5 +64,4 @@ void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangle
 
 float getBaseWidth() { return baseWidth_; }
 float getHeight() { return height_; }
-
 }  // namespace triangles

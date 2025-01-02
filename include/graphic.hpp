@@ -32,14 +32,11 @@ const sf::Vector2f relative_position[6] = {sf::Vector2f(0, -height_ / 2),
                                            sf::Vector2f((-baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2),
                                            sf::Vector2f((baseWidth_ * 3 / 2) / 2, (height_ * 3 / 2) / 2)};
 
-void createTriangles(const Flock& , sf::VertexArray& );
-void rotateTriangle(const std::shared_ptr<Bird> & , sf::VertexArray&,  double,  int); // const-qualification of parameters only has an effect in function definitions
-
+void createTriangles(const Flock&, sf::VertexArray&);
+void rotateTriangle(const std::shared_ptr<Bird>&, sf::VertexArray&, double, int);
 float getBaseWidth();
 float getHeight();
 
 }  // namespace triangles
 
 #endif
-
-// cmake -S ./ -B build -DBUILD_TESTING=True -DCMAKE_BUILD_TYPE=Debug

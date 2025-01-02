@@ -16,17 +16,16 @@ class Bird {
   Bird() = default;
   Bird(Point const &, Point const &);
 
-  virtual Point get_position() const;
-  virtual Point get_velocity() const;
+  virtual Point getPosition() const;
+  virtual Point getVelocity() const;
 
-  virtual void set_bird(Point, Point);
-  // virtual void set_velocity(Point);
+  virtual void setBird(Point, Point);
 
   virtual Point border(double, double, Point);
   virtual Point separation(double, double, std::vector<std::shared_ptr<Bird>> &);
 
   virtual void friction(const double[2], Point &) = 0;
-  virtual void boost( const double[2], Point &) = 0;
+  virtual void boost(const double[2], Point &) = 0;
 
   virtual ~Bird();
 };
@@ -34,7 +33,7 @@ class Bird {
 class Boid final : public Bird {
  public:
   Boid();
-  Boid(Point const &, Point const &);  // dentro chiama Bird()
+  Boid(Point const &, Point const &);
 
   void friction(const double[2], Point &) override;
   void boost(const double[2], Point &) override;
