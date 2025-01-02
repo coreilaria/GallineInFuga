@@ -8,11 +8,13 @@
 
 #include "../include/graphic.hpp"
 #include "../include/point.hpp"
+using namespace point;
+
+namespace bird {
 
 //----------------------------------------------------------------------------------------------------------------------
 // ---Implementation of Bird class--------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-
 Bird::Bird(Point const& position, Point const& velocity) : position_(position), velocity_(velocity) {}
 
 Point Bird::getPosition() const { return position_; }
@@ -64,7 +66,6 @@ Bird::~Bird() = default;
 //----------------------------------------------------------------------------------------------------------------------
 // ---Implementation of Boid class--------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-
 Boid::Boid() : Bird() {}
 Boid::Boid(Point const& pos, Point const& vel) : Bird(pos, vel) { sightAngle_ = 2. / 3 * M_PI; }
 
@@ -112,7 +113,6 @@ void Boid::boost(const double minSpeed[2], Point& velocity) {
 //----------------------------------------------------------------------------------------------------------------------
 // ---Implementation of Predator class----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
-
 Predator::Predator() : Bird() {}
 Predator::Predator(Point const& pos, Point const& vel) : Bird(pos, vel) { sightAngle_ = 1. / 2 * M_PI; }
 
@@ -138,3 +138,4 @@ void Predator::boost(const double minSpeed[2], Point& velocity) {
     velocity = minSpeed[1] * (velocity / velocity.module());
   }
 }
+}  // namespace bird

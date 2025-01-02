@@ -11,9 +11,9 @@ using namespace graphic_par;
 using namespace triangles;
 
 int main() {
-  Flock flock(200, 2);
+  flock::Flock flock(200, 2);
 
-  Statistics statistics;
+  statistics::Statistics statistics;
   flock.generateBirds();
   unsigned int counter{0};
 
@@ -50,7 +50,7 @@ int main() {
     sf::Text text;
     sf::Font font;
     if (!font.loadFromFile("../arial.ttf")) {
-      std::cerr << "Errore: Impossibile caricare il font.\n";
+      std::cerr << "Error: Fail to load the font.\n";
       return -1;
     }
 

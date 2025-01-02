@@ -8,6 +8,11 @@
 #include "../include/graphic.hpp"
 #include "../include/point.hpp"
 
+using namespace point;
+using namespace bird;
+using namespace flock;
+using namespace statistics;
+
 constexpr double d{80.};
 constexpr double ds{d / 2.};
 constexpr double s{0.6};

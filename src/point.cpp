@@ -3,6 +3,8 @@
 #include <cassert>
 #include <cmath>
 
+namespace point {
+
 Point::Point() : x_{0.}, y_{0.} {}
 Point::Point(const double x, const double y) : x_{x}, y_{y} {}
 
@@ -14,8 +16,7 @@ double Point::distance(const Point& P) const {
   return std::sqrt((x_ - P.getX()) * (x_ - P.getX()) + (y_ - P.getY()) * (y_ - P.getY()));
 }
 
-float Point::angle() const { return static_cast<float>(std::atan2(y_, x_) + M_PI / 2); }
-// output in radiant
+float Point::angle() const { return static_cast<float>(std::atan2(y_, x_) + M_PI / 2); }  // output in radiant
 
 Point& Point::operator+=(const Point& a) {
   x_ += a.getX();
@@ -51,3 +52,4 @@ sf::Vertex Point::operator()() const {
   out.color = sf::Color::White;
   return out;
 }
+}  // namespace point

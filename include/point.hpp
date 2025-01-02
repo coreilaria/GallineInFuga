@@ -3,6 +3,7 @@
 
 #include <SFML/Graphics.hpp>
 
+namespace point {
 class Point {
  private:
   double x_;
@@ -27,5 +28,5 @@ Point operator-(const Point&, const Point&);
 Point operator*(double, const Point&);
 Point operator/(const Point&, double);
 bool operator==(const Point&, const Point&);
-
+}  // namespace point
 #endif

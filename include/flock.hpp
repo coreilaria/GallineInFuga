@@ -7,6 +7,9 @@
 
 #include "../include/bird.hpp"
 #include "../include/statistics.hpp"
+using namespace bird;
+
+namespace flock {
 
 class Flock {
  private:
@@ -51,4 +54,5 @@ class Flock {
 
   Statistics statistics();
 };
+}  // namespace flock
 #endif

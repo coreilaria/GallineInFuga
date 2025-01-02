@@ -6,6 +6,8 @@
 
 #include "../include/point.hpp"
 
+namespace bird {
+
 class Bird {
  protected:
   Point position_;
@@ -53,5 +55,5 @@ class Predator final : public Bird {
 
   Point chase(double, std::vector<std::shared_ptr<Bird>> &) const;
 };
-
+}  // namespace bird
 #endif

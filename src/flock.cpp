@@ -16,6 +16,11 @@
 
 using namespace graphic_par;
 using namespace triangles;
+using namespace bird;
+using namespace point;
+using namespace statistics;
+
+namespace flock {
 
 Flock::Flock() : nBoids_(0), nPredators_(0), maxSpeed_{12., 8.}, minSpeed_{7., 5.} {}
 Flock::Flock(const int nBoids, const int nPredators)
@@ -41,7 +46,6 @@ void Flock::setMinSpeed(const double minSpeed_b, const double minSpeed_p) {
   minSpeed_[0] = minSpeed_b;
   minSpeed_[1] = minSpeed_p;
 }
-
 
 void Flock::generateBirds() {
   std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch().count());
@@ -76,7 +80,6 @@ void Flock::generateBirds() {
     assert(bird != nullptr && "Nullptr found in flock_ vector");
   }
 }
-
 
 std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, const int i) const {
   // Finds near boids for both boids and predators
@@ -224,7 +227,8 @@ Statistics Flock::statistics() {
   meanBoids_speed = sum[0] / nBoids_;
   meanBoids_speed2 = sum[1] / nBoids_;
 
-  double dev_speed = std::sqrt(meanBoids_speed2 - meanBoids_speed * meanBoids_speed);
+  const double dev_speed = std::sqrt(meanBoids_speed2 - meanBoids_speed * meanBoids_speed);
 
-  return {meanBoids_dist, dev_dist, meanBoids_speed, dev_speed};
+  return Statistics(meanBoids_dist, dev_dist, meanBoids_speed, dev_speed);
 }
+}  // namespace flock
