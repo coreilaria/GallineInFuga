@@ -21,10 +21,12 @@ using namespace point;
 using namespace statistics;
 
 namespace flock {
+Flock::Flock()
+  : nBoids_(0), nPredators_(0), maxSpeed_{12., 8.}, minSpeed_{7., 5.} {
+}
 
-Flock::Flock() : nBoids_(0), nPredators_(0), maxSpeed_{12., 8.}, minSpeed_{7., 5.} {}
 Flock::Flock(const int nBoids, const int nPredators)
-    : nBoids_(nBoids), nPredators_(nPredators), maxSpeed_{12., 8.}, minSpeed_{7., 5.} {
+  : nBoids_(nBoids), nPredators_(nPredators), maxSpeed_{12., 8.}, minSpeed_{7., 5.} {
   flock_.resize(nBoids_ + nPredators_);
 }
 
@@ -38,10 +40,12 @@ void Flock::setFlock(const std::vector<std::shared_ptr<Bird>>& flock) {
   assert(nBoids_ + nPredators_ == static_cast<int>(flock.size()));
   flock_ = flock;
 }
+
 void Flock::setMaxSpeed(const double maxSpeed_b, const double maxSpeed_p) {
   maxSpeed_[0] = maxSpeed_b;
   maxSpeed_[1] = maxSpeed_p;
 }
+
 void Flock::setMinSpeed(const double minSpeed_b, const double minSpeed_p) {
   minSpeed_[0] = minSpeed_b;
   minSpeed_[1] = minSpeed_p;
@@ -56,8 +60,7 @@ void Flock::generateBirds() {
 
   std::vector<Boid> boids;
   std::vector<Predator> predators;
-  // emplace_back viene utilizzato per costruire direttamente gli oggetti all'interno dei vettori
-  // senza creare copie temporanee
+
   boids.reserve(nBoids_);
   for (int i = 0; i < nBoids_; ++i) {
     boids.emplace_back(Point(dist_pos_x(rng), dist_pos_y(rng)), Point(dist_vel_x(rng), dist_vel_y(rng)));
@@ -70,15 +73,12 @@ void Flock::generateBirds() {
   flock_.clear();
 
   for (const auto& boid : boids) {
-    flock_.push_back(std::make_shared<Boid>(boid));  // Usa std::make_shared per creare shared_ptr
+    flock_.push_back(std::make_shared<Boid>(boid));
   }
   for (const auto& predator : predators) {
-    flock_.push_back(std::make_shared<Predator>(predator));  // Usa std::make_shared per creare shared_ptr
+    flock_.push_back(std::make_shared<Predator>(predator));
   }
   assert(!flock_.empty());
-  for (const auto& bird : flock_) {
-    assert(bird != nullptr && "Nullptr found in flock_ vector");
-  }
 }
 
 std::vector<std::shared_ptr<Bird>> Flock::findNearBoids(const Bird& target, const int i) const {
@@ -156,7 +156,7 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
     }
     if (!near_boids.empty()) {
       v += b->separation(s_, ds_, near_boids) + std::dynamic_pointer_cast<Boid>(b)->alignment(a_, near_boids) +
-           std::dynamic_pointer_cast<Boid>(b)->cohesion(c_, near_boids);
+          std::dynamic_pointer_cast<Boid>(b)->cohesion(c_, near_boids);
     }
   } else {
     if (!near_predators.empty()) {
@@ -202,7 +202,7 @@ Statistics Flock::statistics() {
                                                   [&it](std::array<double, 2>& acc, const std::shared_ptr<Bird>& bird) {
                                                     acc[0] += (bird->getPosition().distance((*it)->getPosition()));
                                                     acc[1] += bird->getPosition().distance((*it)->getPosition()) *
-                                                              bird->getPosition().distance((*it)->getPosition());
+                                                        bird->getPosition().distance((*it)->getPosition());
                                                     return acc;
                                                   });
       meanBoids_dist += sum[0];
@@ -231,4 +231,4 @@ Statistics Flock::statistics() {
 
   return Statistics(meanBoids_dist, dev_dist, meanBoids_speed, dev_speed);
 }
-}  // namespace flock
+} // namespace flock
