@@ -52,7 +52,7 @@ class Flock {
   std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &, sf::VertexArray &, int) const;
   void evolve(sf::VertexArray &) const;
 
-  Statistics statistics();
+  statistics::Statistics statistics();
 };
 }  // namespace flock
 #endif

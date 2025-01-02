@@ -5,6 +5,7 @@
 #include <vector>
 
 #include "../include/point.hpp"
+using namespace point;
 
 namespace bird {
 
