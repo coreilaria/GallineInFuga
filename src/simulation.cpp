@@ -11,7 +11,8 @@ using namespace graphic_par;
 using namespace triangles;
 
 int main() {
-  Flock flock;
+  Flock flock(200, 2);
+
   Statistics statistics;
   flock.generateBirds();
   unsigned int counter{0};
@@ -21,9 +22,9 @@ int main() {
 
   sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
   sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., windowHeight)),
-                  sf::Vertex(sf::Vector2f(statsWidth, 0.)), sf::Vertex(sf::Vector2f(statsWidth, windowHeight))};
-  for (auto & i : v) {
-    i.color= sf::Color(50, 50, 50);
+                     sf::Vertex(sf::Vector2f(statsWidth, 0.)), sf::Vertex(sf::Vector2f(statsWidth, windowHeight))};
+  for (auto& i : v) {
+    i.color = sf::Color(50, 50, 50);
   }
   rectangle.create(4);
   rectangle.update(v);
@@ -32,11 +33,6 @@ int main() {
                           "Flock simulation", sf::Style::Titlebar);
   window.setPosition(sf::Vector2i(10, 50));
   window.setFramerateLimit(60);
-  // this feature is implemented by SFML itself, using a combination of sf::Clock and sf::sleep.
-  // An important consequence is that it is not 100% reliable,
-  // especially for high framerates: sf::sleep's resolution depends on the underlying operating system and hardware,
-  // and can be as high as 10 or 15 milliseconds. Don't rely on this feature to implement precise timing.
-
   sf::Event event{};
 
   while (window.isOpen()) {
@@ -74,7 +70,7 @@ int main() {
     text.setCharacterSize(24);  // in pixels
     text.setFillColor(sf::Color::White);
 
-    ++counter;     // può fare overflow, essendo unsigned int ricomincia da 0 che è ok per la logica del programma
+    ++counter;  // might overflow, it would restart from 0, which is compatible with the logic of the program.
     window.clear();
 
     flock.evolve(triangles);
