@@ -11,7 +11,10 @@ using namespace graphic_par;
 using namespace triangles;
 
 int main() {
-  flock::Flock flock(200, 2);
+  int nBoid = getPositiveInteger("Enter the number of boids to simulate: ");
+  int nPredator = getPositiveInteger("Enter the number of predators to simulate: ");
+
+  flock::Flock flock(nBoid, nPredator);
 
   statistics::Statistics statistics;
   flock.generateBirds();

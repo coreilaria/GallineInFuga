@@ -2,9 +2,34 @@
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
 
 #include "../include/flock.hpp"
+namespace graphic_par {
+int getPositiveInteger(const std::string& prompt) {
+  int value;
+  int counter{0};
+  while (counter < 3) {
+    std::cout << prompt;
+    std::cin >> value;
 
+    // check if the input is valid
+    if (std::cin.fail() || value <= 0) {
+      std::cin.clear();                                                    // clear the error flag
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
+      std::cout << "Invalid input! Please enter a positive integer.\n\n";
+      counter++;
+    } else {
+      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
+      return value;
+    }
+  }
+
+  std::cout << "\nToo many invalid input. The program will now terminate.\n";
+  exit(1);  // Termina il programma
+}
+
+}  // namespace graphic_par
 namespace triangles {
 void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles) {
   for (int i = 0; i < flock.getFlockSize(); ++i) {

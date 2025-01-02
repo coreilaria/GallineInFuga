@@ -23,6 +23,8 @@ constexpr double minVel_x = -maxVel_x;
 
 constexpr double maxVel_y = 3;
 constexpr double minVel_y = -maxVel_y;
+
+int getPositiveInteger(const std::string&);
 }  // namespace graphic_par
 
 //----------------------------------------------------------------------------------------------------------------------
