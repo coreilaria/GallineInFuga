@@ -54,7 +54,6 @@ Point Bird::border(const double margin, const double turn_factor) {
   if (position_.getY() < margin) {
     v4_y += turn_factor;
   }
-
   if (position_.getY() > graphic_par::windowHeight - margin) {
     v4_y -= turn_factor;
   }
@@ -66,6 +65,7 @@ Bird::~Bird() = default;
 //----------------------------------------------------------------------------------------------------------------------
 // ---Implementation of Boid class--------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+
 Boid::Boid() : Bird() {}
 Boid::Boid(Point const& pos, Point const& vel) : Bird(pos, vel) { sightAngle_ = 2. / 3 * M_PI; }
 
@@ -113,6 +113,7 @@ void Boid::boost(const double minSpeed[2], Point& velocity) {
 //----------------------------------------------------------------------------------------------------------------------
 // ---Implementation of Predator class----------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
+
 Predator::Predator() : Bird() {}
 Predator::Predator(Point const& pos, Point const& vel) : Bird(pos, vel) { sightAngle_ = 1. / 2 * M_PI; }
 
