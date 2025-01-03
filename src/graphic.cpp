@@ -6,7 +6,7 @@
 
 #include "../include/flock.hpp"
 namespace graphic_par {
-int getPositiveInteger(const std::string& prompt) {
+int getPositiveInteger(const std::string& prompt, bool const positive) {
   int value;
   int counter{0};
   while (counter < 3) {
@@ -14,10 +14,14 @@ int getPositiveInteger(const std::string& prompt) {
     std::cin >> value;
 
     // check if the input is valid
-    if (std::cin.fail() || value <= 0) {
+    if (std::cin.fail() || (positive && value <= 0)) {
       std::cin.clear();                                                    // clear the error flag
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
-      std::cout << "Invalid input! Please enter a positive integer.\n\n";
+      if (positive) {
+        std::cout << "Invalid input! Please enter a positive integer.\n\n";
+      } else {
+        std::cout << "Invalid input! Please enter an integer.\n\n";
+      }
       counter++;
     } else {
       std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
