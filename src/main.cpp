@@ -66,10 +66,10 @@ int main() {
     if (counter % 15 == 0) {
       statistics = flock.statistics();
     }
-    text_display = "Mean distance: " + std::to_string(statistics.dev_dist) + "\n" +
-                   "Distance standard deviation: " + std::to_string(statistics.dev_dist) + "\n\n" +
-                   "Mean speed: " + std::to_string(statistics.mean_speed) + "\n" +
-                   "Speed standard deviation: " + std::to_string(statistics.dev_speed);
+    text_display = "Mean distance: " + std::to_string(statistics.devDist) + "\n" +
+                   "Distance standard deviation: " + std::to_string(statistics.devDist) + "\n\n" +
+                   "Mean speed: " + std::to_string(statistics.meanSpeed) + "\n" +
+                   "Speed standard deviation: " + std::to_string(statistics.devSpeed);
     text.setString(text_display);
     text.setCharacterSize(24);  // in pixels
     text.setFillColor(sf::Color::White);
