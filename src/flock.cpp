@@ -141,14 +141,13 @@ std::vector<std::shared_ptr<Bird>> Flock::findNearPredators(const Bird& target, 
   return near;
 }
 
-std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::VertexArray& triangle, const int i) const {
+std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::VertexArray& triangles, const int i) const {
   Point p = b->getPosition();
-  Point v = b->getVelocity();
 
   std::vector<std::shared_ptr<Bird>> near_boids{findNearBoids(*b, i)};
   std::vector<std::shared_ptr<Bird>> near_predators{findNearPredators(*b, i)};
 
-  v = b->border(margin_, turnFactor_);
+  Point v = b->border(margin_, turnFactor_);
 
   if (i < nBoids_) {
     if (!near_predators.empty()) {
@@ -172,7 +171,7 @@ std::array<Point, 2> Flock::updateBird(const std::shared_ptr<Bird>& b, sf::Verte
 
   const double theta{v.angle()};
   p += dt * v;
-  rotateTriangle(b, triangle, theta, i);
+  rotateTriangle(b, triangles, theta, i);
   return {p, v};
 }
 
