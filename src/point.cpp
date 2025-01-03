@@ -12,8 +12,8 @@ double Point::getX() const { return x_; }
 double Point::getY() const { return y_; }
 
 double Point::module() const { return std::sqrt(x_ * x_ + y_ * y_); }
-double Point::distance(const Point& P) const {
-  return std::sqrt((x_ - P.getX()) * (x_ - P.getX()) + (y_ - P.getY()) * (y_ - P.getY()));
+double Point::distance(const Point& p) const {
+  return std::sqrt((x_ - p.getX()) * (x_ - p.getX()) + (y_ - p.getY()) * (y_ - p.getY()));
 }
 
 float Point::angle() const { return static_cast<float>(std::atan2(y_, x_) + M_PI / 2); }  // output in radiant
