@@ -11,7 +11,8 @@
 namespace point {
 class Point {
   /// @brief The Point class represents a vector in 2D.
-  /// @param x_, y_ are the coordinates of the vector
+  /// @param x_ Is the x component of the vector.
+  /// @param y_ Is the y component of the vector.
  private:
   double x_;
   double y_;
@@ -21,12 +22,16 @@ class Point {
   Point();
 
   /// @brief Construct a new Point object, with the two coordinates.
-  /// @param x, y are the coordinate of the new Point object.
+  /// @param x Is the x component of the vector.
+  /// @param y Is the y component of the vector.
   Point(double x, double y);
 
-  /// @brief Getters get the coordinates
-  /// @return the x and y of the vector.
+  /// @brief Get the x coordinate.
+  /// @return The x component of the vector.
   [[nodiscard]] double getX() const;
+
+  /// @brief Get the y coordinate.
+  /// @return The y component of the vector.
   [[nodiscard]] double getY() const;
 
   ///@brief Evaluate the distance of the vector from the origin.
@@ -47,7 +52,7 @@ class Point {
   ///@return Itself.
   Point& operator+=(const Point& a);
 
-  ///@brief Converts a Point object into a sf::Vertex object.
+  ///@brief Convert a Point object into a sf::Vertex object.
   ///@return The conversion in sf::Vertex.
   sf::Vertex operator()() const;
 };
@@ -74,7 +79,7 @@ Point operator*(double scalar, const Point& a);
 ///@return The vector whose components of the vector divided by the scalar.
 Point operator/(const Point& a, double scalar);
 
-///@brief Compares two Point objects.
+///@brief Compare two Point objects.
 ///@param a, b Are the Point objects in comparison.
 ///@return The result of the comparison.
 bool operator==(const Point& a, const Point& b);
