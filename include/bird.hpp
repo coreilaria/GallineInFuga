@@ -3,8 +3,8 @@
 ///
 /// @details    This file contains the definition of Bird class, Boid class and Predator class which inherit publicly
 ///             from Bird. A Bird object represent a bird flying in a two dimension space, each bird is characterized by
-///             two point::Point objects, a position and a velocity, and a double representing the sight angle they
-///             could perceive.
+///             two point::Point objects, a position and a velocity, and a double representing the sight angle they could
+///             perceive.
 #ifndef BIRD_HPP
 #define BIRD_HPP
 

@@ -138,8 +138,8 @@ std::vector<std::shared_ptr<bird::Bird>> Flock::findNearPredators(const bird::Bi
 std::array<point::Point, 2> Flock::updateBird(const std::shared_ptr<bird::Bird>& b, sf::VertexArray& triangles, const int i) const {
   point::Point p = b->getPosition();
 
-  std::vector<std::shared_ptr<bird::Bird>> near_boids{findNearBoids(*b, i)};
-  std::vector<std::shared_ptr<bird::Bird>> near_predators{findNearPredators(*b, i)};
+  const std::vector<std::shared_ptr<bird::Bird>> near_boids{findNearBoids(*b, i)};
+  const std::vector<std::shared_ptr<bird::Bird>> near_predators{findNearPredators(*b, i)};
 
   point::Point v = b->border(margin_, turn_factor_);
 

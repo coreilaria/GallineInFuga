@@ -54,10 +54,10 @@ int getPositiveInteger(const std::string& prompt, bool positive);
 //----------------------------------------------------------------------------------------------------------------------
 namespace triangles {
 
-///@param baseWidth_ Is the length of the triangle's base.
+///@param baseWidth_ Represents the length of the triangle's base.
 constexpr float baseWidth = 7;
 
-///@param height Is the height of the triangle.
+///@param height Represents the height of the triangle.
 constexpr float height = 15;
 
 ///@param relativePosition Is an array containing the relative position of a triangle's vertex in relation to the
@@ -80,14 +80,15 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles);
 /// @param bird Is the bird associated with the triangle we need to rotate.
 /// @param triangles Is an array containing tree sf::Vertex for each bird in the flock, those constitute a sf::Triangle.
 /// @param theta Is the angle of the bird's updated velocity, formed with the vertical axis.
+/// @param i Is the index associated with the position of the bird in the flock.
 void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, double theta, int i);
 
 /// @brief Get the base width of the triangle.
-/// @return The base with.
+/// @return The base of the triangle.
 [[nodiscard]] float getBaseWidth();
 
 /// @brief Get the height of the triangle.
-/// @return The height with.
+/// @return The height of the triangle.
 [[nodiscard]] float getHeight();
 }  // namespace triangles
 
