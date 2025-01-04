@@ -46,7 +46,7 @@ constexpr double min_vel_y = -max_vel_y;
 ///@param positive Is a boolean constant that determine if the output of the function should be strictly positive or
 /// just positive.
 ///@return An integer.
-int getPositiveInteger(const std::string& prompt, bool positive);
+[[nodiscard]] int getPositiveInteger(const std::string& prompt, bool positive);
 }  // namespace graphic_par
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -60,15 +60,15 @@ constexpr float base_width = 7;
 ///@param height Represents the height of the triangle.
 constexpr float height = 15;
 
-///@param relaytive_position Is an array containing the relative position of a triangle's vertex in relation to the
-/// center. The first three elements identify a triangle associated with a Boid object, the last three identify a
-/// triangle associated with a Predator object.
-const sf::Vector2f relative_position[6] = {sf::Vector2f(0, -height / 2),
-                                           sf::Vector2f(-base_width / 2, height / 2),
-                                           sf::Vector2f(base_width / 2, height / 2),
-                                           sf::Vector2f(0, (-height * 3 / 2) / 2),
-                                           sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
-                                           sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
+///@param relative_position Is an array containing the relative position of a triangle's vertex in relation to the
+/// center. The first three elements identify a triangle associated with a bird::Boid object, the last three identify a
+/// triangle associated with a bird::Predator object.
+const std::array<sf::Vector2f, 6> relative_position = {sf::Vector2f(0, -height / 2),
+                                                       sf::Vector2f(-base_width / 2, height / 2),
+                                                       sf::Vector2f(base_width / 2, height / 2),
+                                                       sf::Vector2f(0, (-height * 3 / 2) / 2),
+                                                       sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
+                                                       sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
 
 /// @brief Constructs an array of sf::Vertex, three to three represent triangles, one for each bird.
 /// @param flock Is the vector of birds.
