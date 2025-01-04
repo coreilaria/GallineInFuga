@@ -46,11 +46,11 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles) {
       triangles[j].color = sf::Color::Blue;
 
       // down-left vertex
-      triangles[j + 1].position = vertex.position + sf::Vector2f(-baseWidth / 2, height / 2);
+      triangles[j + 1].position = vertex.position + sf::Vector2f(-base_width / 2, height / 2);
       triangles[j + 1].color = sf::Color::Blue;
 
       // down-right vertex
-      triangles[j + 2].position = vertex.position + sf::Vector2f(baseWidth / 2, height / 2);
+      triangles[j + 2].position = vertex.position + sf::Vector2f(base_width / 2, height / 2);
       triangles[j + 2].color = sf::Color::Blue;
 
     } else {
@@ -59,11 +59,11 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles) {
       triangles[j].color = sf::Color::Red;
 
       // down-left vertex
-      triangles[j + 1].position = vertex.position + sf::Vector2f(-(baseWidth * 3 / 2) / 2, (height * 3 / 2) / 2);
+      triangles[j + 1].position = vertex.position + sf::Vector2f(-(base_width * 3 / 2) / 2, (height * 3 / 2) / 2);
       triangles[j + 1].color = sf::Color::Red;
 
       // down-right vertex
-      triangles[j + 2].position = vertex.position + sf::Vector2f((baseWidth * 3 / 2) / 2, (height * 3 / 2) / 2);
+      triangles[j + 2].position = vertex.position + sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2);
       triangles[j + 2].color = sf::Color::Red;
     }
   }
@@ -78,20 +78,20 @@ void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& tr
   for (int k = j; k < j + 3; ++k) {
     if (std::dynamic_pointer_cast<bird::Boid>(bird)) {
       triangles[k].position =
-          vertex.position + sf::Vector2f(static_cast<float>(relativePosition[k - j].x * std::cos(theta) -
-                                                            relativePosition[k - j].y * std::sin(theta)),
-                                         static_cast<float>(relativePosition[k - j].x * std::sin(theta) +
-                                                            relativePosition[k - j].y * std::cos(theta)));
+          vertex.position + sf::Vector2f(static_cast<float>(relative_position[k - j].x * std::cos(theta) -
+                                                            relative_position[k - j].y * std::sin(theta)),
+                                         static_cast<float>(relative_position[k - j].x * std::sin(theta) +
+                                                            relative_position[k - j].y * std::cos(theta)));
     } else if (std::dynamic_pointer_cast<bird::Predator>(bird)) {
       triangles[k].position =
-          vertex.position + sf::Vector2f(static_cast<float>(relativePosition[k - j + 3].x * std::cos(theta) -
-                                                            relativePosition[k - j + 3].y * std::sin(theta)),
-                                         static_cast<float>(relativePosition[k - j + 3].x * std::sin(theta) +
-                                                            relativePosition[k - j + 3].y * std::cos(theta)));
+          vertex.position + sf::Vector2f(static_cast<float>(relative_position[k - j + 3].x * std::cos(theta) -
+                                                            relative_position[k - j + 3].y * std::sin(theta)),
+                                         static_cast<float>(relative_position[k - j + 3].x * std::sin(theta) +
+                                                            relative_position[k - j + 3].y * std::cos(theta)));
     }
   }
 }
 
-float getBaseWidth() { return baseWidth; }
+float getBaseWidth() { return base_width; }
 float getHeight() { return height; }
 }  // namespace triangles
