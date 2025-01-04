@@ -41,7 +41,7 @@ constexpr double maxVel_y = 3;
 constexpr double minVel_y = -maxVel_y;
 
 ///@brief It takes in input an integer, checking if it should be strictly positive or just positive. It allows 3
-/// attempts to insert a valid input, then it exit the program.
+/// attempts to insert a valid input, then it exits the program.
 ///@param prompt Is a constant string that will be streamed in output.
 ///@param positive Is a boolean constant that determine if the output of the function should be strictly positive or
 /// just positive.
@@ -70,24 +70,24 @@ const sf::Vector2f relativePosition[6] = {sf::Vector2f(0, -height / 2),
                                           sf::Vector2f((-baseWidth * 3 / 2) / 2, (height * 3 / 2) / 2),
                                           sf::Vector2f((baseWidth * 3 / 2) / 2, (height * 3 / 2) / 2)};
 
-/// @brief Construct an array of sf::Vertex, three to three represent triangles, one for each bird.
+/// @brief Constructs an array of sf::Vertex, three to three represent triangles, one for each bird.
 /// @param flock Is the vector of birds.
 /// @param triangles Is an array containing tree sf::Vertex for each bird in the flock, those constitute a sf::Triangle.
 void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles);
 
-/// @brief Update the direction of the triangle.
-/// @details Rotate the triangle associated with the bird, according to the direction of the bird's velocity.
+/// @brief Updates the direction of the triangle.
+/// @details Rotates the triangle associated with the bird, according to the direction of the bird's velocity.
 /// @param bird Is the bird associated with the triangle we need to rotate.
 /// @param triangles Is an array containing tree sf::Vertex for each bird in the flock, those constitute a sf::Triangle.
 /// @param theta Is the angle of the bird's updated velocity, formed with the vertical axis.
 void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangles, double theta, int i);
 
-/// @brief Get the base width of the triangle.
-/// @return The base with.
+/// @brief Gets the base width of the triangle.
+/// @return The base width.
 [[nodiscard]] float getBaseWidth();
 
-/// @brief Get the height of the triangle.
-/// @return The height with.
+/// @brief Gets the height of the triangle.
+/// @return The height.
 [[nodiscard]] float getHeight();
 }  // namespace triangles
 

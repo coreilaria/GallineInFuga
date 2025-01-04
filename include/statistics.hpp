@@ -7,23 +7,23 @@
 #define STATISTICS_HPP
 namespace statistics {
 struct Statistics {
-  ///@param meanDist Represent the mean value of the distance between each couple of boids, at a fixed time.
+  ///@param meanDist Represents the mean value of the distance between each couple of boids, at a fixed time.
   double meanDist;
 
-  ///@param devDist Represent the standard deviation associated with the mean distance.
+  ///@param devDist Represents the standard deviation associated with the mean distance.
   double devDist;
 
-  ///@param meanDist Represent the mean value of the speed of each boid.
+  ///@param meanDist Represents the mean value of the speed of each boid.
   double meanSpeed;
 
-  ///@param devSpeed Represent the standard deviation associated with the mean speed, at a fixed time.
+  ///@param devSpeed Represents the standard deviation associated with the mean speed, at a fixed time.
   double devSpeed;
 
-  ///@brief Construct an object Statistics
+  ///@brief Constructs an object Statistics
   ///@details Each attribute is set to 0.
   Statistics();
 
-  ///@brief Construct an object Statistics
+  ///@brief Constructs an object Statistics
   ///@details Each attribute is initialized with the given parameters.
   ///@param m_dist Is the mean distance.
   ///@param d_dist Is the standard deviation associated with the mean distance.

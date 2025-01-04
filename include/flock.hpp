@@ -50,79 +50,79 @@ class Flock {
   /// @param ds_ Is the radius of the circle where the separation rule would be effective.
   double ds_ = 20.;
 
-  /// @param turnFactor_ Is the increment that would be applied to the velocity's component when a bird flies too close
-  /// to teh border of the window.
+  /// @param turnFactor_ Is the increment that would be applied to the component of the velocity when a bird flies too close
+  /// to the border of the window.
   double turnFactor_ = 5.;
 
-  /// @param margin_ Is the distance from the window's border within which the border rule applies.
+  /// @param margin_ Is the distance from the border of the window within which the border rule applies.
   double margin_ = 100.;
 
  public:
-  /// @brief Construct a new Flock object.
-  /// @details Set:
+  /// @brief Constructs a new Flock object.
+  /// @details Sets:
   /// - nBoids_ = 0
   /// - nPredators_ = 0
   /// - maxSpeed_ = {12., 8.}
   /// - minSpeed_{7., 5.}
   Flock();
 
-  /// @brief Construct a new Flock object,
-  /// @details Initialize nBoids_ and nPredators_ with the given parameters and set:
+  /// @brief Constructs a new Flock object,
+  /// @details Initializes nBoids_ and nPredators_ with the given parameters and sets:
   /// - maxSpeed_ = {12., 8.}
-  /// - minSpeed_{7., 5.}
+  /// - minSpeed_ = {7., 5.}
   Flock(int, int);
 
-  /// @brief Get the number of boids in the flock.
+  /// @brief Gets the number of boids in the flock.
   /// @return The number of boids.
   [[nodiscard]] int getBoidsNum() const;
 
-  /// @brief Get the number of predators in the flock.
+  /// @brief Gets the number of predators in the flock.
   /// @return The number of predators.
   [[nodiscard]] int getPredatorsNum() const;
 
-  /// @brief Get the number of bird in the flock.
+  /// @brief Gets the number of birds in the flock.
   /// @return The sum of the number of boids and predators in the flock.
   [[nodiscard]] int getFlockSize() const;
 
-  /// @brief Get the flock vector.
-  /// @return The vector of bird in the flock.
+  /// @brief Gets the flock vector.
+  /// @return The vector of birds in the flock.
   [[nodiscard]] std::vector<std::shared_ptr<Bird>> getFlock() const;
 
-  /// @brief Get the parameters for the rule border.
+  /// @brief Gets the parameters for the rule border.
   /// @return The array containing respectively the margin and the turn factor.
   [[nodiscard]] std::array<double, 2> getBorderParams() const;
 
-  /// @brief Set the vector of bird which will form the flock.
-  /// @param flock Is the vector of bird.
+  /// @brief Sets the vector of birds which will form the flock.
+  /// @param flock Is the vector of birds.
   void setFlock(const std::vector<std::shared_ptr<Bird>> &flock);
 
-  /// @brief Set maximum speed value for both boids and predators.
+  /// @brief Sets maximum speed value for both boids and predators.
   /// @param maxSpeed_b The maximum speed for boids.
   /// @param maxSpeed_p The maximum speed for predators.
   void setMaxSpeed(double maxSpeed_b, double maxSpeed_p);
 
-  /// @brief Set minimum speed value for both boids and predators.
+  /// @brief Sets minimum speed value for both boids and predators.
   /// @param minSpeed_b The minimum speed for boids.
   /// @param minSpeed_p The minimum speed for predators.
   void setMinSpeed(double minSpeed_b, double minSpeed_p);
 
-  /// @brief Generate birds to fill the flock.
+  /// @brief Generates birds to fill the flock.
   /// @details Boid and Predator objects are generated with random positions and velocities, then the flock vector is
   /// filled with these objects.
   void generateBirds();
 
-  /// @brief Find the boids near a bird.
+  /// @brief Finds the boids near a bird.
   /// @param target Is the bird of which we want to find the boids nearby.
   /// @param i Is the index identifying the position of the bird in the flock.
   std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &target, int i) const;
 
-  /// @brief Find the predators near a bird.
+  /// @brief Finds the predators near a bird.
   /// @param target Is the bird of which we want to find the predators nearby.
   /// @param i Is the index identifying the position of the bird in the flock.
   std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &target, int i) const;
 
-  /// @brief Evaluate the new position and velocity of a bird in the flock.
-  /// @details Evaluate a new velocity for the bird, taking on account all the rules implemented for the birds:
+  /// @brief Evaluates the new position and velocity of a bird in the flock.
+  /// @details Evaluates a new velocity for the bird, taking into account all the rules implemented for the birds:
   ///  - separation
   ///  - border
   ///  - friction
@@ -131,7 +131,7 @@ class Flock {
   ///  - cohesion (boids)
   ///  - repel (boids)
   ///  - chase (predators)
-  ///  Then evaluate the new position by multiplying the new velocity by graphic_par::dt. Eventually update the position
+  ///  Then evaluates the new position by multiplying the new velocity by graphic_par::dt. Eventually updates the position
   ///  and rotation of the triangle associated with the bird.
   /// @param b Is the bird to update
   /// @param triangle Is the array containing the triangle associated with the bird.
@@ -139,18 +139,18 @@ class Flock {
   /// @return The array containing, respectively, the updated position and velocity of the bird.
   std::array<Point, 2> updateBird(const std::shared_ptr<Bird> &b, sf::VertexArray &triangle, int i) const;
 
-  /// @brief Update the triangles' position and direction.
-  /// @details It updates the velocity and position of each bird in the flock. Then is updated the position and the
-  /// direction of the triangles associated.
+  /// @brief Updates the position and the direction of the triangles.
+  /// @details It updates the velocity and position of each bird in the flock. Then the position and the
+  /// direction of the associated triangles are updated.
   /// @param triangles Array of triangles associated with each bird in the flock.
   void evolve(sf::VertexArray &triangles) const;
 
-  /// @brief Evaluate the relevant statistical quantities of the flock.
+  /// @brief Evaluates the relevant statistical quantities of the flock.
   /// @details It computes:
   /// - mean distance
-  /// - mean distance's standard deviation
+  /// - standard deviation of the distance
   /// - mean speed
-  /// - mean speed's standard deviation
+  /// - standard deviation of the speed
   ///@return A Statistics object.
   statistics::Statistics statistics();
 };
