@@ -19,8 +19,8 @@ constexpr double s{0.6};
 constexpr double c{0.001};
 constexpr double a{0.6};
 
-constexpr double maxSpeed[2]{5., 4.};
-constexpr double minSpeed[2]{3., 2.5};
+constexpr std::array<double, 2> maxSpeed{5., 4.};
+constexpr std::array<double, 2> minSpeed{3., 2.5};
 
 //======================================================================================================================
 //===TESTING POINT CLASS================================================================================================

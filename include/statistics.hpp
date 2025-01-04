@@ -5,22 +5,24 @@
 ///             A Statistics object contains all the relevant information for a statistical analysis of the flock.
 #ifndef STATISTICS_HPP
 #define STATISTICS_HPP
+
 namespace statistics {
 struct Statistics {
-  ///@param meanDist Represents the mean value of the distance between each couple of boids, at a fixed time.
-  double meanDist;
 
-  ///@param devDist Represents the standard deviation associated with the mean distance.
-  double devDist;
+  ///@param mean_dist Represents the mean value of the distance between each couple of boids, at a fixed time.
+  double mean_dist;
 
-  ///@param meanDist Represents the mean value of the speed of each boid.
-  double meanSpeed;
+  ///@param dev_dist Represents the standard deviation associated with the mean distance.
+  double dev_dist;
 
-  ///@param devSpeed Represents the standard deviation associated with the mean speed, at a fixed time.
-  double devSpeed;
+  ///@param mean_speed Represents the mean value of the speed of each boid.
+  double mean_speed;
+
+  ///@param dev_speed Represents the standard deviation associated with the mean speed, at a fixed time.
+  double dev_speed;
 
   ///@brief Constructs an object Statistics
-  ///@details Each attribute is set to 0.
+  ///@details Each attribute is initialized to '0.'.
   Statistics();
 
   ///@brief Constructs an object Statistics

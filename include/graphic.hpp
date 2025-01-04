@@ -54,21 +54,21 @@ int getPositiveInteger(const std::string& prompt, bool positive);
 //----------------------------------------------------------------------------------------------------------------------
 namespace triangles {
 
-///@param baseWidth_ Is the length of the triangle's base.
-constexpr float baseWidth = 7;
+///@param base_width Represents the length of the triangle's base.
+constexpr float base_width = 7;
 
-///@param height Is the height of the triangle.
+///@param height Represents the height of the triangle.
 constexpr float height = 15;
 
-///@param relativePosition Is an array containing the relative position of a triangle's vertex in relation to the
+///@param relaytive_position Is an array containing the relative position of a triangle's vertex in relation to the
 /// center. The first three elements identify a triangle associated with a Boid object, the last three identify a
 /// triangle associated with a Predator object.
-const sf::Vector2f relativePosition[6] = {sf::Vector2f(0, -height / 2),
-                                          sf::Vector2f(-baseWidth / 2, height / 2),
-                                          sf::Vector2f(baseWidth / 2, height / 2),
+const sf::Vector2f relative_position[6] = {sf::Vector2f(0, -height / 2),
+                                          sf::Vector2f(-base_width / 2, height / 2),
+                                          sf::Vector2f(base_width / 2, height / 2),
                                           sf::Vector2f(0, (-height * 3 / 2) / 2),
-                                          sf::Vector2f((-baseWidth * 3 / 2) / 2, (height * 3 / 2) / 2),
-                                          sf::Vector2f((baseWidth * 3 / 2) / 2, (height * 3 / 2) / 2)};
+                                          sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
+                                          sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
 
 /// @brief Constructs an array of sf::Vertex, three to three represent triangles, one for each bird.
 /// @param flock Is the vector of birds.
@@ -80,14 +80,15 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles);
 /// @param bird Is the bird associated with the triangle we need to rotate.
 /// @param triangles Is an array containing tree sf::Vertex for each bird in the flock, those constitute a sf::Triangle.
 /// @param theta Is the angle of the bird's updated velocity, formed with the vertical axis.
-void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangles, double theta, int i);
+/// @param i Is the index associated with the position of the bird in the flock.
+void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, double theta, int i);
 
 /// @brief Gets the base width of the triangle.
-/// @return The base width.
+/// @return The base width of the triangle.
 [[nodiscard]] float getBaseWidth();
 
 /// @brief Gets the height of the triangle.
-/// @return The height.
+/// @return The height of the triangle.
 [[nodiscard]] float getHeight();
 }  // namespace triangles
 
