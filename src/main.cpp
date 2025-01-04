@@ -11,8 +11,8 @@ using namespace graphic_par;
 using namespace triangles;
 
 int main() {
-  int nBoid = getPositiveInteger("Enter the number of boids to simulate: ");
-  int nPredator = getPositiveInteger("Enter the number of predators to simulate: ");
+  int nBoid = getPositiveInteger("Enter the number of boids to simulate: ", true);
+  int nPredator = getPositiveInteger("Enter the number of predators to simulate: ", false);
 
   flock::Flock flock(nBoid, nPredator);
 
