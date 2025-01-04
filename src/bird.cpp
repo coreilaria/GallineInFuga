@@ -38,22 +38,22 @@ point::Point Bird::separation(const double s, const double ds, const std::vector
 }
 
 point::Point Bird::border(const double margin, const double turn_factor) const {
-  assert(margin > 0 && margin < graphic_par::statsWidth && margin <= graphic_par::windowHeight);
+  assert(margin > 0 && margin < graphic_par::stats_width && margin <= graphic_par::window_height);
   assert(turn_factor > 0);
 
   double v4_x{velocity_.getX()};
   double v4_y{velocity_.getY()};
 
-  if (position_.getX() < graphic_par::statsWidth + margin) {
+  if (position_.getX() < graphic_par::stats_width + margin) {
     v4_x += turn_factor;
   }
-  if (position_.getX() > graphic_par::windowWidth - margin) {
+  if (position_.getX() > graphic_par::window_width - margin) {
     v4_x -= turn_factor;
   }
   if (position_.getY() < margin) {
     v4_y += turn_factor;
   }
-  if (position_.getY() > graphic_par::windowHeight - margin) {
+  if (position_.getY() > graphic_par::window_height - margin) {
     v4_y -= turn_factor;
   }
   return {v4_x, v4_y};
@@ -64,7 +64,7 @@ point::Point Bird::border(const double margin, const double turn_factor) const {
 //----------------------------------------------------------------------------------------------------------------------
 
 Boid::Boid() : Bird() {}
-Boid::Boid(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sightAngle_ = 2. / 3 * M_PI; }
+Boid::Boid(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sight_angle_ = 2. / 3 * M_PI; }
 
 point::Point Boid::alignment(const double a, const std::vector<std::shared_ptr<Bird>>& near) const {
   assert(a > 0 && a < 1);
@@ -112,7 +112,7 @@ void Boid::boost(const std::array<double, 2> & min_speed, point::Point& velocity
 //----------------------------------------------------------------------------------------------------------------------
 
 Predator::Predator() : Bird() {}
-Predator::Predator(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sightAngle_ = 1. / 2 * M_PI; }
+Predator::Predator(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sight_angle_ = 1. / 2 * M_PI; }
 
 point::Point Predator::chase(const double c, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
   assert(c > 0);

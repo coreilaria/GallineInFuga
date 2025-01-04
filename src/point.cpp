@@ -48,8 +48,7 @@ Point operator/(const Point& a, const double scalar) {
 bool operator==(const Point& a, const Point& b) { return a.getX() == b.getX() && a.getY() == b.getY(); }
 
 sf::Vertex Point::operator()() const {
-  sf::Vertex out = {sf::Vector2f(static_cast<float>(x_), static_cast<float>(y_))};
-  out.color = sf::Color::White;
+  const sf::Vertex out = {sf::Vector2f(static_cast<float>(x_), static_cast<float>(y_))};
   return out;
 }
 }  // namespace point

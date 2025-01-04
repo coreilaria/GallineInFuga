@@ -58,12 +58,14 @@ class Point {
 };
 
 ///@brief Evaluates the sum between two Point objects.
-///@param a, b Are the two Point objects to sum.
+///@param a First addend.
+///@param b Second addend.
 ///@return The vector sum.
 Point operator+(const Point& a, const Point& b);
 
 ///@brief Evaluates the difference between two Point objects.
-///@param a, b Are the two Point object to subtract.
+///@param a Is the subtrahend.
+///@param b Is the minuend.
 ///@return The vector difference.
 Point operator-(const Point& a, const Point& b);
 
@@ -80,7 +82,8 @@ Point operator*(double scalar, const Point& a);
 Point operator/(const Point& a, double scalar);
 
 ///@brief Compares two Point objects.
-///@param a, b Are the Point objects in comparison.
+///@param a Is the first term of the comparison.
+///@param b Is the second term of the comparison
 ///@return The result of the comparison.
 bool operator==(const Point& a, const Point& b);
 }  // namespace point

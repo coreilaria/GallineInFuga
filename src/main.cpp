@@ -7,12 +7,9 @@
 #include "../include/flock.hpp"
 #include "../include/graphic.hpp"
 
-using namespace graphic_par;
-using namespace triangles;
-
 int main() {
-  int nBoid = getPositiveInteger("Enter the number of boids to simulate: ", true);
-  int nPredator = getPositiveInteger("Enter the number of predators to simulate: ", false);
+  int nBoid = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", true);
+  int nPredator = graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", false);
 
   flock::Flock flock(nBoid, nPredator);
 
@@ -21,19 +18,21 @@ int main() {
   unsigned int counter{0};
 
   sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
-  createTriangles(flock, triangles);
+  triangles::createTriangles(flock, triangles);
 
   sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
-  sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., windowHeight)),
-                     sf::Vertex(sf::Vector2f(statsWidth, 0.)), sf::Vertex(sf::Vector2f(statsWidth, windowHeight))};
+  sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., graphic_par::window_height)),
+                     sf::Vertex(sf::Vector2f(graphic_par::stats_width, 0.)),
+                     sf::Vertex(sf::Vector2f(graphic_par::stats_width, graphic_par::window_height))};
   for (auto& i : v) {
     i.color = sf::Color(50, 50, 50);
   }
   rectangle.create(4);
   rectangle.update(v);
 
-  sf::RenderWindow window({static_cast<unsigned int>(windowWidth), static_cast<unsigned int>(windowHeight)},
-                          "Flock simulation", sf::Style::Titlebar);
+  sf::RenderWindow window(
+      {static_cast<unsigned int>(graphic_par::window_width), static_cast<unsigned int>(graphic_par::window_height)},
+      "Flock simulation", sf::Style::Titlebar);
   window.setPosition(sf::Vector2i(10, 50));
   window.setFramerateLimit(60);
   sf::Event event{};

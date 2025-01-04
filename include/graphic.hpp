@@ -15,30 +15,30 @@ namespace graphic_par {
 ///@param dt It represents the temporal interval used to update cinematic quantities.
 constexpr double dt = 0.7;
 
-///@param windowWidth It represents the width of the simulation window.
-constexpr float windowWidth = 1900.f;
+///@param window_width It represents the width of the simulation window.
+constexpr float window_width = 1900.f;
 
-///@param windowHeight It represents the height of the simulation window.
-constexpr float windowHeight = 900.f;
+///@param window_height It represents the height of the simulation window.
+constexpr float window_height = 900.f;
 
-///@param statsWidth It represents the width of the window containing the statistics data.
-constexpr float statsWidth = 0.25 * windowWidth;
+///@param stats_width It represents the width of the window containing the statistics data.
+constexpr float stats_width = 0.25 * window_width;
 
-///@param maxVel_x It represents the upper boundary of the random generation range for the component x of the velocity
+///@param max_vel_x It represents the upper boundary of the random generation range for the component x of the velocity
 /// of a bird.
-constexpr double maxVel_x = 5.;
+constexpr double max_vel_x = 5.;
 
-///@param minVel_x It represents the lower boundary of the random generation range for the component x of the velocity
+///@param min_vel_x It represents the lower boundary of the random generation range for the component x of the velocity
 /// of a bird.
-constexpr double minVel_x = -maxVel_x;
+constexpr double min_vel_x = -max_vel_x;
 
-///@param maxVel_y It represents the upper boundary of the random generation range for the component y of the velocity
+///@param max_vel_y It represents the upper boundary of the random generation range for the component y of the velocity
 /// of a bird.
-constexpr double maxVel_y = 3;
+constexpr double max_vel_y = 3;
 
-///@param minVel_y It represents the lower boundary of the random generation range for the component y of the velocity
+///@param min_vel_y It represents the lower boundary of the random generation range for the component y of the velocity
 /// of a bird.
-constexpr double minVel_y = -maxVel_y;
+constexpr double min_vel_y = -max_vel_y;
 
 ///@brief It takes in input an integer, checking if it should be strictly positive or just positive. It allows 3
 /// attempts to insert a valid input, then it exits the program.
@@ -46,7 +46,7 @@ constexpr double minVel_y = -maxVel_y;
 ///@param positive Is a boolean constant that determine if the output of the function should be strictly positive or
 /// just positive.
 ///@return An integer.
-int getPositiveInteger(const std::string& prompt, bool positive);
+[[nodiscard]] int getPositiveInteger(const std::string& prompt, bool positive);
 }  // namespace graphic_par
 
 //----------------------------------------------------------------------------------------------------------------------
@@ -60,15 +60,15 @@ constexpr float base_width = 7;
 ///@param height Represents the height of the triangle.
 constexpr float height = 15;
 
-///@param relaytive_position Is an array containing the relative position of a triangle's vertex in relation to the
-/// center. The first three elements identify a triangle associated with a Boid object, the last three identify a
-/// triangle associated with a Predator object.
-const sf::Vector2f relative_position[6] = {sf::Vector2f(0, -height / 2),
-                                          sf::Vector2f(-base_width / 2, height / 2),
-                                          sf::Vector2f(base_width / 2, height / 2),
-                                          sf::Vector2f(0, (-height * 3 / 2) / 2),
-                                          sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
-                                          sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
+///@param relative_position Is an array containing the relative position of a triangle's vertex in relation to the
+/// center. The first three elements identify a triangle associated with a bird::Boid object, the last three identify a
+/// triangle associated with a bird::Predator object.
+const std::array<sf::Vector2f, 6> relative_position = {sf::Vector2f(0, -height / 2),
+                                                       sf::Vector2f(-base_width / 2, height / 2),
+                                                       sf::Vector2f(base_width / 2, height / 2),
+                                                       sf::Vector2f(0, (-height * 3 / 2) / 2),
+                                                       sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
+                                                       sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
 
 /// @brief Constructs an array of sf::Vertex, three to three represent triangles, one for each bird.
 /// @param flock Is the vector of birds.

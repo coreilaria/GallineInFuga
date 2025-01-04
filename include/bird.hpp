@@ -3,8 +3,8 @@
 ///
 /// @details    This file contains the definition of Bird class, Boid class and Predator class which inherit publicly
 ///             from Bird. A Bird object represent a bird flying in a two dimension space, each bird is characterized by
-///             two point::Point objects, a position and a velocity, and a double representing the sight angle they could
-///             perceive.
+///             two point::Point objects, a position and a velocity, and a double representing the sight angle they
+///             could perceive.
 #ifndef BIRD_HPP
 #define BIRD_HPP
 
@@ -19,13 +19,14 @@ class Bird {
   /// @brief The Bird class represents a bird in the simulation.
   /// @param position_ Is the position of the bird.
   /// @param velocity_ Is the velocity of the bird.
-  /// @param sightAngle_ Is the angle of sight of the bird.
+  /// @param sight_angle_ Is the angle of sight of the bird.
  protected:
   point::Point position_;
   point::Point velocity_;
-  double sightAngle_{};
+  double sight_angle_{};
 
  public:
+  /// @brief Default constructor of Bird class.
   Bird() = default;
 
   /// @brief Parametric constructor of Bird class.
@@ -45,7 +46,7 @@ class Bird {
   /// @brief Set the position and the velocity of the bird.
   /// @param position The position of the bird.
   /// @param velocity The velocity of the bird.
-  void setBird(point::Point position, point::Point velocity);  // needs to be selected
+  void setBird(point::Point position, point::Point velocity);
 
   /// @brief Update the velocity of the bird in order to keep it into the border.
   /// @details Whenever the bird is inside the margin, his velocity would be corrected in order to bring it away from
@@ -77,6 +78,7 @@ class Bird {
 
 class Boid final : public Bird {
  public:
+  ///@brief Default constructor.
   Boid();
 
   /// @brief Construct a new Boid object, with given position and velocity, and initialize the sight angle for boids.
@@ -128,7 +130,9 @@ class Boid final : public Bird {
 
 class Predator final : public Bird {
  public:
+  ///@brief Default constructor.
   Predator();
+
   /// @brief Construct a new Predator object, with given position and velocity and initialize the sight angle for
   /// predators.
   /// @param pos Is the position of the boid.
