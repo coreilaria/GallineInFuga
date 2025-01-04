@@ -8,23 +8,24 @@
 
 namespace statistics {
 struct Statistics {
-  ///@param mean_dist Represent the mean value of the distance between each couple of boids, at a fixed time.
+
+  ///@param mean_dist Represents the mean value of the distance between each couple of boids, at a fixed time.
   double mean_dist;
 
-  ///@param dev_dist Represent the standard deviation associated with the mean distance.
+  ///@param dev_dist Represents the standard deviation associated with the mean distance.
   double dev_dist;
 
-  ///@param mean_speed Represent the mean value of the speed of each boid.
+  ///@param mean_speed Represents the mean value of the speed of each boid.
   double mean_speed;
 
-  ///@param dev_speed Represent the standard deviation associated with the mean speed, at a fixed time.
+  ///@param dev_speed Represents the standard deviation associated with the mean speed, at a fixed time.
   double dev_speed;
 
-  ///@brief Construct an object Statistics
+  ///@brief Constructs an object Statistics
   ///@details Each attribute is initialized to '0.'.
   Statistics();
 
-  ///@brief Construct an object Statistics
+  ///@brief Constructs an object Statistics
   ///@details Each attribute is initialized with the given parameters.
   ///@param m_dist Is the mean distance.
   ///@param d_dist Is the standard deviation associated with the mean distance.
