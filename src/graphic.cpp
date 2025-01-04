@@ -70,19 +70,19 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles) {
   assert(static_cast<int>(triangles.getVertexCount()) == flock.getFlockSize() * 3);
 }
 
-void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangles, const double theta, const int i) {
+void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, const double theta, const int i) {
   const sf::Vertex vertex{bird->getPosition()()};  // operator () returns conversion from Point to sf::Vertex
 
   const int j = 3 * i;
 
   for (int k = j; k < j + 3; ++k) {
-    if (std::dynamic_pointer_cast<Boid>(bird)) {
+    if (std::dynamic_pointer_cast<bird::Boid>(bird)) {
       triangles[k].position =
           vertex.position + sf::Vector2f(static_cast<float>(relativePosition[k - j].x * std::cos(theta) -
                                                             relativePosition[k - j].y * std::sin(theta)),
                                          static_cast<float>(relativePosition[k - j].x * std::sin(theta) +
                                                             relativePosition[k - j].y * std::cos(theta)));
-    } else if (std::dynamic_pointer_cast<Predator>(bird)) {
+    } else if (std::dynamic_pointer_cast<bird::Predator>(bird)) {
       triangles[k].position =
           vertex.position + sf::Vector2f(static_cast<float>(relativePosition[k - j + 3].x * std::cos(theta) -
                                                             relativePosition[k - j + 3].y * std::sin(theta)),

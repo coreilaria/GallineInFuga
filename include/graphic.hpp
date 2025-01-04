@@ -80,7 +80,7 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles);
 /// @param bird Is the bird associated with the triangle we need to rotate.
 /// @param triangles Is an array containing tree sf::Vertex for each bird in the flock, those constitute a sf::Triangle.
 /// @param theta Is the angle of the bird's updated velocity, formed with the vertical axis.
-void rotateTriangle(const std::shared_ptr<Bird>& bird, sf::VertexArray& triangles, double theta, int i);
+void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, double theta, int i);
 
 /// @brief Get the base width of the triangle.
 /// @return The base with.
