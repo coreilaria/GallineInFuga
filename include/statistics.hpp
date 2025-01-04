@@ -8,7 +8,6 @@
 
 namespace statistics {
 struct Statistics {
-
   ///@param mean_dist Represents the mean value of the distance between each couple of boids, at a fixed time.
   double mean_dist;
 

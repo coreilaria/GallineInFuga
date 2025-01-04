@@ -8,11 +8,6 @@
 #include "../include/graphic.hpp"
 #include "../include/point.hpp"
 
-using namespace point;
-using namespace bird;
-using namespace flock;
-using namespace statistics;
-
 constexpr double d{80.};
 constexpr double ds{d / 2.};
 constexpr double s{0.6};
@@ -27,18 +22,18 @@ constexpr std::array<double, 2> minSpeed{3., 2.5};
 //======================================================================================================================
 
 TEST_CASE("Testing Point class") {
-  Point p0;
-  Point p1(1., 1.);
-  Point p2(-5.2, 3.75);
-  Point p3(-2., -4.);
-  Point p4(1., -6.);
+  point::Point p0;
+  point::Point p1(1., 1.);
+  point::Point p2(-5.2, 3.75);
+  point::Point p3(-2., -4.);
+  point::Point p4(1., -6.);
 
   double scalar1 = 7.;
   double scalar2 = -11.;
 
   SUBCASE("Testing getters") {
-    CHECK(p0 == Point(0., 0.));
-    CHECK(p1 == Point(1., 1.));
+    CHECK(p0 == point::Point(0., 0.));
+    CHECK(p1 == point::Point(1., 1.));
   }
   SUBCASE("Testing module method") {
     CHECK(p0.module() == 0.);
@@ -64,67 +59,67 @@ TEST_CASE("Testing Point class") {
   }
 
   SUBCASE("Testing operator +") {
-    Point sum1 = p0 + p1;
-    Point sum2 = p1 + p0;
+    point::Point sum1 = p0 + p1;
+    point::Point sum2 = p1 + p0;
 
-    Point sum3 = p1 + p2;
-    Point sum4 = p2 + p1;
+    point::Point sum3 = p1 + p2;
+    point::Point sum4 = p2 + p1;
 
-    CHECK(sum1 == Point(1., 1.));
-    CHECK(sum2 == Point(1., 1.));
-    CHECK(sum3 == Point(-4.2, 4.75));
-    CHECK(sum4 == Point(-4.2, 4.75));
+    CHECK(sum1 == point::Point(1., 1.));
+    CHECK(sum2 == point::Point(1., 1.));
+    CHECK(sum3 == point::Point(-4.2, 4.75));
+    CHECK(sum4 == point::Point(-4.2, 4.75));
   }
 
   SUBCASE("Testing operator -") {
-    Point diff1 = p0 - p1;
-    Point diff2 = p1 - p0;
+    point::Point diff1 = p0 - p1;
+    point::Point diff2 = p1 - p0;
 
-    Point diff3 = p1 - p2;
-    Point diff4 = p2 - p1;
+    point::Point diff3 = p1 - p2;
+    point::Point diff4 = p2 - p1;
 
-    Point diff5 = p2 - p0;
-    Point diff6 = p0 - p2;
+    point::Point diff5 = p2 - p0;
+    point::Point diff6 = p0 - p2;
 
-    CHECK(diff1 == Point(-1., -1));
-    CHECK(diff2 == Point(1., 1.));
-    CHECK(diff3 == Point(6.2, -2.75));
-    CHECK(diff4 == Point(-6.2, 2.75));
-    CHECK(diff5 == Point(-5.2, 3.75));
-    CHECK(diff6 == Point(5.2, -3.75));
+    CHECK(diff1 == point::Point(-1., -1));
+    CHECK(diff2 == point::Point(1., 1.));
+    CHECK(diff3 == point::Point(6.2, -2.75));
+    CHECK(diff4 == point::Point(-6.2, 2.75));
+    CHECK(diff5 == point::Point(-5.2, 3.75));
+    CHECK(diff6 == point::Point(5.2, -3.75));
   }
 
   SUBCASE("Testing operator *") {
     double scalar0 = 0.;
-    Point prod1 = scalar0 * p0;
-    Point prod2 = scalar0 * p1;
-    Point prod3 = scalar0 * p2;
+    point::Point prod1 = scalar0 * p0;
+    point::Point prod2 = scalar0 * p1;
+    point::Point prod3 = scalar0 * p2;
 
-    Point prod4 = scalar1 * p0;
-    Point prod5 = scalar1 * p1;
-    Point prod6 = scalar1 * p2;
+    point::Point prod4 = scalar1 * p0;
+    point::Point prod5 = scalar1 * p1;
+    point::Point prod6 = scalar1 * p2;
 
-    Point prod7 = scalar2 * p0;
-    Point prod8 = scalar2 * p1;
-    Point prod9 = scalar2 * p2;
+    point::Point prod7 = scalar2 * p0;
+    point::Point prod8 = scalar2 * p1;
+    point::Point prod9 = scalar2 * p2;
 
-    CHECK(prod1 == Point(0., 0.));
-    CHECK(prod2 == Point(0., 0.));
-    CHECK(prod3 == Point(0., 0.));
-    CHECK(prod4 == Point(0., 0.));
-    CHECK(prod5 == Point(7., 7.));
-    CHECK(prod6 == Point(-36.4, 26.25));
-    CHECK(prod7 == Point(0., 0.));
-    CHECK(prod8 == Point(-11., -11.));
-    CHECK(prod9 == Point(57.2, -41.25));
+    CHECK(prod1 == point::Point(0., 0.));
+    CHECK(prod2 == point::Point(0., 0.));
+    CHECK(prod3 == point::Point(0., 0.));
+    CHECK(prod4 == point::Point(0., 0.));
+    CHECK(prod5 == point::Point(7., 7.));
+    CHECK(prod6 == point::Point(-36.4, 26.25));
+    CHECK(prod7 == point::Point(0., 0.));
+    CHECK(prod8 == point::Point(-11., -11.));
+    CHECK(prod9 == point::Point(57.2, -41.25));
   }
 
   SUBCASE("Testing operator /") {
-    Point div2 = p1 / scalar1;
-    Point div3 = p1 / scalar2;
-    Point div4 = p0 / scalar1;
-    Point div5 = p2 / scalar1;
-    Point div6 = p2 / scalar2;
+    point::Point div2 = p1 / scalar1;
+    point::Point div3 = p1 / scalar2;
+    point::Point div4 = p0 / scalar1;
+    point::Point div5 = p2 / scalar1;
+    point::Point div6 = p2 / scalar2;
 
     CHECK(div2.getX() == doctest::Approx(0.142857));
     CHECK(div2.getY() == doctest::Approx(0.142857));
@@ -132,7 +127,7 @@ TEST_CASE("Testing Point class") {
     CHECK(div3.getX() == doctest::Approx(-0.090909090));
     CHECK(div3.getY() == doctest::Approx(-0.090909090));
 
-    CHECK(div4 == Point(0., 0.));
+    CHECK(div4 == point::Point(0., 0.));
 
     CHECK(div5.getX() == doctest::Approx(-0.742857));
     CHECK(div5.getY() == doctest::Approx(0.535714));
@@ -141,19 +136,19 @@ TEST_CASE("Testing Point class") {
     CHECK(div6.getY() == doctest::Approx(-0.340909090));
   }
   SUBCASE("Testing operator +=") {
-    Point start0 = p0;
-    Point start1(8., -6.);
+    point::Point start0 = p0;
+    point::Point start1(8., -6.);
 
     start0 += p1;
     start1 += p2;
 
-    CHECK(start0 == Point(1., 1.));
-    CHECK(start1 == Point(2.8, -2.25));
+    CHECK(start0 == point::Point(1., 1.));
+    CHECK(start1 == point::Point(2.8, -2.25));
   }
   SUBCASE("Testing operator ==") {
-    Point point0 = p0;
-    Point point1 = p1;
-    Point point2 = p2;
+    point::Point point0 = p0;
+    point::Point point1 = p1;
+    point::Point point2 = p2;
 
     CHECK(point0 == p0);
     CHECK(point1 == p1);
@@ -185,58 +180,58 @@ TEST_CASE("Testing Point class") {
 //===TESTING BOID CLASS=================================================================================================
 //======================================================================================================================
 
-Point pos1(3., -2.);
-Point vel1(5., -1.);
+point::Point pos1(3., -2.);
+point::Point vel1(5., -1.);
 double alfa{M_PI / 3. + vel1.angle()};
 double beta{-1 * M_PI / 3. + vel1.angle()};
 
-Point pos2 = pos1 + 0.8 * d * Point(std::sin(alfa), -std::cos(alfa));
-Point vel2(-8.5, -6.);
+point::Point pos2 = pos1 + 0.8 * d * point::Point(std::sin(alfa), -std::cos(alfa));
+point::Point vel2(-8.5, -6.);
 
-Point pos3 = pos1 + 0.8 * d * Point(std::sin(beta), -std::cos(beta));
-Point vel3(-7.3, 2.5);
+point::Point pos3 = pos1 + 0.8 * d * point::Point(std::sin(beta), -std::cos(beta));
+point::Point vel3(-7.3, 2.5);
 
-Point pos4 = pos1 + 0.5 * ds * Point(std::sin(alfa), -std::cos(alfa));
-Point vel4(-1., -2.);
+point::Point pos4 = pos1 + 0.5 * ds * point::Point(std::sin(alfa), -std::cos(alfa));
+point::Point vel4(-1., -2.);
 
-Point pos5 = pos1 + 0.5 * ds * Point(std::sin(beta), -std::cos(beta));
-Point vel5(-5., -3.2);
+point::Point pos5 = pos1 + 0.5 * ds * point::Point(std::sin(beta), -std::cos(beta));
+point::Point vel5(-5., -3.2);
 
 TEST_CASE("Testing Boid class") {
   double x = pos1.getX();
   double y = pos1.getY();
 
-  Boid b1(pos1, vel1);
-  Boid b2(pos2, vel2);
-  Boid b3(pos3, vel3);
-  Boid b4(pos4, vel4);
-  Boid b5;
+  bird::Boid b1(pos1, vel1);
+  bird::Boid b2(pos2, vel2);
+  bird::Boid b3(pos3, vel3);
+  bird::Boid b4(pos4, vel4);
+  bird::Boid b5;
 
   b5.setBird(pos5, vel5);
 
-  Point v1 = vel1;
-  Point v2 = vel2;
-  Point v3 = vel3;
-  Point v4 = vel4;
-  Point v5 = vel5;
+  point::Point v1 = vel1;
+  point::Point v2 = vel2;
+  point::Point v3 = vel3;
+  point::Point v4 = vel4;
+  point::Point v5 = vel5;
 
-  std::vector<std::shared_ptr<Bird>> near_b1{std::make_shared<Boid>(b2), std::make_shared<Boid>(b3),
-                                             std::make_shared<Boid>(b4), std::make_shared<Boid>(b5)};
+  std::vector<std::shared_ptr<bird::Bird>> near_b1{std::make_shared<bird::Boid>(b2), std::make_shared<bird::Boid>(b3),
+                                             std::make_shared<bird::Boid>(b4), std::make_shared<bird::Boid>(b5)};
 
   SUBCASE("Testing getters") {
-    Boid b0;
-    CHECK(b0.getPosition() == Point(0., 0.));
-    CHECK(b0.getVelocity() == Point(0., 0.));
+    bird::Boid b0;
+    CHECK(b0.getPosition() == point::Point(0., 0.));
+    CHECK(b0.getVelocity() == point::Point(0., 0.));
 
-    CHECK(b1.getPosition() == Point(3., -2.));
-    CHECK(b1.getVelocity() == Point(5., -1.));
+    CHECK(b1.getPosition() == point::Point(3., -2.));
+    CHECK(b1.getVelocity() == point::Point(5., -1.));
   }
 
   SUBCASE("Testing setters") {
     CHECK(b5.getPosition().getX() == doctest::Approx(pos5.getX()));
     CHECK(b5.getPosition().getY() == doctest::Approx(pos5.getY()));
 
-    CHECK(b5.getVelocity() == Point(-5., -3.2));
+    CHECK(b5.getVelocity() == point::Point(-5., -3.2));
   }
 
   SUBCASE("Testing separation method") {
@@ -264,8 +259,8 @@ TEST_CASE("Testing Boid class") {
   }
 
   SUBCASE("Testing repel method") {
-    // here we apply Boid::repel on near_b1, which identifies the boids near b1, even if it was initially intended
-    // to be applied on near_predators
+    // here we apply bird::Boid::repel on near_b1, which identifies the boids near b1, even if it was initially intended
+    // to be applied on near_predators.
 
     double rep1_x = -s * 6 * (0.5 * ds + 0.8 * d) * (std::sin(alfa) + std::sin(beta));
     double rep1_y = -s * 6 * (0.5 * ds + 0.8 * d) * -(std::cos(alfa) + std::cos(beta));
@@ -304,33 +299,33 @@ TEST_CASE("Testing Boid class") {
     b4.boost(minSpeed, v4);
     b5.boost(minSpeed, v5);
 
-    CHECK(v1 == Point(5., -1.));
-    CHECK(v2 == Point(-8.5, -6.));
-    CHECK(v3 == Point(-7.3, 2.5));
+    CHECK(v1 == point::Point(5., -1.));
+    CHECK(v2 == point::Point(-8.5, -6.));
+    CHECK(v3 == point::Point(-7.3, 2.5));
 
     CHECK(v4.getX() == doctest::Approx(minSpeed[0] * std::sin(vel4.angle())));
     CHECK(v4.getY() == doctest::Approx(-minSpeed[0] * std::cos(vel4.angle())));
 
-    CHECK(v5 == Point(-5., -3.2));
+    CHECK(v5 == point::Point(-5., -3.2));
   }
 
   SUBCASE("Testing border method") {
     constexpr double margin{100.};
     constexpr double turn_factor{1.5};
 
-    Boid boid0;
-    Boid boid1(Point(graphic_par::statsWidth + margin + 2., margin / 2.), vel1);
-    Boid boid2(Point(graphic_par::statsWidth + margin + 2., graphic_par::windowHeight - margin / 2.), vel2);
-    Boid boid3(Point(graphic_par::statsWidth + margin / 2., margin + 5.), vel3);
-    Boid boid4(Point(graphic_par::windowWidth - margin / 2., margin + 5.), vel4);
-    Boid boid5(Point(graphic_par::windowWidth / 2., graphic_par::windowHeight / 2.), vel5);
+    bird::Boid boid0;
+    bird::Boid boid1(point::Point(graphic_par::stats_width + margin + 2., margin / 2.), vel1);
+    bird::Boid boid2(point::Point(graphic_par::stats_width + margin + 2., graphic_par::window_height - margin / 2.), vel2);
+    bird::Boid boid3(point::Point(graphic_par::stats_width + margin / 2., margin + 5.), vel3);
+    bird::Boid boid4(point::Point(graphic_par::window_width - margin / 2., margin + 5.), vel4);
+    bird::Boid boid5(point::Point(graphic_par::window_width / 2., graphic_par::window_height / 2.), vel5);
 
-    Point velocity0;
-    Point velocity1;
-    Point velocity2;
-    Point velocity3;
-    Point velocity4;
-    Point velocity5;
+    point::Point velocity0;
+    point::Point velocity1;
+    point::Point velocity2;
+    point::Point velocity3;
+    point::Point velocity4;
+    point::Point velocity5;
 
     velocity0 += boid0.border(margin, turn_factor);
     velocity1 += boid1.border(margin, turn_factor);
@@ -364,48 +359,47 @@ TEST_CASE("Testing Boid class") {
 //======================================================================================================================
 
 TEST_CASE("Testing Predator class") {
-  Predator p1(pos1, vel1);
-  Predator p2(pos2, vel2);
-  Predator p3(pos3, vel3);
-  Predator p4;
+  bird::Predator p1(pos1, vel1);
+  bird::Predator p2(pos2, vel2);
+  bird::Predator p3(pos3, vel3);
+  bird::Predator p4;
 
-  pos4 = pos1 + 0.5 * d * Point(std::sin(alfa), -std::cos(alfa));
+  pos4 = pos1 + 0.5 * d * point::Point(std::sin(alfa), -std::cos(alfa));
   p4.setBird(pos4, vel4);
 
-  Point v1 = vel1;
-  Point v2 = vel2;
-  Point v3 = vel3;
-  Point v4 = vel4;
+  point::Point v1 = vel1;
+  point::Point v2 = vel2;
+  point::Point v3 = vel3;
+  point::Point v4 = vel4;
 
-  std::vector<std::shared_ptr<Bird>> near_p1{std::make_shared<Predator>(p2), std::make_shared<Predator>(p3),
-                                             std::make_shared<Predator>(p4)};
+  std::vector<std::shared_ptr<bird::Bird>> near_p1{std::make_shared<bird::Predator>(p2), std::make_shared<bird::Predator>(p3),
+                                             std::make_shared<bird::Predator>(p4)};
 
   SUBCASE("Testing getters") {
-    Predator p0;
-    CHECK(p0.getPosition() == Point(0., 0.));
-    CHECK(p0.getVelocity() == Point(0., 0.));
-    CHECK(p1.getPosition() == Point(3., -2.));
-    CHECK(p1.getVelocity() == Point(5., -1.));
+    bird::Predator p0;
+    CHECK(p0.getPosition() == point::Point(0., 0.));
+    CHECK(p0.getVelocity() == point::Point(0., 0.));
+    CHECK(p1.getPosition() == point::Point(3., -2.));
+    CHECK(p1.getVelocity() == point::Point(5., -1.));
   }
 
   SUBCASE("Testing setters") {
     CHECK(p2.getPosition().getX() == doctest::Approx(pos2.getX()));
     CHECK(p2.getPosition().getY() == doctest::Approx(pos2.getY()));
-    CHECK(p2.getVelocity() == Point(-8.5, -6.));
+    CHECK(p2.getVelocity() == point::Point(-8.5, -6.));
 
     CHECK(p3.getPosition().getX() == doctest::Approx(pos3.getX()));
     CHECK(p3.getPosition().getY() == doctest::Approx(pos3.getY()));
-    CHECK(p3.getVelocity() == Point(-7.3, 2.5));
+    CHECK(p3.getVelocity() == point::Point(-7.3, 2.5));
 
     CHECK(p4.getPosition().getX() == doctest::Approx(pos4.getX()));
     CHECK(p4.getPosition().getY() == doctest::Approx(pos4.getY()));
-    CHECK(p4.getVelocity() == Point(-1., -2.));
+    CHECK(p4.getVelocity() == point::Point(-1., -2.));
   }
 
   SUBCASE("Testing chase method") {
-    // here we apply Predator::chase on near_p1, which identifies the predators near p1, even if it was initially
-    // intended
-    // to be applied on near_boids
+    // here we apply bird::Predator::chase on near_p1, which identifies the predators near p1, even if it was initially
+    // intended to be applied on near_boids.
 
     double chase1_x = c * 2 * d / 3. * (1.3 * std::sin(alfa) + 0.8 * std::sin(beta));
     double chase1_y = c * 2 * -d / 3. * (1.3 * std::cos(alfa) + 0.8 * std::cos(beta));
@@ -429,7 +423,7 @@ TEST_CASE("Testing Predator class") {
     CHECK(v3.getX() == doctest::Approx(maxSpeed[1] * std::sin(vel3.angle())));
     CHECK(v3.getY() == doctest::Approx(-maxSpeed[1] * std::cos(vel3.angle())));
 
-    CHECK(v4 == Point(-1., -2.));
+    CHECK(v4 == point::Point(-1., -2.));
   }
 
   SUBCASE("Testing boost method") {
@@ -438,9 +432,9 @@ TEST_CASE("Testing Predator class") {
     p3.boost(minSpeed, v3);
     p4.boost(minSpeed, v4);
 
-    CHECK(v1 == Point(5., -1.));
-    CHECK(v2 == Point(-8.5, -6.));
-    CHECK(v3 == Point(-7.3, 2.5));
+    CHECK(v1 == point::Point(5., -1.));
+    CHECK(v2 == point::Point(-8.5, -6.));
+    CHECK(v3 == point::Point(-7.3, 2.5));
 
     CHECK(v4.getX() == doctest::Approx(minSpeed[1] * std::sin(vel4.angle())));
     CHECK(v4.getY() == doctest::Approx(-minSpeed[1] * std::cos(vel4.angle())));
@@ -451,16 +445,16 @@ TEST_CASE("Testing Predator class") {
 //===TESTING FUNCTIONS IN NAMESPACE TRIANGLES::=========================================================================
 //======================================================================================================================
 
-Flock flock1(2, 2);
+flock::Flock flock1(2, 2);
 
-std::shared_ptr<Boid> b1 = std::make_shared<Boid>(pos1, vel1);
-std::shared_ptr<Boid> b2 = std::make_shared<Boid>(pos2, vel2);
-std::shared_ptr<Predator> p1 = std::make_shared<Predator>(pos3, vel3);
-std::shared_ptr<Predator> p2 = std::make_shared<Predator>(pos5, vel5);
-// Boid b1(pos1, vel1);
-std::vector<std::shared_ptr<Bird>> f1{};
+std::shared_ptr<bird::Boid> b1 = std::make_shared<bird::Boid>(pos1, vel1);
+std::shared_ptr<bird::Boid> b2 = std::make_shared<bird::Boid>(pos2, vel2);
+std::shared_ptr<bird::Predator> p1 = std::make_shared<bird::Predator>(pos3, vel3);
+std::shared_ptr<bird::Predator> p2 = std::make_shared<bird::Predator>(pos5, vel5);
 
-TEST_CASE("Testing functions in namespace triangles::") {
+std::vector<std::shared_ptr<bird::Bird>> f1{};
+
+TEST_CASE("Testing functions in namespace triangles") {
   f1.push_back(b1);
   f1.push_back(b2);
   f1.push_back(p1);
@@ -550,7 +544,7 @@ TEST_CASE("Testing Flock class") {
   sf::VertexArray triangles(sf::Triangles, 3 * flock1.getFlockSize());
 
   SUBCASE("Testing generateBirds method") {
-    Flock flock0(2, 2);
+    flock::Flock flock0(2, 2);
     flock0.generateBirds();
     CHECK(!flock0.getFlock().empty());
   }
@@ -562,13 +556,13 @@ TEST_CASE("Testing Flock class") {
   }
 
   SUBCASE("Testing findNearBoids method") {
-    std::vector<std::shared_ptr<Bird>> nearBoids1;
+    std::vector<std::shared_ptr<bird::Bird>> nearBoids1;
     nearBoids1 = flock1.findNearBoids(*b1, 0);
 
     CHECK(nearBoids1.size() == 1);
     CHECK(nearBoids1[0].get() == b2.get());
 
-    std::vector<std::shared_ptr<Bird>> nearBoids2;
+    std::vector<std::shared_ptr<bird::Bird>> nearBoids2;
     nearBoids2 = flock1.findNearBoids(*p1, 2);
 
     CHECK(nearBoids2.size() == 2);
@@ -577,21 +571,21 @@ TEST_CASE("Testing Flock class") {
   }
 
   SUBCASE("Testing findNearPredators method") {
-    std::vector<std::shared_ptr<Bird>> nearPredators1;
+    std::vector<std::shared_ptr<bird::Bird>> nearPredators1;
     nearPredators1 = flock1.findNearPredators(*b1, 0);
 
     CHECK(nearPredators1.size() == 2);
     CHECK(nearPredators1[0] == p1);
     CHECK(nearPredators1[1] == p2);
 
-    std::vector<std::shared_ptr<Bird>> nearPredators2;
+    std::vector<std::shared_ptr<bird::Bird>> nearPredators2;
     nearPredators2 = flock1.findNearPredators(*p1, 2);
 
     CHECK(nearPredators2.size() == 1);
     CHECK(nearPredators2[0] == p2);
 
-    Flock flock2(2, 0);
-    std::vector<std::shared_ptr<Bird>> f2;
+    flock::Flock flock2(2, 0);
+    std::vector<std::shared_ptr<bird::Bird>> f2;
     f2.push_back(b1);
     f2.push_back(b2);
 
@@ -600,50 +594,50 @@ TEST_CASE("Testing Flock class") {
 
   flock1.setMaxSpeed(5., 4.);
   flock1.setMinSpeed(3, 2.5);
-  std::array<Point, 2> update_boid = flock1.updateBird(b1, triangles, 0);
-  std::array<Point, 2> update_predator = flock1.updateBird(p1, triangles, 2);
+  std::array<point::Point, 2> update_boid = flock1.updateBird(b1, triangles, 0);
+  std::array<point::Point, 2> update_predator = flock1.updateBird(p1, triangles, 2);
 
   SUBCASE("Testing updateBird method") {
     const std::array<double, 2> border_params = flock1.getBorderParams();
 
     CHECK(border_params[0] > 0);
     CHECK(border_params[1] > 0);
-    CHECK(border_params[0] < graphic_par::statsWidth);
-    CHECK(border_params[0] <= graphic_par::windowHeight);
+    CHECK(border_params[0] < graphic_par::stats_width);
+    CHECK(border_params[0] <= graphic_par::window_height);
 
-    std::vector<std::shared_ptr<Bird>> nearBoids1;
-    std::vector<std::shared_ptr<Bird>> nearPredators1;
+    std::vector<std::shared_ptr<bird::Bird>> nearBoids1;
+    std::vector<std::shared_ptr<bird::Bird>> nearPredators1;
     nearBoids1 = flock1.findNearBoids(*b1, 0);
     nearPredators1 = flock1.findNearPredators(*b1, 0);
 
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    Point v_boid = b1->border(border_params[0], border_params[1]) + b1->separation(s, ds, nearBoids1) +
+    point::Point v_boid = b1->border(border_params[0], border_params[1]) + b1->separation(s, ds, nearBoids1) +
                    b1->alignment(a, nearBoids1) + b1->cohesion(c, nearBoids1) + b1->repel(s, nearPredators1);
     b1->friction(maxSpeed, v_boid);
     b1->boost(minSpeed, v_boid);
-    Point p_boid = b1->getPosition() + graphic_par::dt * v_boid;
+    point::Point p_boid = b1->getPosition() + graphic_par::dt * v_boid;
 
     CHECK(update_boid[0].getX() == doctest::Approx(p_boid.getX()));
     CHECK(update_boid[0].getY() == doctest::Approx(p_boid.getY()));
     CHECK(update_boid[1].getX() == doctest::Approx(v_boid.getX()));
     CHECK(update_boid[1].getY() == doctest::Approx(v_boid.getY()));
 
-    std::vector<std::shared_ptr<Bird>> nearBoids2;
-    std::vector<std::shared_ptr<Bird>> nearPredators2;
+    std::vector<std::shared_ptr<bird::Bird>> nearBoids2;
+    std::vector<std::shared_ptr<bird::Bird>> nearPredators2;
     nearBoids2 = flock1.findNearBoids(*p1, 2);
     nearPredators2 = flock1.findNearPredators(*p1, 2);
 
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    Point v_predator = p1->border(border_params[0], border_params[1]) +
+    point::Point v_predator = p1->border(border_params[0], border_params[1]) +
                        p1->separation(s * 0.1, d * 0.5, nearPredators2) + p1->chase(c, nearBoids2);
 
     p1->friction(maxSpeed, v_predator);
     p1->boost(minSpeed, v_predator);
-    Point p_predator = p1->getPosition() + graphic_par::dt * v_predator;
+    point::Point p_predator = p1->getPosition() + graphic_par::dt * v_predator;
 
     CHECK(update_predator[0].getX() == doctest::Approx(p_predator.getX()));
     CHECK(update_predator[0].getY() == doctest::Approx(p_predator.getY()));
@@ -655,8 +649,8 @@ TEST_CASE("Testing Flock class") {
     flock1.evolve(triangles);
     triangles::createTriangles(flock1, triangles);
 
-    Boid boid(update_boid[0], update_boid[1]);
-    Boid predator(update_predator[0], update_predator[1]);
+    bird::Boid boid(update_boid[0], update_boid[1]);
+    bird::Predator predator(update_predator[0], update_predator[1]);
 
     CHECK(flock1.getFlock()[0]->getPosition().getX() == boid.getPosition().getX());
     CHECK(flock1.getFlock()[0]->getPosition().getY() == boid.getPosition().getY());
@@ -678,7 +672,7 @@ TEST_CASE("Testing Flock class") {
   }
 
   SUBCASE("Testing statistics method") {
-    Statistics stats = flock1.statistics();
+    statistics::Statistics stats = flock1.statistics();
 
     double speed1 = flock1.getFlock()[0]->getVelocity().module();
     double speed2 = flock1.getFlock()[1]->getVelocity().module();
@@ -702,8 +696,8 @@ TEST_CASE("Testing Flock class") {
 
 TEST_CASE("Testing Statistics struct") {
   SUBCASE("Testing default and parametric constructors") {
-    Statistics stats0;
-    Statistics stats1(7., 3., 2., 0.5);
+    statistics::Statistics stats0;
+    statistics::Statistics stats1(7., 3., 2., 0.5);
 
     CHECK(stats0.mean_dist == 0.);
     CHECK(stats0.dev_dist == 0.);

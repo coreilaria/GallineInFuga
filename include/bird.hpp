@@ -19,13 +19,14 @@ class Bird {
   /// @brief The Bird class represents a bird in the simulation.
   /// @param position_ Is the position of the bird.
   /// @param velocity_ Is the velocity of the bird.
-  /// @param sightAngle_ Is the angle of sight of the bird.
+  /// @param sight_angle_ Is the angle of sight of the bird.
  protected:
   point::Point position_;
   point::Point velocity_;
-  double sightAngle_{};
+  double sight_angle_{};
 
  public:
+ /// @brief Default constructor of Bird class.
   Bird() = default;
 
   /// @brief Parametric constructor of Bird class.
