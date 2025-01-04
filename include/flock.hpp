@@ -111,14 +111,14 @@ class Flock {
   /// filled with these objects.
   void generateBirds();
 
-  /// @brief Finds the boids near a bird::Bird.
+  /// @brief Finds the bird::Boids near a bird::Bird.
   /// @param target Is the bird::Bird of which we want to find the bird::Boids nearby.
   /// @param i Is the index identifying the position of the bird::Bird in the flock.
   std::vector<std::shared_ptr<Bird>> findNearBoids(const Bird &target, int i) const;
 
   /// @brief Finds the predators near a bird::Bird.
   /// @param target Is the bird::Bird of which we want to find the bird::Predators nearby.
-  /// @param i Is the index identifying the position of the bird in the flock.
+  /// @param i Is the index identifying the position of the bird::Bird in the flock.
   std::vector<std::shared_ptr<Bird>> findNearPredators(const Bird &target, int i) const;
 
   /// @brief Evaluates the new position and velocity of a bird::Bird in the flock.
