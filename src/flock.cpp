@@ -15,12 +15,15 @@
 #include "../include/statistics.hpp"
 
 namespace flock {
-Flock::Flock()
-  : n_boids_(0), n_predators_(0), max_speed_{12., 8.}, min_speed_{7., 5.} {
-}
+
+// Flock::Flock() : n_boids_(0), n_predators_(0), s_(0.6), a_(0.6), c_(0.001), max_speed_{12., 8.}, min_speed_{7., 5.} {};
 
 Flock::Flock(const int nBoids, const int nPredators)
-  : n_boids_(nBoids), n_predators_(nPredators), max_speed_{12., 8.}, min_speed_{7., 5.} {
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.6), a_(0.6), c_(0.001), max_speed_{12., 8.}, min_speed_{7., 5.} {
+  flock_.resize(n_boids_ + n_predators_);
+}
+Flock::Flock(const int nBoids, const int nPredators, const double s, const double a, const double c)
+    : n_boids_(nBoids), n_predators_(nPredators), s_(s), a_(a), c_(c), max_speed_{12., 8.}, min_speed_{7., 5.} {
   flock_.resize(n_boids_ + n_predators_);
 }
 
@@ -61,7 +64,8 @@ void Flock::generateBirds() {
   }
   predators.reserve(n_predators_);
   for (int i = 0; i < n_predators_; ++i) {
-    predators.emplace_back(point::Point(dist_pos_x(rng), dist_pos_y(rng)), point::Point(dist_vel_x(rng), dist_vel_y(rng)));
+    predators.emplace_back(point::Point(dist_pos_x(rng), dist_pos_y(rng)),
+                           point::Point(dist_vel_x(rng), dist_vel_y(rng)));
   }
 
   flock_.clear();
@@ -135,7 +139,8 @@ std::vector<std::shared_ptr<bird::Bird>> Flock::findNearPredators(const bird::Bi
   return near;
 }
 
-std::array<point::Point, 2> Flock::updateBird(const std::shared_ptr<bird::Bird>& b, sf::VertexArray& triangles, const int i) const {
+std::array<point::Point, 2> Flock::updateBird(const std::shared_ptr<bird::Bird>& b, sf::VertexArray& triangles,
+                                              const int i) const {
   point::Point p = b->getPosition();
 
   const std::vector<std::shared_ptr<bird::Bird>> near_boids{findNearBoids(*b, i)};
@@ -149,7 +154,7 @@ std::array<point::Point, 2> Flock::updateBird(const std::shared_ptr<bird::Bird>&
     }
     if (!near_boids.empty()) {
       v += b->separation(s_, ds_, near_boids) + std::dynamic_pointer_cast<bird::Boid>(b)->alignment(a_, near_boids) +
-          std::dynamic_pointer_cast<bird::Boid>(b)->cohesion(c_, near_boids);
+           std::dynamic_pointer_cast<bird::Boid>(b)->cohesion(c_, near_boids);
     }
   } else {
     if (!near_predators.empty()) {
@@ -191,13 +196,14 @@ statistics::Statistics Flock::statistics() const {
 
   if (n_boids_ > 1) {
     for (auto it = flock_.begin(); it != flock_.begin() + n_boids_; ++it) {
-      std::array<double, 2> sum = std::accumulate(it, flock_.begin() + n_boids_, std::array<double, 2>{0., 0.},
-                                                  [&it](std::array<double, 2>& acc, const std::shared_ptr<bird::Bird>& bird) {
-                                                    acc[0] += (bird->getPosition().distance((*it)->getPosition()));
-                                                    acc[1] += bird->getPosition().distance((*it)->getPosition()) *
-                                                        bird->getPosition().distance((*it)->getPosition());
-                                                    return acc;
-                                                  });
+      std::array<double, 2> sum =
+          std::accumulate(it, flock_.begin() + n_boids_, std::array<double, 2>{0., 0.},
+                          [&it](std::array<double, 2>& acc, const std::shared_ptr<bird::Bird>& bird) {
+                            acc[0] += (bird->getPosition().distance((*it)->getPosition()));
+                            acc[1] += bird->getPosition().distance((*it)->getPosition()) *
+                                      bird->getPosition().distance((*it)->getPosition());
+                            return acc;
+                          });
       meanBoids_dist += sum[0];
       meanBoids_dist2 += sum[1];
     }
@@ -224,4 +230,4 @@ statistics::Statistics Flock::statistics() const {
 
   return {meanBoids_dist, dev_dist, meanBoids_speed, dev_speed};
 }
-} // namespace flock
+}  // namespace flock
