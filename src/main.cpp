@@ -23,15 +23,8 @@ int main() {
   sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
   triangles::createTriangles(flock, triangles);
 
-  sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
-  sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., graphic_par::window_height)),
-                     sf::Vertex(sf::Vector2f(graphic_par::stats_width, 0.)),
-                     sf::Vertex(sf::Vector2f(graphic_par::stats_width, graphic_par::window_height))};
-  for (auto& i : v) {
-    i.color = sf::Color(50, 50, 50);
-  }
-  rectangle.create(4);
-  rectangle.update(v);
+  sf::VertexBuffer stats_rectangle = graphic_par::createRectangle(graphic_par::stats_rectangle, 50, 50, 50);
+  sf::VertexBuffer simulation_rectangle = graphic_par::createRectangle(graphic_par::simulation_rectangle, 120, 200, 240);
 
   sf::RenderWindow window(
       {static_cast<unsigned int>(graphic_par::window_width), static_cast<unsigned int>(graphic_par::window_height)},
@@ -81,8 +74,9 @@ int main() {
 
     flock.evolve(triangles);
 
+    window.draw(stats_rectangle);
+    window.draw(simulation_rectangle);
     window.draw(triangles);
-    window.draw(rectangle);
     window.draw(text);
 
     window.display();

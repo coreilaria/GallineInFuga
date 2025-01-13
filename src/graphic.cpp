@@ -38,4 +38,21 @@ double getPositiveDouble(const std::string& prompt, std::istream& in, std::ostre
   return value;
 }
 
+sf::VertexBuffer createRectangle(std::array<sf::Vertex, 4>& vertex, const unsigned char red, const unsigned char green,
+                                 const unsigned char blue) {
+  for (auto& v : vertex) {
+    v.color = sf::Color(red, green, blue);
+  }
+  sf::VertexBuffer rectangle(sf::TrianglesStrip, sf::VertexBuffer::Static);
+
+  if (!rectangle.create(4)) {
+    throw std::runtime_error("Failed to create VertexBuffer.");
+  }
+
+  if (!rectangle.update(vertex.data())) {
+    throw std::runtime_error("Failed to update VertexBuffer.");
+  }
+
+  return rectangle;
+}
 }  // namespace graphic_par

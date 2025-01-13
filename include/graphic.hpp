@@ -36,6 +36,18 @@ constexpr double max_vel_y = 3;
 /// of a bird.
 constexpr double min_vel_y = -max_vel_y;
 
+///@param stats_rectangle It's an array containing the vertexes needed to draw the statistics' rectangle from
+/// sf::TrianglesStrips.
+inline std::array<sf::Vertex, 4> stats_rectangle = {
+    sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., window_height)),
+    sf::Vertex(sf::Vector2f(stats_width, 0.)), sf::Vertex(sf::Vector2f(stats_width, window_height))};
+
+///@param simulation_rectangle It's an array containing the vertexes needed to draw the simulation's rectangle from
+/// sf::TrianglesStrips.
+inline std::array<sf::Vertex, 4> simulation_rectangle = {
+    sf::Vertex(sf::Vector2f(stats_width, 0.)), sf::Vertex(sf::Vector2f(stats_width, window_height)),
+    sf::Vertex(sf::Vector2f(window_width, 0.)), sf::Vertex(sf::Vector2f(window_width, window_height))};
+
 ///@brief It takes in input an integer, checking if it should be strictly positive. If an invalid input is given, it
 /// exits the program.
 ///@param prompt Is a constant string that will be streamed in output.
@@ -54,5 +66,14 @@ int getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream
 ///@return A double.
 double getPositiveDouble(const std::string& prompt, std::istream& in, std::ostream& out);
 
+///@brief It takes in input a double, checking if lays in the range [0,1]. If an invalid input is given, it exits the
+/// program.
+///@param vertex It is an array containing the vertexes needed to draw a rectangle from sf::TrianglesStrips.
+///@param red It is the red rgb component.
+///@param green It is the green rgb component.
+///@param blue It is the blue rgb component.
+///@return A sf::VertexBuffer.
+sf::VertexBuffer createRectangle(std::array<sf::Vertex, 4>& vertex, unsigned char red, unsigned char green,
+                                 unsigned char blue);
 }  // namespace graphic_par
 #endif

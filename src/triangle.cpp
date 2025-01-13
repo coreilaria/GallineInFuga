@@ -10,33 +10,33 @@ namespace triangles {
 void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles) {
   for (int i = 0; i < flock.getFlockSize(); ++i) {
     const int j = 3 * i;
-    sf::Vertex vertex{flock.getFlock()[i]->getPosition()()};  // operator () returns conversion from Point to sf::Vertex
+    sf::Vertex vertex{flock.getFlock()[i]->getPosition()()};
 
     if (i < flock.getBoidsNum()) {
       // upper vertex (centered)
       triangles[j].position = vertex.position + sf::Vector2f(0, -height / 2);
-      triangles[j].color = sf::Color::Blue;
+      triangles[j].color = sf::Color::Black;
 
       // down-left vertex
       triangles[j + 1].position = vertex.position + sf::Vector2f(-base_width / 2, height / 2);
-      triangles[j + 1].color = sf::Color::Blue;
+      triangles[j + 1].color = sf::Color::Black;
 
       // down-right vertex
       triangles[j + 2].position = vertex.position + sf::Vector2f(base_width / 2, height / 2);
-      triangles[j + 2].color = sf::Color::Blue;
+      triangles[j + 2].color = sf::Color::Black;
 
     } else {
       // upper vertex (centered)
       triangles[j].position = vertex.position + sf::Vector2f(0, -(height * 3 / 2) / 2);
-      triangles[j].color = sf::Color::Red;
+      triangles[j].color = sf::Color(128, 0, 32);
 
       // down-left vertex
       triangles[j + 1].position = vertex.position + sf::Vector2f(-(base_width * 3 / 2) / 2, (height * 3 / 2) / 2);
-      triangles[j + 1].color = sf::Color::Red;
+      triangles[j + 1].color = sf::Color(128, 0, 32);
 
       // down-right vertex
       triangles[j + 2].position = vertex.position + sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2);
-      triangles[j + 2].color = sf::Color::Red;
+      triangles[j + 2].color = sf::Color(128, 0, 32);
     }
   }
   assert(static_cast<int>(triangles.getVertexCount()) == flock.getFlockSize() * 3);

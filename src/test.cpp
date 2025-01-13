@@ -526,17 +526,17 @@ TEST_CASE("Testing functions in namespace triangles") {
   SUBCASE("Testing triangles::createTriangles()") {
     triangles::createTriangles(flock1, triangles);
 
-    CHECK(triangles[0].color == sf::Color::Blue);
-    CHECK(triangles[1].color == sf::Color::Blue);
-    CHECK(triangles[2].color == sf::Color::Blue);
+    CHECK(triangles[0].color == sf::Color::Black);
+    CHECK(triangles[1].color == sf::Color::Black);
+    CHECK(triangles[2].color == sf::Color::Black);
 
     CHECK(triangles[0].position == v1.position + sf::Vector2f(0, -height / 2));
     CHECK(triangles[1].position == v1.position + sf::Vector2f(-base_width / 2, height / 2));
     CHECK(triangles[2].position == v1.position + sf::Vector2f(base_width / 2, height / 2));
 
-    CHECK(triangles[6].color == sf::Color::Red);
-    CHECK(triangles[7].color == sf::Color::Red);
-    CHECK(triangles[8].color == sf::Color::Red);
+    CHECK(triangles[6].color == sf::Color(128, 0, 32));
+    CHECK(triangles[7].color == sf::Color(128, 0, 32));
+    CHECK(triangles[8].color == sf::Color(128, 0, 32));
 
     CHECK(triangles[6].position == v2.position + sf::Vector2f(0, -(height * 3 / 2) / 2));
     CHECK(triangles[7].position == v2.position + sf::Vector2f(-(base_width * 3 / 2) / 2, (height * 3 / 2) / 2));
@@ -706,18 +706,18 @@ TEST_CASE("Testing Flock class") {
     CHECK(flock1.getFlock()[0]->getVelocity().getX() == boid.getVelocity().getX());
     CHECK(flock1.getFlock()[0]->getVelocity().getY() == boid.getVelocity().getY());
 
-    CHECK(triangles[0].color == sf::Color::Blue);
-    CHECK(triangles[1].color == sf::Color::Blue);
-    CHECK(triangles[2].color == sf::Color::Blue);
+    CHECK(triangles[0].color == sf::Color::Black);
+    CHECK(triangles[1].color == sf::Color::Black);
+    CHECK(triangles[2].color == sf::Color::Black);
 
     CHECK(flock1.getFlock()[2]->getPosition().getX() == predator.getPosition().getX());
     CHECK(flock1.getFlock()[2]->getPosition().getY() == predator.getPosition().getY());
     CHECK(flock1.getFlock()[2]->getVelocity().getX() == predator.getVelocity().getX());
     CHECK(flock1.getFlock()[2]->getVelocity().getY() == predator.getVelocity().getY());
 
-    CHECK(triangles[6].color == sf::Color::Red);
-    CHECK(triangles[7].color == sf::Color::Red);
-    CHECK(triangles[8].color == sf::Color::Red);
+    CHECK(triangles[6].color == sf::Color(128, 0, 32));
+    CHECK(triangles[7].color == sf::Color(128, 0, 32));
+    CHECK(triangles[8].color == sf::Color(128, 0, 32));
   }
 
   SUBCASE("Testing statistics method") {
@@ -761,3 +761,4 @@ TEST_CASE("Testing Statistics struct") {
 }
 
 // TODO: decidere se vogliamo testare funzione flock::setFlockParams()
+// TODO: testare graphic_par::createRectangle()
