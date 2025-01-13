@@ -7,6 +7,7 @@
 #include "../include/flock.hpp"
 #include "../include/graphic.hpp"
 #include "../include/point.hpp"
+#include "../include/triangle.hpp"
 
 constexpr double d{80.};
 constexpr double ds{d / 2.};
@@ -216,7 +217,7 @@ TEST_CASE("Testing Boid class") {
   point::Point v5 = vel5;
 
   std::vector<std::shared_ptr<bird::Bird>> near_b1{std::make_shared<bird::Boid>(b2), std::make_shared<bird::Boid>(b3),
-                                             std::make_shared<bird::Boid>(b4), std::make_shared<bird::Boid>(b5)};
+                                                   std::make_shared<bird::Boid>(b4), std::make_shared<bird::Boid>(b5)};
 
   SUBCASE("Testing getters") {
     bird::Boid b0;
@@ -315,7 +316,8 @@ TEST_CASE("Testing Boid class") {
 
     bird::Boid boid0;
     bird::Boid boid1(point::Point(graphic_par::stats_width + margin + 2., margin / 2.), vel1);
-    bird::Boid boid2(point::Point(graphic_par::stats_width + margin + 2., graphic_par::window_height - margin / 2.), vel2);
+    bird::Boid boid2(point::Point(graphic_par::stats_width + margin + 2., graphic_par::window_height - margin / 2.),
+                     vel2);
     bird::Boid boid3(point::Point(graphic_par::stats_width + margin / 2., margin + 5.), vel3);
     bird::Boid boid4(point::Point(graphic_par::window_width - margin / 2., margin + 5.), vel4);
     bird::Boid boid5(point::Point(graphic_par::window_width / 2., graphic_par::window_height / 2.), vel5);
@@ -372,8 +374,8 @@ TEST_CASE("Testing Predator class") {
   point::Point v3 = vel3;
   point::Point v4 = vel4;
 
-  std::vector<std::shared_ptr<bird::Bird>> near_p1{std::make_shared<bird::Predator>(p2), std::make_shared<bird::Predator>(p3),
-                                             std::make_shared<bird::Predator>(p4)};
+  std::vector<std::shared_ptr<bird::Bird>> near_p1{
+      std::make_shared<bird::Predator>(p2), std::make_shared<bird::Predator>(p3), std::make_shared<bird::Predator>(p4)};
 
   SUBCASE("Testing getters") {
     bird::Predator p0;
@@ -441,6 +443,55 @@ TEST_CASE("Testing Predator class") {
   }
 }
 
+//======================================================================================================================
+//===TESTING FUNCTIONS IN NAMESPACE GRAPHIC_PAR=========================================================================
+//======================================================================================================================
+TEST_CASE("Testing functions in namespace graphic_par") {
+  SUBCASE("Testing graphic_par::getPositiveInteger()") {
+    std::istringstream input1("5\n");
+    std::istringstream input2("0\n");
+    std::istringstream input3("-1\n");
+
+    std::ostringstream output1;
+    std::ostringstream output2;
+    std::ostringstream output3;
+
+    CHECK(graphic_par::getPositiveInteger("Enter a positive integer, might be zero: ", input1, output1, false) ==
+          doctest::Approx(5));
+    CHECK(graphic_par::getPositiveInteger("Enter a positive integer: ", input2, output2, true) == doctest::Approx(0));
+    CHECK_THROWS_AS(graphic_par::getPositiveInteger("Enter a positive integer: ", input3, output3, true),
+                    std::exception);
+
+    CHECK(output1.str() == "Enter a positive integer, might be zero: ");
+    CHECK(output2.str() == "Enter a positive integer: ");
+    CHECK(output3.str() == "Enter a positive integer: \nInvalid input. The program will now terminate.\n");
+  }
+
+  SUBCASE("Testing graphic_par::getPositiveDouble()") {
+    std::istringstream input1("5.5\n");
+    std::istringstream input2("1.\n");
+    std::istringstream input3("0.\n");
+    std::istringstream input4("-1.\n");
+
+    std::ostringstream output1;
+    std::ostringstream output2;
+    std::ostringstream output3;
+    std::ostringstream output4;
+
+    CHECK(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input1, output1) == doctest::Approx(5.5));
+    CHECK(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input2, output2) == doctest::Approx(1.));
+    CHECK(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input3, output3) == doctest::Approx(0.));
+    CHECK_THROWS_AS(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input4, output4),
+                    std::exception);
+
+    CHECK(output1.str() == "Enter a double between 0 and 1: ");
+    CHECK(output2.str() == "Enter a double between 0 and 1: ");
+    CHECK(output3.str() == "Enter a double between 0 and 1: ");
+    CHECK(output4.str() == "Enter a double between 0 and 1: \nInvalid input. The program will now terminate.\n");
+  }
+
+  SUBCASE("Testing graphic_par::createRectangle()") {}
+}
 //======================================================================================================================
 //===TESTING FUNCTIONS IN NAMESPACE TRIANGLES::=========================================================================
 //======================================================================================================================
@@ -592,7 +643,6 @@ TEST_CASE("Testing Flock class") {
     CHECK(flock2.findNearPredators(*b1, 0).empty());
   }
 
-
   std::array<point::Point, 2> update_boid = flock1.updateBird(b1, triangles, 0);
   std::array<point::Point, 2> update_predator = flock1.updateBird(p1, triangles, 2);
 
@@ -613,7 +663,7 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearPredators1.size() == 2);
 
     point::Point v_boid = b1->border(border_params[0], border_params[1]) + b1->separation(s, ds, nearBoids1) +
-                   b1->alignment(a, nearBoids1) + b1->cohesion(c, nearBoids1) + b1->repel(s, nearPredators1);
+                          b1->alignment(a, nearBoids1) + b1->cohesion(c, nearBoids1) + b1->repel(s, nearPredators1);
     b1->friction(maxSpeed, v_boid);
     b1->boost(minSpeed, v_boid);
     point::Point p_boid = b1->getPosition() + graphic_par::dt * v_boid;
@@ -632,7 +682,7 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearPredators1.size() == 2);
 
     point::Point v_predator = p1->border(border_params[0], border_params[1]) +
-                       p1->separation(s * 0.1, d * 0.5, nearPredators2) + p1->chase(c, nearBoids2);
+                              p1->separation(s * 0.1, d * 0.5, nearPredators2) + p1->chase(c, nearBoids2);
 
     p1->friction(maxSpeed, v_predator);
     p1->boost(minSpeed, v_predator);
@@ -710,9 +760,4 @@ TEST_CASE("Testing Statistics struct") {
   }
 }
 
-//TODO: testare funzione getPositiveInteger()
-//TODO: testare funzione getPositiveDouble()
-//TODO: testare costruttore con max e min speed
-//TODO: testare funzione flock::setFlockParams()
-
-
+// TODO: decidere se vogliamo testare funzione flock::setFlockParams()

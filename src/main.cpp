@@ -6,10 +6,12 @@
 
 #include "../include/flock.hpp"
 #include "../include/graphic.hpp"
+#include "../include/triangle.hpp"
 
 int main() {
-  int nBoids = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", true);
-  int nPredators = graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", false);
+  int nBoids = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", std::cin, std::cout, true);
+  int nPredators =
+      graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", std::cin, std::cout, false);
 
   flock::Flock flock(nBoids, nPredators);
   flock.setFlockParams();

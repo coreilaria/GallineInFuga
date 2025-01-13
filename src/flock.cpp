@@ -12,17 +12,20 @@
 
 #include "../include/bird.hpp"
 #include "../include/graphic.hpp"
+#include "../include/triangle.hpp"
 #include "../include/point.hpp"
 #include "../include/statistics.hpp"
 
 namespace flock {
 
 Flock::Flock(const int nBoids, const int nPredators)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.6), a_(0.6), c_(0.001), max_speed_{12., 8.}, min_speed_{7., 5.} {
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.002), max_speed_{12., 8.}, min_speed_{7., 5.} {
   flock_.resize(n_boids_ + n_predators_);
 }
-Flock::Flock(const int nBoids, const int nPredators, const std::array<double, 2> & maxSpeed, const std::array<double, 2> & minSpeed)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.6), a_(0.6), c_(0.001), max_speed_ {maxSpeed}, min_speed_{minSpeed} {
+Flock::Flock(const int nBoids, const int nPredators, const std::array<double, 2>& maxSpeed,
+             const std::array<double, 2>& minSpeed)
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.002), max_speed_{maxSpeed},
+      min_speed_{minSpeed} {
   flock_.resize(n_boids_ + n_predators_);
 }
 
@@ -43,16 +46,15 @@ void Flock::setFlockParams() {
   std::cin >> statement;
 
   if (statement == 'Y' || statement == 'y') {
-    const double s = graphic_par::getPositiveDouble("\nEnter the separation coefficient: ");
-    const double a = graphic_par::getPositiveDouble("Enter the alignment coefficient: ");
-    const double c = graphic_par::getPositiveDouble("Enter the cohesion coefficient: ");
-
+    const double s = graphic_par::getPositiveDouble("\nEnter the separation coefficient: ", std::cin, std::cout);
+    const double a = graphic_par::getPositiveDouble("Enter the alignment coefficient: ", std::cin, std::cout);
+    const double c = graphic_par::getPositiveDouble("Enter the cohesion coefficient: ", std::cin, std::cout);
     s_ = s;
     a_ = a;
     c_ = c;
-  }
-  else if (statement == 'N' || statement == 'n') {
-    std::cout << "\nThe simulation parameters are set as default (s = 0.6, a = 0.6, c = 0.001) \n";
+
+  } else if (statement == 'N' || statement == 'n') {
+    std::cout << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.002) \n";
 
   } else {
     std::cerr << "\nInvalid input.";
@@ -60,22 +62,12 @@ void Flock::setFlockParams() {
   }
 }
 
-// void Flock::setMaxSpeed(const double maxSpeed_b, const double maxSpeed_p) {
-//   max_speed_[0] = maxSpeed_b;
-//   max_speed_[1] = maxSpeed_p;
-// }
-//
-// void Flock::setMinSpeed(const double minSpeed_b, const double minSpeed_p) {
-//   min_speed_[0] = minSpeed_b;
-//   min_speed_[1] = minSpeed_p;
-// }
-
 void Flock::generateBirds() {
   std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch().count());
-  std::uniform_real_distribution<double> dist_pos_x(graphic_par::stats_width, graphic_par::window_width);
-  std::uniform_real_distribution<double> dist_pos_y(0., graphic_par::window_height);
-  std::uniform_real_distribution<double> dist_vel_x(graphic_par::min_vel_x, graphic_par::max_vel_x);
-  std::uniform_real_distribution<double> dist_vel_y(graphic_par::min_vel_y, graphic_par::max_vel_y);
+  std::uniform_real_distribution<> dist_pos_x(graphic_par::stats_width, graphic_par::window_width);
+  std::uniform_real_distribution<> dist_pos_y(0., graphic_par::window_height);
+  std::uniform_real_distribution<> dist_vel_x(graphic_par::min_vel_x, graphic_par::max_vel_x);
+  std::uniform_real_distribution<> dist_vel_y(graphic_par::min_vel_y, graphic_par::max_vel_y);
 
   std::vector<bird::Boid> boids;
   std::vector<bird::Predator> predators;
