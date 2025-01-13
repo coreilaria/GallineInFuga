@@ -40,13 +40,22 @@ constexpr double max_vel_y = 3;
 /// of a bird.
 constexpr double min_vel_y = -max_vel_y;
 
-///@brief It takes in input an integer, checking if it should be strictly positive or just positive. It allows 3
-/// attempts to insert a valid input, then it exits the program.
+///@brief It takes in input an integer, checking if it should be strictly positive. If an invalid input is given, it
+/// exits the program.
 ///@param prompt Is a constant string that will be streamed in output.
-///@param positive Is a boolean constant that determine if the output of the function should be strictly positive or
+///@param positive Is a boolean constant that determines if the output of the function should be strictly positive or
 /// just positive.
 ///@return An integer.
 [[nodiscard]] int getPositiveInteger(const std::string& prompt, bool positive);
+
+///@brief It takes in input a double, checking if lays in the range [0,1]. If an invalid input is given, it exits the
+/// program.
+///@param prompt Is a constant string that will be streamed in output.
+///@param less_than_one Is a boolean constant that determines if the output of the function can be greater of one or
+///not.
+///@return A double.
+[[nodiscard]] double getPositiveDouble(const std::string& prompt);
+
 }  // namespace graphic_par
 
 //----------------------------------------------------------------------------------------------------------------------

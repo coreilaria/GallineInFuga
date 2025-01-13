@@ -8,29 +8,33 @@
 namespace graphic_par {
 int getPositiveInteger(const std::string& prompt, bool const positive) {
   int value;
-  int counter{0};
-  while (counter < 3) {
-    std::cout << prompt;
-    std::cin >> value;
+  std::cout << prompt;
+  std::cin >> value;
 
-    // check if the input is valid
-    if (std::cin.fail() || (positive && value <= 0)) {
-      std::cin.clear();                                                    // clear the error flag
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
-      if (positive) {
-        std::cout << "Invalid input! Please enter a positive integer.\n\n";
-      } else {
-        std::cout << "Invalid input! Please enter an integer.\n\n";
-      }
-      counter++;
-    } else {
-      std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
-      return value;
-    }
+  // check if the input is valid
+  if (std::cin.fail() || (positive && value <= 0)) {
+    std::cin.clear();                                                    // clear the error flag
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
+    std::cout << "\nInvalid input. The program will now terminate.\n";
+    exit(1);
   }
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
+  return value;
+}
 
-  std::cout << "\nToo many invalid input. The program will now terminate.\n";
-  exit(1);  // Termina il programma
+double getPositiveDouble(const std::string& prompt) {
+  double value;
+  std::cout << prompt;
+  std::cin >> value;
+
+  if (std::cin.fail() || (value < 0 || value > 1)) {
+    std::cin.clear();                                                    // clear the error flag
+    std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
+    std::cout << "\nInvalid input. The program will now terminate.\n";
+    exit(1);
+  }
+  std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
+  return value;
 }
 
 }  // namespace graphic_par
@@ -70,7 +74,8 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles) {
   assert(static_cast<int>(triangles.getVertexCount()) == flock.getFlockSize() * 3);
 }
 
-void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, const double theta, const int i) {
+void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, const double theta,
+                    const int i) {
   const sf::Vertex vertex{bird->getPosition()()};  // operator () returns conversion from Point to sf::Vertex
 
   const int j = 3 * i;
