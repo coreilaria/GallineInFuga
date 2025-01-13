@@ -25,15 +25,15 @@ void Bird::setBird(const point::Point position, const point::Point velocity) {
 }
 
 point::Point Bird::separation(const double s, const double ds, const std::vector<std::shared_ptr<Bird>>& near) const {
-  assert(s > 0 && s < 1);
+  assert(s >= 0 && s <= 1);
   assert(ds > 0);
   const point::Point sum = std::accumulate(near.begin(), near.end(), point::Point(0., 0.),
-                                    [this, ds](point::Point acc, const std::shared_ptr<Bird>& boid) {
-                                      if (boid->getPosition().distance(position_) < ds) {
-                                        acc += boid->getPosition() - position_;
-                                      }
-                                      return acc;
-                                    });
+                                           [this, ds](point::Point acc, const std::shared_ptr<Bird>& boid) {
+                                             if (boid->getPosition().distance(position_) < ds) {
+                                               acc += boid->getPosition() - position_;
+                                             }
+                                             return acc;
+                                           });
   return (-s) * sum;
 }
 
@@ -67,30 +67,30 @@ Boid::Boid() : Bird() {}
 Boid::Boid(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sight_angle_ = 2. / 3 * M_PI; }
 
 point::Point Boid::alignment(const double a, const std::vector<std::shared_ptr<Bird>>& near) const {
-  assert(a > 0 && a < 1);
-  const point::Point sum =
-      std::accumulate(near.begin(), near.end(), point::Point(0., 0.),
-                      [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getVelocity(); });
+  assert(a >= 0 && a <= 1);
+  const point::Point sum = std::accumulate(
+      near.begin(), near.end(), point::Point(0., 0.),
+      [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getVelocity(); });
   return a * (sum / static_cast<double>(near.size()) - velocity_);
 }
 
 point::Point Boid::cohesion(const double c, const std::vector<std::shared_ptr<Bird>>& near) const {
-  assert(c > 0);
-  const point::Point sum =
-      std::accumulate(near.begin(), near.end(), point::Point(0., 0.),
-                      [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
+  assert(c >= 0 && c <= 1);
+  const point::Point sum = std::accumulate(
+      near.begin(), near.end(), point::Point(0., 0.),
+      [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
   return c * (sum / static_cast<double>(near.size()) - position_);
 }
 
 point::Point Boid::repel(const double s, const std::vector<std::shared_ptr<Bird>>& near) const {
-  assert(s > 0);
+  assert(s >= 0);
   const point::Point sum = std::accumulate(
       near.begin(), near.end(), point::Point(0., 0.),
       [this](point::Point acc, const std::shared_ptr<Bird>& boid) { return acc += boid->getPosition() - position_; });
   return (-s * 6) * sum;
 }
 
-void Boid::friction(const std::array<double, 2> & max_speed, point::Point& velocity) {
+void Boid::friction(const std::array<double, 2>& max_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
   assert(max_speed[0] > 0);
   if (velocity.module() > max_speed[0]) {
@@ -98,7 +98,7 @@ void Boid::friction(const std::array<double, 2> & max_speed, point::Point& veloc
   }
 }
 
-void Boid::boost(const std::array<double, 2> & min_speed, point::Point& velocity) {
+void Boid::boost(const std::array<double, 2>& min_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
   assert(min_speed[0] > 0);
 
@@ -115,21 +115,21 @@ Predator::Predator() : Bird() {}
 Predator::Predator(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sight_angle_ = 1. / 2 * M_PI; }
 
 point::Point Predator::chase(const double c, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
-  assert(c > 0);
-  const point::Point sum =
-      std::accumulate(near_boids.begin(), near_boids.end(), point::Point(0., 0.),
-                      [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
+  assert(c >= 0 && c <= 1);
+  const point::Point sum = std::accumulate(
+      near_boids.begin(), near_boids.end(), point::Point(0., 0.),
+      [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
 
   return c * 2 * (sum / static_cast<double>(near_boids.size()) - position_);
 }
-void Predator::friction(const std::array<double, 2> & max_speed, point::Point& velocity) {
+void Predator::friction(const std::array<double, 2>& max_speed, point::Point& velocity) {
   assert(max_speed[1] > 0);
   assert(velocity.module() != 0);
   if (velocity.module() > max_speed[1]) {
     velocity = max_speed[1] * (velocity / velocity.module());
   }
 }
-void Predator::boost(const std::array<double, 2> & min_speed, point::Point& velocity) {
+void Predator::boost(const std::array<double, 2>& min_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
   assert(min_speed[1] > 0);
   if (velocity.module() < min_speed[1]) {
