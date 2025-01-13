@@ -60,36 +60,27 @@ class Flock {
   std::array<double, 2> min_speed_;
 
  public:
-  /// @brief Constructs a new Flock object.
-  /// @details Sets:
-  /// - n_boids_ = 0
-  /// - n_predators_ = 0
-  /// - s = 0.6
-  /// - a = 0.6
-  /// - c = 0.001
-  /// - max_speed_ = {12., 8.}
-  /// - min_speed_{7., 5.}
-  // Flock();
-
   /// @brief Constructs a new Flock object,
   /// @param nBoids Number of boids.
   /// @param nPredators Number of predators.
   /// @details Initializes n_boids_ and n_predators_ with the given parameters and sets:
+  /// - s_ = 0.6
+  /// - a_ = 0.6
+  /// - c_ = 0.01
   /// - max_speed_ = {12., 8.}
   /// - min_speed_ = {7., 5.}
   Flock(int nBoids, int nPredators);
 
-  
   /// @brief Constructs a new Flock object,
   /// @param nBoids Number of boids.
   /// @param nPredators Number of predators.
-  /// @param s Separation coefficient.
-  /// @param a Alignment coefficient.
-  /// @param c Cohesion coefficient.
-  /// @details Initializes n_boids_ and n_predators_, s_, a_, c_ with the given parameters and sets:
-  /// - max_speed_ = {12., 8.}
-  /// - min_speed_ = {7., 5.}
-  Flock(int nBoids, int nPredators, double s, double a, double c);
+  /// @param maxSpeed Maximum values of speed for boids and predators.
+  /// @param minSpeed Minimum values of speed for boids and predators.
+  /// @details Initializes n_boids_ and n_predators_, max_speed_, min_speed_ with the given parameters and sets:
+  /// - s_ = 0.6
+  /// - a_ = 0.6
+  /// - c_ = 0.01
+  Flock(int nBoids, int nPredators, const std::array<double, 2> &maxSpeed, const std::array<double, 2> &minSpeed);
 
   /// @brief Gets the number of bird::Boids in the flock.
   /// @return The number of bird::Boids.
@@ -115,15 +106,8 @@ class Flock {
   /// @param flock Is the vector of bird::Birds.
   void setFlock(const std::vector<std::shared_ptr<bird::Bird>> &flock);
 
-  /// @brief Sets maximum speed value for both bird::Boids and bird::Predators.
-  /// @param maxSpeed_b The maximum speed for bird::Boids.
-  /// @param maxSpeed_p The maximum speed for bird::Predators.
-  void setMaxSpeed(double maxSpeed_b, double maxSpeed_p);
-
-  /// @brief Sets minimum speed value for both bird::Boids and bird::Predators.
-  /// @param minSpeed_b The minimum speed for bird::Boids.
-  /// @param minSpeed_p The minimum speed for bird::Predators.
-  void setMinSpeed(double minSpeed_b, double minSpeed_p);
+  /// @brief Sets the flock's flight parameters with the values streamed in input.
+  void setFlockParams();
 
   /// @brief Generates bird::Birds to fill the flock.
   /// @details bird::Boid and bird::Predator objects are generated with random positions and velocities, then the flock

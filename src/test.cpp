@@ -445,7 +445,7 @@ TEST_CASE("Testing Predator class") {
 //===TESTING FUNCTIONS IN NAMESPACE TRIANGLES::=========================================================================
 //======================================================================================================================
 
-flock::Flock flock1(2, 2);
+flock::Flock flock1(2, 2, maxSpeed, minSpeed);
 
 std::shared_ptr<bird::Boid> b1 = std::make_shared<bird::Boid>(pos1, vel1);
 std::shared_ptr<bird::Boid> b2 = std::make_shared<bird::Boid>(pos2, vel2);
@@ -592,8 +592,7 @@ TEST_CASE("Testing Flock class") {
     CHECK(flock2.findNearPredators(*b1, 0).empty());
   }
 
-  flock1.setMaxSpeed(5., 4.);
-  flock1.setMinSpeed(3, 2.5);
+
   std::array<point::Point, 2> update_boid = flock1.updateBird(b1, triangles, 0);
   std::array<point::Point, 2> update_predator = flock1.updateBird(p1, triangles, 2);
 
@@ -710,3 +709,10 @@ TEST_CASE("Testing Statistics struct") {
     CHECK(stats1.dev_speed == 0.5);
   }
 }
+
+//TODO: testare funzione getPositiveInteger()
+//TODO: testare funzione getPositiveDouble()
+//TODO: testare costruttore con max e min speed
+//TODO: testare funzione flock::setFlockParams()
+
+

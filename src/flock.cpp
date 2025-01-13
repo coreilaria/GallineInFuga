@@ -4,6 +4,7 @@
 #include <array>
 #include <cassert>
 #include <chrono>
+#include <iostream>
 #include <memory>
 #include <numeric>
 #include <random>
@@ -16,14 +17,12 @@
 
 namespace flock {
 
-// Flock::Flock() : n_boids_(0), n_predators_(0), s_(0.6), a_(0.6), c_(0.001), max_speed_{12., 8.}, min_speed_{7., 5.} {};
-
 Flock::Flock(const int nBoids, const int nPredators)
     : n_boids_(nBoids), n_predators_(nPredators), s_(0.6), a_(0.6), c_(0.001), max_speed_{12., 8.}, min_speed_{7., 5.} {
   flock_.resize(n_boids_ + n_predators_);
 }
-Flock::Flock(const int nBoids, const int nPredators, const double s, const double a, const double c)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(s), a_(a), c_(c), max_speed_{12., 8.}, min_speed_{7., 5.} {
+Flock::Flock(const int nBoids, const int nPredators, const std::array<double, 2> & maxSpeed, const std::array<double, 2> & minSpeed)
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.6), a_(0.6), c_(0.001), max_speed_ {maxSpeed}, min_speed_{minSpeed} {
   flock_.resize(n_boids_ + n_predators_);
 }
 
@@ -38,15 +37,38 @@ void Flock::setFlock(const std::vector<std::shared_ptr<bird::Bird>>& flock) {
   flock_ = flock;
 }
 
-void Flock::setMaxSpeed(const double maxSpeed_b, const double maxSpeed_p) {
-  max_speed_[0] = maxSpeed_b;
-  max_speed_[1] = maxSpeed_p;
+void Flock::setFlockParams() {
+  char statement;
+  std::cout << "\nWould you like to customize the parameters of the simulation? (Y/n) ";
+  std::cin >> statement;
+
+  if (statement == 'Y' || statement == 'y') {
+    const double s = graphic_par::getPositiveDouble("\nEnter the separation coefficient: ");
+    const double a = graphic_par::getPositiveDouble("Enter the alignment coefficient: ");
+    const double c = graphic_par::getPositiveDouble("Enter the cohesion coefficient: ");
+
+    s_ = s;
+    a_ = a;
+    c_ = c;
+  }
+  else if (statement == 'N' || statement == 'n') {
+    std::cout << "\nThe simulation parameters are set as default (s = 0.6, a = 0.6, c = 0.001) \n";
+
+  } else {
+    std::cerr << "\nInvalid input.";
+    std::exit(1);
+  }
 }
 
-void Flock::setMinSpeed(const double minSpeed_b, const double minSpeed_p) {
-  min_speed_[0] = minSpeed_b;
-  min_speed_[1] = minSpeed_p;
-}
+// void Flock::setMaxSpeed(const double maxSpeed_b, const double maxSpeed_p) {
+//   max_speed_[0] = maxSpeed_b;
+//   max_speed_[1] = maxSpeed_p;
+// }
+//
+// void Flock::setMinSpeed(const double minSpeed_b, const double minSpeed_p) {
+//   min_speed_[0] = minSpeed_b;
+//   min_speed_[1] = minSpeed_p;
+// }
 
 void Flock::generateBirds() {
   std::default_random_engine rng(std::chrono::system_clock::now().time_since_epoch().count());
