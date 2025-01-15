@@ -9,32 +9,32 @@
 namespace graphic_par {
 
 ///@param dt It represents the temporal interval used to update cinematic quantities.
-constexpr double dt = 0.7;
+inline constexpr double dt = 0.7;
 
 ///@param window_width It represents the width of the simulation window.
-constexpr float window_width = 1900.f;
+inline constexpr float window_width = 1900.f;
 
 ///@param window_height It represents the height of the simulation window.
-constexpr float window_height = 900.f;
+inline constexpr float window_height = 900.f;
 
 ///@param stats_width It represents the width of the window containing the statistics data.
-constexpr float stats_width = 0.25 * window_width;
+inline constexpr float stats_width = 0.25 * window_width;
 
 ///@param max_vel_x It represents the upper boundary of the random generation range for the component x of the velocity
 /// of a bird.
-constexpr double max_vel_x = 5.;
+inline constexpr double max_vel_x = 5.;
 
 ///@param min_vel_x It represents the lower boundary of the random generation range for the component x of the velocity
 /// of a bird.
-constexpr double min_vel_x = -max_vel_x;
+inline constexpr double min_vel_x = -max_vel_x;
 
 ///@param max_vel_y It represents the upper boundary of the random generation range for the component y of the velocity
 /// of a bird.
-constexpr double max_vel_y = 3;
+inline constexpr double max_vel_y = 3;
 
 ///@param min_vel_y It represents the lower boundary of the random generation range for the component y of the velocity
 /// of a bird.
-constexpr double min_vel_y = -max_vel_y;
+inline constexpr double min_vel_y = -max_vel_y;
 
 ///@param stats_rectangle It's an array containing the vertexes needed to draw the statistics' rectangle from
 /// sf::TrianglesStrips.

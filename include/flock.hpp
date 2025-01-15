@@ -39,17 +39,17 @@ class Flock {
   double c_;
 
   /// @param d_ Is the radius of the circle where the nearby bird::Boids can be located.
-  double d_ = 75.;
+  static constexpr double d_ = 75.;
 
   /// @param ds_ Is the radius of the circle where the separation rule would be effective.
-  double ds_ = 20.;
+  static constexpr double ds_ = 20.;
 
   /// @param turn_factor_ Is the increment that is applied to the component of the velocity when a bird::Bird flies too
   /// close to the border of the window.
-  double turn_factor_ = 5.;
+  static constexpr double turn_factor_ = 5.;
 
   /// @param margin_ Is the distance from the border of the window within which the border rule applies.
-  double margin_ = 100.;
+  static constexpr double margin_ = 100.;
 
   /// @param max_speed_ Is an array containing the maximum speed value, respectively for bird::Boids and
   /// bird::Predators.
