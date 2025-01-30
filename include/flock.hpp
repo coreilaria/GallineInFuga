@@ -27,7 +27,9 @@ class Flock {
   int n_predators_;
 
   /// @param flock_ Is the vector containing both bird::Boids and bird::Predators.
-  std::vector<std::shared_ptr<bird::Bird>> flock_;
+  std::vector<std::shared_ptr<bird::Boid>> b_flock_;
+  std::vector<std::shared_ptr<bird::Predator>> p_flock_;
+
 
   /// @param s_ Is the parameters which modules the separation of the bird::Birds in the flock.
   double s_;
@@ -96,7 +98,9 @@ class Flock {
 
   /// @brief Gets the flock vector.
   /// @return The vector of bird::Bird in the flock.
-  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> getFlock() const;
+  [[nodiscard]] std::vector<std::shared_ptr<bird::Boid>> getBoidFlock() const;
+  [[nodiscard]] std::vector<std::shared_ptr<bird::Predator>> getPredatorFlock() const;
+
 
   /// @brief Gets the parameters for the rule border.
   /// @return The array containing respectively the margin and the turn factor.
@@ -104,7 +108,7 @@ class Flock {
 
   /// @brief Sets the vector of bird::Birds which will form the flock.
   /// @param flock Is the vector of bird::Birds.
-  void setFlock(const std::vector<std::shared_ptr<bird::Bird>> &flock);
+  // void setFlock(const std::vector<std::shared_ptr<bird::Bird>> &flock); //TODO: USATO NEI TEST, TOGLIERLO
 
   /// @brief Sets the flock's flight parameters with the values streamed in input.
   void setFlockParams();
@@ -117,12 +121,13 @@ class Flock {
   /// @brief Finds the bird::Boids near a bird::Bird.
   /// @param target Is the bird::Bird of which we want to find the bird::Boids nearby.
   /// @param i Is the index identifying the position of the bird::Bird in the flock.
-  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearBoids(const bird::Bird &target, int i) const;
+  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearBoids(int i, bool is_boid) const;
+
 
   /// @brief Finds the predators near a bird::Bird.
   /// @param target Is the bird::Bird of which we want to find the bird::Predators nearby.
   /// @param i Is the index identifying the position of the bird::Bird in the flock.
-  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearPredators(const bird::Bird &target, int i) const;
+  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearPredators(int i, bool is_boid) const;
 
   /// @brief Evaluates the new position and velocity of a bird::Bird in the flock.
   /// @details Evaluates a new velocity for the bird::Bird, taking into account all the rules implemented for the
@@ -141,7 +146,7 @@ class Flock {
   /// @param triangles Is the array containing the triangle associated with the bird::Bird.
   /// @param i Is the index identifying the position of the bird::Bird in the flock.
   /// @return The array containing, respectively, the updated position and velocity of the bird::Bird.
-  std::array<point::Point, 2> updateBird(const std::shared_ptr<bird::Bird> &b, sf::VertexArray &triangles, int i) const;
+  std::array<point::Point, 2> updateBird( sf::VertexArray &triangles, int i, bool is_boid) const;
 
   /// @brief Updates the position and the direction of the triangles.
   /// @details It updates the velocity and position of each bird::Bird in the flock. Then the position and the

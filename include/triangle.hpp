@@ -7,7 +7,6 @@
 #include "../include/bird.hpp"
 #include "../include/flock.hpp"
 
-
 //----------------------------------------------------------------------------------------------------------------------
 //---NAMESPACE TRIANGLES------------------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -40,7 +39,7 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles);
 /// @param triangles Is an array containing tree sf::Vertex for each bird in the flock, those constitute a sf::Triangle.
 /// @param theta Is the angle of the bird's updated velocity, formed with the vertical axis.
 /// @param i Is the index associated with the position of the bird in the flock.
-void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& triangles, double theta, int i);
+void rotateTriangle(const point::Point& target_position, sf::VertexArray& triangles, double theta, int i, bool is_boid, int nBoids);
 
 /// @brief Gets the base width of the triangle.
 /// @return The base width of the triangle.
@@ -51,5 +50,4 @@ void rotateTriangle(const std::shared_ptr<bird::Bird>& bird, sf::VertexArray& tr
 [[nodiscard]] float getHeight();
 }  // namespace triangles
 
-
-#endif //TRIANGLE_HPP
+#endif  // TRIANGLE_HPP
