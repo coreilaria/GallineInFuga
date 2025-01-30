@@ -19,13 +19,13 @@
 namespace flock {
 
 Flock::Flock(const int nBoids, const int nPredators)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.002), max_speed_{12., 8.}, min_speed_{7., 5.} {
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), max_speed_{12., 8.}, min_speed_{7., 5.} {
   b_flock_.resize(n_boids_);
   p_flock_.resize(n_predators_);
 }
 Flock::Flock(const int nBoids, const int nPredators, const std::array<double, 2>& maxSpeed,
              const std::array<double, 2>& minSpeed)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.002), max_speed_{maxSpeed},
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), max_speed_{maxSpeed},
       min_speed_{minSpeed} {
   b_flock_.resize(n_boids_);
   p_flock_.resize(n_predators_);
@@ -58,7 +58,7 @@ void Flock::setFlockParams() {
     c_ = c;
 
   } else if (statement == 'N' || statement == 'n') {
-    std::cout << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.002) \n";
+    std::cout << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.004) \n";
 
   } else {
     std::cerr << "\nInvalid input.";
@@ -208,10 +208,10 @@ std::array<point::Point, 2> Flock::updateBird(sf::VertexArray& triangles, const 
     point::Point v = p_flock_[i]->border(margin_, turn_factor_);
 
     if (!near_predators.empty()) {
-      v += p_flock_[i]->separation(s_ , d_ * 0.5, near_predators);
+      v += p_flock_[i]->separation(s_, d_ * 0.5, near_predators);
     }
     if (!near_boids.empty()) {
-      v += p_flock_[i]->chase(s_, near_boids);
+      v += p_flock_[i]->chase(c_, near_boids);
     }
     p_flock_[i]->boost(min_speed_, v);
     p_flock_[i]->friction(max_speed_, v);

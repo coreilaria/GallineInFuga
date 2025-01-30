@@ -48,7 +48,7 @@ class Flock {
 
   /// @param turn_factor_ Is the increment that is applied to the component of the velocity when a bird::Bird flies too
   /// close to the border of the window.
-  double turn_factor_ = 5.;
+  double turn_factor_ = 2.5;
 
   /// @param margin_ Is the distance from the border of the window within which the border rule applies.
   double margin_ = 100.;
