@@ -29,22 +29,14 @@ class Flock {
   /// @param flock_ Is the vector containing both bird::Boids and bird::Predators.
   std::vector<std::shared_ptr<bird::Bird>> flock_;
 
-  /// @param max_speed_ Is an array containing the maximum speed value, respectively for bird::Boids and
-  /// bird::Predators.
-  std::array<double, 2> max_speed_;
-
-  /// @param min_speed_ Is an array containing the minimum speed value, respectively for bird::Boids and
-  /// bird::Predators.
-  std::array<double, 2> min_speed_;
-
   /// @param s_ Is the parameters which modules the separation of the bird::Birds in the flock.
-  double s_ = 0.6;
+  double s_;
 
   /// @param a_ Is the parameters which modules the alignment of the bird::Boids in the flock.
-  double a_ = 0.6;
+  double a_;
 
   /// @param c_ Is the parameters which modules the cohesion of the bird::Boids in the flock.
-  double c_ = 0.001;
+  double c_;
 
   /// @param d_ Is the radius of the circle where the nearby bird::Boids can be located.
   double d_ = 75.;
@@ -59,20 +51,36 @@ class Flock {
   /// @param margin_ Is the distance from the border of the window within which the border rule applies.
   double margin_ = 100.;
 
- public:
-  /// @brief Constructs a new Flock object.
-  /// @details Sets:
-  /// - n_boids_ = 0
-  /// - n_predators_ = 0
-  /// - max_speed_ = {12., 8.}
-  /// - min_speed_{7., 5.}
-  Flock();
+  /// @param max_speed_ Is an array containing the maximum speed value, respectively for bird::Boids and
+  /// bird::Predators.
+  std::array<double, 2> max_speed_;
 
+  /// @param min_speed_ Is an array containing the minimum speed value, respectively for bird::Boids and
+  /// bird::Predators.
+  std::array<double, 2> min_speed_;
+
+ public:
   /// @brief Constructs a new Flock object,
-  /// @details Initializes nBoids_ and nPredators_ with the given parameters and sets:
+  /// @param nBoids Number of boids.
+  /// @param nPredators Number of predators.
+  /// @details Initializes n_boids_ and n_predators_ with the given parameters and sets:
+  /// - s_ = 0.6
+  /// - a_ = 0.6
+  /// - c_ = 0.01
   /// - max_speed_ = {12., 8.}
   /// - min_speed_ = {7., 5.}
-  Flock(int, int);
+  Flock(int nBoids, int nPredators);
+
+  /// @brief Constructs a new Flock object,
+  /// @param nBoids Number of boids.
+  /// @param nPredators Number of predators.
+  /// @param maxSpeed Maximum values of speed for boids and predators.
+  /// @param minSpeed Minimum values of speed for boids and predators.
+  /// @details Initializes n_boids_ and n_predators_, max_speed_, min_speed_ with the given parameters and sets:
+  /// - s_ = 0.6
+  /// - a_ = 0.6
+  /// - c_ = 0.01
+  Flock(int nBoids, int nPredators, const std::array<double, 2> &maxSpeed, const std::array<double, 2> &minSpeed);
 
   /// @brief Gets the number of bird::Boids in the flock.
   /// @return The number of bird::Boids.
@@ -98,15 +106,8 @@ class Flock {
   /// @param flock Is the vector of bird::Birds.
   void setFlock(const std::vector<std::shared_ptr<bird::Bird>> &flock);
 
-  /// @brief Sets maximum speed value for both bird::Boids and bird::Predators.
-  /// @param maxSpeed_b The maximum speed for bird::Boids.
-  /// @param maxSpeed_p The maximum speed for bird::Predators.
-  void setMaxSpeed(double maxSpeed_b, double maxSpeed_p);
-
-  /// @brief Sets minimum speed value for both bird::Boids and bird::Predators.
-  /// @param minSpeed_b The minimum speed for bird::Boids.
-  /// @param minSpeed_p The minimum speed for bird::Predators.
-  void setMinSpeed(double minSpeed_b, double minSpeed_p);
+  /// @brief Sets the flock's flight parameters with the values streamed in input.
+  void setFlockParams();
 
   /// @brief Generates bird::Birds to fill the flock.
   /// @details bird::Boid and bird::Predator objects are generated with random positions and velocities, then the flock
@@ -126,7 +127,6 @@ class Flock {
   /// @brief Evaluates the new position and velocity of a bird::Bird in the flock.
   /// @details Evaluates a new velocity for the bird::Bird, taking into account all the rules implemented for the
   /// bird::Birds:
-
   ///  - separation
   ///  - border
   ///  - friction
@@ -137,7 +137,7 @@ class Flock {
   ///  - chase (bird::Predator)
   ///  Then evaluates the new position by multiplying the new velocity by graphic_par::dt. Eventually updates the
   ///  position and rotation of the triangle associated with the bird::Bird.
-  /// @param b Is the bird::Bird to update
+  /// @param b Is the bird::Bird to update.
   /// @param triangles Is the array containing the triangle associated with the bird::Bird.
   /// @param i Is the index identifying the position of the bird::Bird in the flock.
   /// @return The array containing, respectively, the updated position and velocity of the bird::Bird.
