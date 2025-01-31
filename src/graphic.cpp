@@ -2,7 +2,9 @@
 
 #include <cassert>
 #include <cmath>
+#include <iostream>
 #include <sstream>
+#include <stdexcept>
 
 #include "../include/flock.hpp"
 namespace graphic_par {
@@ -12,14 +14,9 @@ int getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream
   out << prompt;
   in >> value;
 
-  // check if the input is valid
   if (in.fail() || (positive && value <= 0)) {
-    in.clear();                                                    // clear the error flag
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
-    out << "\nInvalid input. The program will now terminate.\n";
-    exit(1);
+    throw std::domain_error("Error: Invalid input. The program will now terminate.");
   }
-  in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
   return value;
 }
 
@@ -27,14 +24,9 @@ double getPositiveDouble(const std::string& prompt, std::istream& in, std::ostre
   double value;
   out << prompt;
   in >> value;
-
   if (in.fail() || (value < 0 || value > 1)) {
-    in.clear();                                                    // clear the error flag
-    in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // discard invalid input
-    out << "\nInvalid input. The program will now terminate.\n";
-    exit(1);  // Use exceptions or return values in production code for better handling
+    throw std::domain_error("Error: Invalid input. The program will now terminate.");
   }
-  in.ignore(std::numeric_limits<std::streamsize>::max(), '\n');  // clear the buffer
   return value;
 }
 

@@ -19,17 +19,27 @@
 namespace flock {
 
 Flock::Flock(const int nBoids, const int nPredators)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), max_speed_{12., 8.}, min_speed_{7., 5.} {
-  b_flock_.resize(n_boids_);
-  p_flock_.resize(n_predators_);
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), b_max_speed_(12.), p_max_speed_(8.),
+      b_min_speed_(7.), p_min_speed_(5.) {
+  b_flock_.reserve(n_boids_);
+  p_flock_.reserve(n_predators_);
 }
-Flock::Flock(const int nBoids, const int nPredators, const std::array<double, 2>& maxSpeed,
-             const std::array<double, 2>& minSpeed)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), max_speed_{maxSpeed},
-      min_speed_{minSpeed} {
-  b_flock_.resize(n_boids_);
-  p_flock_.resize(n_predators_);
-}
+
+Flock::Flock(const std::vector<std::shared_ptr<bird::Boid>>& boids,
+             const std::vector<std::shared_ptr<bird::Predator>>& predators, const double bMaxSpeed,
+             const double pMaxSpeed, const double bMinSpeed, const double pMinSpeed)
+    : n_boids_(static_cast<int>(boids.size())), n_predators_(static_cast<int>(predators.size())), b_flock_(boids),
+      p_flock_(predators), s_(0.1), a_(0.1), c_(0.004), b_max_speed_(bMaxSpeed), p_max_speed_(pMaxSpeed),
+      b_min_speed_(bMinSpeed), p_min_speed_(pMinSpeed) {}
+
+// Flock::Flock(const int nBoids, const int nPredators, const double bMaxSpeed, const double pMaxSpeed,
+//              const double bMinSpeed, const double pMinSpeed)
+//     : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), b_max_speed_(bMaxSpeed),
+//     p_max_speed_(pMaxSpeed),
+//       b_min_speed_(bMinSpeed), p_min_speed_(pMinSpeed) {
+//   b_flock_.reserve(n_boids_);
+//   p_flock_.reserve(n_predators_);
+// }
 
 int Flock::getBoidsNum() const { return n_boids_; }
 int Flock::getPredatorsNum() const { return n_predators_; }
@@ -38,11 +48,6 @@ std::vector<std::shared_ptr<bird::Boid>> Flock::getBoidFlock() const { return b_
 std::vector<std::shared_ptr<bird::Predator>> Flock::getPredatorFlock() const { return p_flock_; }
 
 std::array<double, 2> Flock::getBorderParams() const { return {margin_, turn_factor_}; }
-
-// void Flock::setFlock(const std::vector<std::shared_ptr<bird::Bird>>& flock) {
-//   assert(n_boids_ + n_predators_ == static_cast<int>(flock.size()));
-//   flock_ = flock;
-// }
 
 void Flock::setFlockParams() {
   char statement;
@@ -111,7 +116,7 @@ std::vector<std::shared_ptr<bird::Bird>> Flock::findNearBoids(const int i, const
       if (i != j && target_pos.distance(other_pos) < d_) {
         alpha = (target_pos - other_pos).angle();
 
-        if (alpha - beta < 2. / 3 * M_PI || alpha - beta > 2 * M_PI - 2. / 3 * M_PI) {
+        if (alpha - beta < b_sight_angle_ || alpha - beta > 2 * M_PI - b_sight_angle_) {
           near_boids.emplace_back(b_flock_[j]);
         }
       }
@@ -124,7 +129,7 @@ std::vector<std::shared_ptr<bird::Bird>> Flock::findNearBoids(const int i, const
       if (target_pos.distance(other_pos) < d_) {
         alpha = (target_pos - other_pos).angle();
 
-        if (alpha - beta < 0.5 * M_PI || alpha - beta > 1.5 * M_PI) {
+        if (alpha - beta < p_sight_angle_ || alpha - beta > 2 * M_PI - p_sight_angle_) {
           near_boids.emplace_back(b_flock_[j]);
         }
       }
@@ -152,7 +157,7 @@ std::vector<std::shared_ptr<bird::Bird>> Flock::findNearPredators(const int i, c
       if (target_pos.distance(other_pos) < d_) {
         alpha = (target_pos - other_pos).angle();
 
-        if (alpha - beta < 2. / 3 * M_PI || alpha - beta > 2 * M_PI - 2. / 3 * M_PI) {
+        if (alpha - beta < b_sight_angle_ || alpha - beta > 2 * M_PI - b_sight_angle_) {
           near_predators.emplace_back(p_flock_[j]);
         }
       }
@@ -165,7 +170,7 @@ std::vector<std::shared_ptr<bird::Bird>> Flock::findNearPredators(const int i, c
       if (i != j && target_pos.distance(other_pos) < d_) {
         alpha = (target_pos - other_pos).angle();
 
-        if (alpha - beta < 0.5 * M_PI || alpha - beta > 1.5 * M_PI) {
+        if (alpha - beta < p_sight_angle_ || alpha - beta > 2 * M_PI - p_sight_angle_) {
           near_predators.emplace_back(p_flock_[j]);
         }
       }
@@ -191,8 +196,8 @@ std::array<point::Point, 2> Flock::updateBird(sf::VertexArray& triangles, const 
            b_flock_[i]->cohesion(c_, near_boids);
     }
 
-    b_flock_[i]->boost(min_speed_, v);
-    b_flock_[i]->friction(max_speed_, v);
+    b_flock_[i]->boost(b_min_speed_, v);
+    b_flock_[i]->friction(b_max_speed_, v);
 
     const double theta{v.angle()};
     p += graphic_par::dt * v;
@@ -213,8 +218,8 @@ std::array<point::Point, 2> Flock::updateBird(sf::VertexArray& triangles, const 
     if (!near_boids.empty()) {
       v += p_flock_[i]->chase(c_, near_boids);
     }
-    p_flock_[i]->boost(min_speed_, v);
-    p_flock_[i]->friction(max_speed_, v);
+    p_flock_[i]->boost(p_min_speed_, v);
+    p_flock_[i]->friction(p_max_speed_, v);
 
     const double theta{v.angle()};
     p += graphic_par::dt * v;
@@ -247,13 +252,13 @@ void Flock::evolve(sf::VertexArray& triangles) const {
     }
 
     for (int i = 0; i < n_predators_; ++i) {
-      // Updates bird::Predator's positions and velocities
+      // Updates bird::Predator objects' positions and velocities
       p_flock_[i]->setBird(p_pos[i], p_vel[i]);
     }
   }
 
   for (int i = 0; i < n_boids_; ++i) {
-    // Updates bird::Boid's positions and velocities
+    // Updates bird::Boid objects' positions and velocities
     b_flock_[i]->setBird(b_pos[i], b_vel[i]);
   }
 }

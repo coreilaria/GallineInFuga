@@ -3,8 +3,7 @@
 ///
 /// @details    This file contains the definition of Bird class, Boid class and Predator class which inherit publicly
 ///             from Bird. A Bird object represent a bird flying in a two dimension space, each bird is characterized by
-///             two point::Point objects, a position and a velocity, and a double representing the sight angle they
-///             could perceive.
+///             two point::Point objects, a position and a velocity.
 #ifndef BIRD_HPP
 #define BIRD_HPP
 
@@ -15,15 +14,14 @@
 
 namespace bird {
 
+/// @brief The Bird class represents a bird in the simulation.
 class Bird {
-  /// @brief The Bird class represents a bird in the simulation.
-  /// @param position_ Is the position of the bird.
-  /// @param velocity_ Is the velocity of the bird.
-  /// @param sight_angle_ Is the angle of sight of the bird.
  protected:
+  /// @param position_ Is the position of the bird.
   point::Point position_;
+
+  /// @param velocity_ Is the velocity of the bird.
   point::Point velocity_;
-  double sight_angle_{};
 
  public:
   /// @brief Default constructor of Bird class.
@@ -67,10 +65,10 @@ class Bird {
   [[nodiscard]] point::Point separation(double s, double ds, const std::vector<std::shared_ptr<Bird>> &near) const;
 
   /// @brief Pure virtual function to apply friction to a bird's velocity.
-  virtual void friction(const std::array<double, 2> &, point::Point &) = 0;
+  virtual void friction(double, point::Point &) = 0;
 
   /// @brief Pure virtual function to apply a boost to a bird's velocity.
-  virtual void boost(const std::array<double, 2> &, point::Point &) = 0;
+  virtual void boost(double, point::Point &) = 0;
 
   ///@brief Virtual destructor
   virtual ~Bird() = default;
@@ -81,7 +79,7 @@ class Boid final : public Bird {
   ///@brief Default constructor.
   Boid();
 
-  /// @brief Construct a new Boid object, with given position and velocity, and initialize the sight angle for boids.
+  /// @brief Construct a new Boid object, with given position and velocity.
   /// @param pos Is the position of the boid.
   /// @param vel Is the velocity of the boid.
   Boid(point::Point const &pos, point::Point const &vel);
@@ -89,16 +87,16 @@ class Boid final : public Bird {
   /// @brief Updates the speed of the boid by imposing a maximum speed.
   /// @details If the speed of the boid exceeds the maximum allowed, its module would be normalized, leaving the
   /// direction unchanged.
-  /// @param max_speed The component [0] identifies the maximum speed for the boids.
+  /// @param b_max_speed is the maximum speed for the boids.
   /// @param velocity Is the velocity to update.
-  void friction(const std::array<double, 2> &max_speed, point::Point &velocity) override;
+  void friction(double b_max_speed, point::Point &velocity) override;
 
   /// @brief Updates the speed of the boid by imposing a minimum speed.
   /// @details If the speed of the boid exceeds the minimum allowed, its module would be normalized, leaving the
   /// direction unchanged.
-  /// @param min_speed The component [1] identifies the minimum speed for the boids.
+  /// @param b_min_speed is the minimum speed for the boids.
   /// @param velocity Is the velocity to update.
-  void boost(const std::array<double, 2> &min_speed, point::Point &velocity) override;
+  void boost(double b_min_speed, point::Point &velocity) override;
 
   /// @brief Evaluate the correction to the velocity of the boid, in order to keep it aligned with the neighbours.
   /// @details Whenever a boid sees other boids near it, would be evaluated a component of velocity in order to keep it
@@ -133,8 +131,7 @@ class Predator final : public Bird {
   ///@brief Default constructor.
   Predator();
 
-  /// @brief Construct a new Predator object, with given position and velocity and initialize the sight angle for
-  /// predators.
+  /// @brief Construct a new Predator object, with given position and velocity.
   /// @param pos Is the position of the boid.
   /// @param vel Is the velocity of the boid.
   Predator(point::Point const &pos, point::Point const &vel);
@@ -142,16 +139,16 @@ class Predator final : public Bird {
   /// @brief Updates the speed of the predator by imposing a maximum speed.
   /// @details If the speed of the predator exceeds the maximum allowed, its module would be normalized, leaving the
   /// direction unchanged.
-  /// @param max_speed The component [1] identifies the maximum speed for the predators.
+  /// @param p_max_speed is the maximum speed for the predators.
   /// @param velocity Is the velocity to update.
-  void friction(const std::array<double, 2> &max_speed, point::Point &velocity) override;
+  void friction(double p_max_speed, point::Point &velocity) override;
 
   /// @brief Updates the speed of the predator by imposing a minimum speed.
   /// @details If the speed of the predator exceeds the minimum allowed, its module would be normalized, leaving the
   /// direction unchanged.
-  /// @param min_speed The component [1] identifies the minimum speed for the predators.
+  /// @param p_min_speed is the minimum speed for the predators.
   /// @param velocity Is the velocity to update.
-  void boost(const std::array<double, 2> &min_speed, point::Point &velocity) override;
+  void boost(double p_min_speed, point::Point &velocity) override;
 
   /// @brief Evaluate the correction to the velocity of the predator, in order to chase the near boids.
   /// @details Whenever a predator sees boids near it, would be evaluated a component of velocity so that the predators

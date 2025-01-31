@@ -15,8 +15,11 @@ constexpr double s{0.6};
 constexpr double c{0.001};
 constexpr double a{0.6};
 
-constexpr std::array<double, 2> maxSpeed{5., 4.};
-constexpr std::array<double, 2> minSpeed{3., 2.5};
+constexpr double bMaxSpeed{5.};
+constexpr double pMaxSpeed{4.};
+
+constexpr double bMinSpeed{3.};
+constexpr double pMinSpeed{2.5};
 
 //======================================================================================================================
 //===TESTING POINT CLASS================================================================================================
@@ -271,41 +274,41 @@ TEST_CASE("Testing Boid class") {
   }
 
   SUBCASE("Testing friction method") {
-    b1.friction(maxSpeed, v1);
-    b2.friction(maxSpeed, v2);
-    b3.friction(maxSpeed, v3);
-    b4.friction(maxSpeed, v4);
-    b5.friction(maxSpeed, v5);
+    b1.friction(bMaxSpeed, v1);
+    b2.friction(bMaxSpeed, v2);
+    b3.friction(bMaxSpeed, v3);
+    b4.friction(bMaxSpeed, v4);
+    b5.friction(bMaxSpeed, v5);
 
-    CHECK(v1.getX() == doctest::Approx(maxSpeed[0] * std::sin(vel1.angle())));
-    CHECK(v1.getY() == doctest::Approx(-maxSpeed[0] * std::cos(vel1.angle())));
+    CHECK(v1.getX() == doctest::Approx(bMaxSpeed * std::sin(vel1.angle())));
+    CHECK(v1.getY() == doctest::Approx(-bMaxSpeed * std::cos(vel1.angle())));
 
-    CHECK(v2.getX() == doctest::Approx(maxSpeed[0] * std::sin(vel2.angle())));
-    CHECK(v2.getY() == doctest::Approx(-maxSpeed[0] * std::cos(vel2.angle())));
+    CHECK(v2.getX() == doctest::Approx(bMaxSpeed * std::sin(vel2.angle())));
+    CHECK(v2.getY() == doctest::Approx(-bMaxSpeed * std::cos(vel2.angle())));
 
-    CHECK(v3.getX() == doctest::Approx(maxSpeed[0] * std::sin(vel3.angle())));
-    CHECK(v3.getY() == doctest::Approx(-maxSpeed[0] * std::cos(vel3.angle())));
+    CHECK(v3.getX() == doctest::Approx(bMaxSpeed * std::sin(vel3.angle())));
+    CHECK(v3.getY() == doctest::Approx(-bMaxSpeed * std::cos(vel3.angle())));
 
     CHECK(v4.getX() == doctest::Approx(vel4.getX()));
     CHECK(v4.getY() == doctest::Approx(vel4.getY()));
 
-    CHECK(v5.getX() == doctest::Approx(maxSpeed[0] * std::sin(vel5.angle())));
-    CHECK(v5.getY() == doctest::Approx(-maxSpeed[0] * std::cos(vel5.angle())));
+    CHECK(v5.getX() == doctest::Approx(bMaxSpeed * std::sin(vel5.angle())));
+    CHECK(v5.getY() == doctest::Approx(-bMaxSpeed * std::cos(vel5.angle())));
   }
 
   SUBCASE("Testing boost method") {
-    b1.boost(minSpeed, v1);
-    b2.boost(minSpeed, v2);
-    b3.boost(minSpeed, v3);
-    b4.boost(minSpeed, v4);
-    b5.boost(minSpeed, v5);
+    b1.boost(bMinSpeed, v1);
+    b2.boost(bMinSpeed, v2);
+    b3.boost(bMinSpeed, v3);
+    b4.boost(bMinSpeed, v4);
+    b5.boost(bMinSpeed, v5);
 
     CHECK(v1 == point::Point(5., -1.));
     CHECK(v2 == point::Point(-8.5, -6.));
     CHECK(v3 == point::Point(-7.3, 2.5));
 
-    CHECK(v4.getX() == doctest::Approx(minSpeed[0] * std::sin(vel4.angle())));
-    CHECK(v4.getY() == doctest::Approx(-minSpeed[0] * std::cos(vel4.angle())));
+    CHECK(v4.getX() == doctest::Approx(bMinSpeed * std::sin(vel4.angle())));
+    CHECK(v4.getY() == doctest::Approx(-bMinSpeed * std::cos(vel4.angle())));
 
     CHECK(v5 == point::Point(-5., -3.2));
   }
@@ -411,35 +414,35 @@ TEST_CASE("Testing Predator class") {
   }
 
   SUBCASE("Testing friction method") {
-    p1.friction(maxSpeed, v1);
-    p2.friction(maxSpeed, v2);
-    p3.friction(maxSpeed, v3);
-    p4.friction(maxSpeed, v4);
+    p1.friction(pMaxSpeed, v1);
+    p2.friction(pMaxSpeed, v2);
+    p3.friction(pMaxSpeed, v3);
+    p4.friction(pMaxSpeed, v4);
 
-    CHECK(v1.getX() == doctest::Approx(maxSpeed[1] * std::sin(vel1.angle())));
-    CHECK(v1.getY() == doctest::Approx(-maxSpeed[1] * std::cos(vel1.angle())));
+    CHECK(v1.getX() == doctest::Approx(pMaxSpeed * std::sin(vel1.angle())));
+    CHECK(v1.getY() == doctest::Approx(-pMaxSpeed * std::cos(vel1.angle())));
 
-    CHECK(v2.getX() == doctest::Approx(maxSpeed[1] * std::sin(vel2.angle())));
-    CHECK(v2.getY() == doctest::Approx(-maxSpeed[1] * std::cos(vel2.angle())));
+    CHECK(v2.getX() == doctest::Approx(pMaxSpeed * std::sin(vel2.angle())));
+    CHECK(v2.getY() == doctest::Approx(-pMaxSpeed * std::cos(vel2.angle())));
 
-    CHECK(v3.getX() == doctest::Approx(maxSpeed[1] * std::sin(vel3.angle())));
-    CHECK(v3.getY() == doctest::Approx(-maxSpeed[1] * std::cos(vel3.angle())));
+    CHECK(v3.getX() == doctest::Approx(pMaxSpeed * std::sin(vel3.angle())));
+    CHECK(v3.getY() == doctest::Approx(-pMaxSpeed * std::cos(vel3.angle())));
 
     CHECK(v4 == point::Point(-1., -2.));
   }
 
   SUBCASE("Testing boost method") {
-    p1.boost(minSpeed, v1);
-    p2.boost(minSpeed, v2);
-    p3.boost(minSpeed, v3);
-    p4.boost(minSpeed, v4);
+    p1.boost(pMinSpeed, v1);
+    p2.boost(pMinSpeed, v2);
+    p3.boost(pMinSpeed, v3);
+    p4.boost(pMinSpeed, v4);
 
     CHECK(v1 == point::Point(5., -1.));
     CHECK(v2 == point::Point(-8.5, -6.));
     CHECK(v3 == point::Point(-7.3, 2.5));
 
-    CHECK(v4.getX() == doctest::Approx(minSpeed[1] * std::sin(vel4.angle())));
-    CHECK(v4.getY() == doctest::Approx(-minSpeed[1] * std::cos(vel4.angle())));
+    CHECK(v4.getX() == doctest::Approx(pMinSpeed * std::sin(vel4.angle())));
+    CHECK(v4.getY() == doctest::Approx(-pMinSpeed * std::cos(vel4.angle())));
   }
 }
 
@@ -458,13 +461,15 @@ TEST_CASE("Testing functions in namespace graphic_par") {
 
     CHECK(graphic_par::getPositiveInteger("Enter a positive integer, might be zero: ", input1, output1, false) ==
           doctest::Approx(5));
-    CHECK(graphic_par::getPositiveInteger("Enter a positive integer: ", input2, output2, true) == doctest::Approx(0));
-    CHECK_THROWS_AS(graphic_par::getPositiveInteger("Enter a positive integer: ", input3, output3, true),
-                    std::exception);
+    // CHECK(graphic_par::getPositiveInteger("Enter a positive integer: ", input2, output2, true) == doctest::Approx(0));
+    CHECK_THROWS_WITH_AS(graphic_par::getPositiveInteger("Enter a positive integer: ", input2, output2, true),
+                         "Error: Invalid input. The program will now terminate.", std::domain_error);
+    CHECK_THROWS_WITH_AS(graphic_par::getPositiveInteger("Enter a positive integer: ", input3, output3, true),
+                     "Error: Invalid input. The program will now terminate.", std::domain_error);
 
     CHECK(output1.str() == "Enter a positive integer, might be zero: ");
     CHECK(output2.str() == "Enter a positive integer: ");
-    CHECK(output3.str() == "Enter a positive integer: \nInvalid input. The program will now terminate.\n");
+    // CHECK(output3.str() == "Enter a positive integer: \nInvalid input. The program will now terminate.\n");
   }
 
   SUBCASE("Testing graphic_par::getPositiveDouble()") {
@@ -478,42 +483,42 @@ TEST_CASE("Testing functions in namespace graphic_par") {
     std::ostringstream output3;
     std::ostringstream output4;
 
-    CHECK(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input1, output1) == doctest::Approx(5.5));
+    CHECK_THROWS_WITH_AS(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input1, output1),
+                       "Error: Invalid input. The program will now terminate.", std::domain_error);
     CHECK(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input2, output2) == doctest::Approx(1.));
     CHECK(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input3, output3) == doctest::Approx(0.));
-    CHECK_THROWS_AS(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input4, output4),
-                    std::exception);
+    CHECK_THROWS_WITH_AS(graphic_par::getPositiveDouble("Enter a double between 0 and 1: ", input4, output4),
+                       "Error: Invalid input. The program will now terminate.", std::domain_error);
 
     CHECK(output1.str() == "Enter a double between 0 and 1: ");
     CHECK(output2.str() == "Enter a double between 0 and 1: ");
     CHECK(output3.str() == "Enter a double between 0 and 1: ");
-    CHECK(output4.str() == "Enter a double between 0 and 1: \nInvalid input. The program will now terminate.\n");
+    // CHECK(output4.str() == "Enter a double between 0 and 1: \nInvalid input. The program will now terminate.\n");
   }
 
-  SUBCASE("Testing graphic_par::createRectangle()") {}
+  // SUBCASE("Testing graphic_par::createRectangle()") {}
 }
 //======================================================================================================================
 //===TESTING FUNCTIONS IN NAMESPACE TRIANGLES::=========================================================================
 //======================================================================================================================
 
-flock::Flock flock1(2, 2, maxSpeed, minSpeed);
 
 std::shared_ptr<bird::Boid> b1 = std::make_shared<bird::Boid>(pos1, vel1);
 std::shared_ptr<bird::Boid> b2 = std::make_shared<bird::Boid>(pos2, vel2);
+std::vector<std::shared_ptr<bird::Boid>> boids{b1, b2};
+
 std::shared_ptr<bird::Predator> p1 = std::make_shared<bird::Predator>(pos3, vel3);
 std::shared_ptr<bird::Predator> p2 = std::make_shared<bird::Predator>(pos5, vel5);
+std::vector<std::shared_ptr<bird::Predator>> predators{p1, p2};
 
-std::vector<std::shared_ptr<bird::Bird>> f1{};
+flock::Flock flock1(boids, predators, bMaxSpeed, pMaxSpeed, bMinSpeed, pMinSpeed);
 
 TEST_CASE("Testing functions in namespace triangles") {
-  f1.push_back(b1);
-  f1.push_back(b2);
-  f1.push_back(p1);
-  f1.push_back(p2);
-  f1.resize(4);
 
-  CHECK(flock1.getFlockSize() == f1.size());
-  flock1.setFlock(f1);
+  flock1.getBoidFlock().resize(2);
+  flock1.getPredatorFlock().resize(2);
+
+  CHECK(flock1.getFlockSize() == flock1.getBoidsNum() + flock1.getPredatorsNum());
 
   sf::Vertex v1{pos1()};
   sf::Vertex v2{pos3()};
@@ -547,9 +552,11 @@ TEST_CASE("Testing functions in namespace triangles") {
   SUBCASE("Testing triangles::rotateTriangles()") {
     double theta1{2.5};
     double theta2{3.6};
+    const point::Point b1_pos = b1->getPosition();
+    const point::Point p1_pos = p1->getPosition();
 
-    triangles::rotateTriangle(b1, triangles, theta1, 0);
-    triangles::rotateTriangle(p1, triangles, theta2, 2);
+    triangles::rotateTriangle(b1_pos, triangles, theta1, 0, true, 2);
+    triangles::rotateTriangle(p1_pos, triangles, theta2, 0, false, 2);
 
     CHECK(triangles[0].position ==
           v1.position + sf::Vector2f(static_cast<float>(triangles::relative_position[0].x * std::cos(theta1) -
@@ -597,7 +604,9 @@ TEST_CASE("Testing Flock class") {
   SUBCASE("Testing generateBirds method") {
     flock::Flock flock0(2, 2);
     flock0.generateBirds();
-    CHECK(!flock0.getFlock().empty());
+
+    CHECK(!flock0.getBoidFlock().empty());
+    CHECK(!flock0.getPredatorFlock().empty());
   }
 
   SUBCASE("Testing getters and setters") {
@@ -608,13 +617,13 @@ TEST_CASE("Testing Flock class") {
 
   SUBCASE("Testing findNearBoids method") {
     std::vector<std::shared_ptr<bird::Bird>> nearBoids1;
-    nearBoids1 = flock1.findNearBoids(*b1, 0);
+    nearBoids1 = flock1.findNearBoids(0, true);
 
     CHECK(nearBoids1.size() == 1);
     CHECK(nearBoids1[0].get() == b2.get());
 
     std::vector<std::shared_ptr<bird::Bird>> nearBoids2;
-    nearBoids2 = flock1.findNearBoids(*p1, 2);
+    nearBoids2 = flock1.findNearBoids(0, false);
 
     CHECK(nearBoids2.size() == 2);
     CHECK(nearBoids2[0] == b1);
@@ -623,14 +632,14 @@ TEST_CASE("Testing Flock class") {
 
   SUBCASE("Testing findNearPredators method") {
     std::vector<std::shared_ptr<bird::Bird>> nearPredators1;
-    nearPredators1 = flock1.findNearPredators(*b1, 0);
+    nearPredators1 = flock1.findNearPredators(0, true);
 
     CHECK(nearPredators1.size() == 2);
     CHECK(nearPredators1[0] == p1);
     CHECK(nearPredators1[1] == p2);
 
     std::vector<std::shared_ptr<bird::Bird>> nearPredators2;
-    nearPredators2 = flock1.findNearPredators(*p1, 2);
+    nearPredators2 = flock1.findNearPredators(0, false);
 
     CHECK(nearPredators2.size() == 1);
     CHECK(nearPredators2[0] == p2);
@@ -640,11 +649,11 @@ TEST_CASE("Testing Flock class") {
     f2.push_back(b1);
     f2.push_back(b2);
 
-    CHECK(flock2.findNearPredators(*b1, 0).empty());
+    CHECK(flock2.findNearPredators(0, true).empty());
   }
 
-  std::array<point::Point, 2> update_boid = flock1.updateBird(b1, triangles, 0);
-  std::array<point::Point, 2> update_predator = flock1.updateBird(p1, triangles, 2);
+  std::array<point::Point, 2> update_boid = flock1.updateBird(triangles, 0, true);
+  std::array<point::Point, 2> update_predator = flock1.updateBird(triangles, 0, false);
 
   SUBCASE("Testing updateBird method") {
     const std::array<double, 2> border_params = flock1.getBorderParams();
@@ -656,16 +665,16 @@ TEST_CASE("Testing Flock class") {
 
     std::vector<std::shared_ptr<bird::Bird>> nearBoids1;
     std::vector<std::shared_ptr<bird::Bird>> nearPredators1;
-    nearBoids1 = flock1.findNearBoids(*b1, 0);
-    nearPredators1 = flock1.findNearPredators(*b1, 0);
+    nearBoids1 = flock1.findNearBoids(0, true);
+    nearPredators1 = flock1.findNearPredators(0, true);
 
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
     point::Point v_boid = b1->border(border_params[0], border_params[1]) + b1->separation(s, ds, nearBoids1) +
                           b1->alignment(a, nearBoids1) + b1->cohesion(c, nearBoids1) + b1->repel(s, nearPredators1);
-    b1->friction(maxSpeed, v_boid);
-    b1->boost(minSpeed, v_boid);
+    b1->friction(bMaxSpeed, v_boid);
+    b1->boost(bMinSpeed, v_boid);
     point::Point p_boid = b1->getPosition() + graphic_par::dt * v_boid;
 
     CHECK(update_boid[0].getX() == doctest::Approx(p_boid.getX()));
@@ -675,8 +684,8 @@ TEST_CASE("Testing Flock class") {
 
     std::vector<std::shared_ptr<bird::Bird>> nearBoids2;
     std::vector<std::shared_ptr<bird::Bird>> nearPredators2;
-    nearBoids2 = flock1.findNearBoids(*p1, 2);
-    nearPredators2 = flock1.findNearPredators(*p1, 2);
+    nearBoids2 = flock1.findNearBoids(0, false);
+    nearPredators2 = flock1.findNearPredators(0, false);
 
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
@@ -684,8 +693,8 @@ TEST_CASE("Testing Flock class") {
     point::Point v_predator = p1->border(border_params[0], border_params[1]) +
                               p1->separation(s * 0.1, d * 0.5, nearPredators2) + p1->chase(c, nearBoids2);
 
-    p1->friction(maxSpeed, v_predator);
-    p1->boost(minSpeed, v_predator);
+    p1->friction(pMaxSpeed, v_predator);
+    p1->boost(pMinSpeed, v_predator);
     point::Point p_predator = p1->getPosition() + graphic_par::dt * v_predator;
 
     CHECK(update_predator[0].getX() == doctest::Approx(p_predator.getX()));
@@ -701,19 +710,19 @@ TEST_CASE("Testing Flock class") {
     bird::Boid boid(update_boid[0], update_boid[1]);
     bird::Predator predator(update_predator[0], update_predator[1]);
 
-    CHECK(flock1.getFlock()[0]->getPosition().getX() == boid.getPosition().getX());
-    CHECK(flock1.getFlock()[0]->getPosition().getY() == boid.getPosition().getY());
-    CHECK(flock1.getFlock()[0]->getVelocity().getX() == boid.getVelocity().getX());
-    CHECK(flock1.getFlock()[0]->getVelocity().getY() == boid.getVelocity().getY());
+    CHECK(flock1.getBoidFlock()[0]->getPosition().getX() == boid.getPosition().getX());
+    CHECK(flock1.getBoidFlock()[0]->getPosition().getY() == boid.getPosition().getY());
+    CHECK(flock1.getBoidFlock()[0]->getVelocity().getX() == boid.getVelocity().getX());
+    CHECK(flock1.getBoidFlock()[0]->getVelocity().getY() == boid.getVelocity().getY());
 
     CHECK(triangles[0].color == sf::Color::Blue);
     CHECK(triangles[1].color == sf::Color::Blue);
     CHECK(triangles[2].color == sf::Color::Blue);
 
-    CHECK(flock1.getFlock()[2]->getPosition().getX() == predator.getPosition().getX());
-    CHECK(flock1.getFlock()[2]->getPosition().getY() == predator.getPosition().getY());
-    CHECK(flock1.getFlock()[2]->getVelocity().getX() == predator.getVelocity().getX());
-    CHECK(flock1.getFlock()[2]->getVelocity().getY() == predator.getVelocity().getY());
+    CHECK(flock1.getPredatorFlock()[0]->getPosition().getX() == predator.getPosition().getX());
+    CHECK(flock1.getPredatorFlock()[0]->getPosition().getY() == predator.getPosition().getY());
+    CHECK(flock1.getPredatorFlock()[0]->getVelocity().getX() == predator.getVelocity().getX());
+    CHECK(flock1.getPredatorFlock()[0]->getVelocity().getY() == predator.getVelocity().getY());
 
     CHECK(triangles[6].color == sf::Color::Red);
     CHECK(triangles[7].color == sf::Color::Red);
@@ -723,14 +732,14 @@ TEST_CASE("Testing Flock class") {
   SUBCASE("Testing statistics method") {
     statistics::Statistics stats = flock1.statistics();
 
-    double speed1 = flock1.getFlock()[0]->getVelocity().module();
-    double speed2 = flock1.getFlock()[1]->getVelocity().module();
+    double speed1 = flock1.getBoidFlock()[0]->getVelocity().module();
+    double speed2 = flock1.getBoidFlock()[1]->getVelocity().module();
 
     double mean_speed = (speed1 + speed2) / 2.;
     double mean_speed2 = (speed1 * speed1 + speed2 * speed2) / 2.;
 
     CHECK(stats.mean_dist ==
-          doctest::Approx(flock1.getFlock()[0]->getPosition().distance(flock1.getFlock()[1]->getPosition())));
+          doctest::Approx(flock1.getBoidFlock()[0]->getPosition().distance(flock1.getBoidFlock()[1]->getPosition())));
     CHECK(stats.mean_speed == doctest::Approx(mean_speed));
     CHECK(stats.dev_dist == doctest::Approx(0.));
     CHECK(stats.dev_speed == doctest::Approx(std::sqrt(mean_speed2 - mean_speed * mean_speed)));
