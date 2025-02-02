@@ -9,7 +9,7 @@
 #include "../include/flock.hpp"
 namespace graphic_par {
 
-int getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, const bool positive) {
+size_t getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, const bool positive) {
   int value;
   out << prompt;
   in >> value;
@@ -17,7 +17,7 @@ int getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream
   if (in.fail() || (positive && value <= 0)) {
     throw std::domain_error("Error: Invalid input. The program will now terminate.");
   }
-  return value;
+  return static_cast<size_t>(value);
 }
 
 double getPositiveDouble(const std::string& prompt, std::istream& in, std::ostream& out) {

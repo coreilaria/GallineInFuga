@@ -65,28 +65,28 @@ point::Point Bird::border(const double margin, const double turn_factor) const {
 Boid::Boid() : Bird() {}
 Boid::Boid(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) {}
 
-point::Point Boid::alignment(const double a, const std::vector<std::shared_ptr<Bird>>& near) const {
+point::Point Boid::alignment(const double a, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
   assert(a >= 0 && a <= 1);
   const point::Point sum = std::accumulate(
-      near.begin(), near.end(), point::Point(0., 0.),
+      near_boids.begin(), near_boids.end(), point::Point(0., 0.),
       [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getVelocity(); });
-  return a * (sum / static_cast<double>(near.size()) - velocity_);
+  return a * (sum / static_cast<double>(near_boids.size()) - velocity_);
 }
 
-point::Point Boid::cohesion(const double c, const std::vector<std::shared_ptr<Bird>>& near) const {
+point::Point Boid::cohesion(const double c, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
   assert(c >= 0 && c <= 1);
   const point::Point sum = std::accumulate(
-      near.begin(), near.end(), point::Point(0., 0.),
+      near_boids.begin(), near_boids.end(), point::Point(0., 0.),
       [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
-  return c * (sum / static_cast<double>(near.size()) - position_);
+  return c * (sum / static_cast<double>(near_boids.size()) - position_);
 }
 
-point::Point Boid::repel(const double s, const std::vector<std::shared_ptr<Bird>>& near) const {
-  assert(s >= 0);
+point::Point Boid::repel(const double r, const std::vector<std::shared_ptr<Bird>>& near_predators) const {
+  assert(r >= 0);
   const point::Point sum = std::accumulate(
-      near.begin(), near.end(), point::Point(0., 0.),
+      near_predators.begin(), near_predators.end(), point::Point(0., 0.),
       [this](point::Point acc, const std::shared_ptr<Bird>& boid) { return acc += boid->getPosition() - position_; });
-  return (-s * 6) * sum;
+  return -r * sum;
 }
 
 void Boid::friction(const double b_max_speed, point::Point& velocity) {

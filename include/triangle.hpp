@@ -39,7 +39,7 @@ void createTriangles(const flock::Flock& flock, sf::VertexArray& triangles);
 /// @param i Is the index associated with the position of the bird in the flock.
 /// @param is_boid Is a boolean constant which states whether the current bird is a bird::Boid or a bird::Predator.
 /// @param nBoids Is the number of bird::Boid objects in the flock.
-void rotateTriangle(const point::Point& target_position, sf::VertexArray& triangles, double theta, int i, bool is_boid, int nBoids);
+void rotateTriangle(const point::Point& target_position, sf::VertexArray& triangles, double theta, size_t i, bool is_boid, size_t  nBoids);
 
 /// @brief Gets the base width of the triangle.
 /// @return The base width of the triangle.

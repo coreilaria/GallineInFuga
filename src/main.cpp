@@ -11,8 +11,8 @@
 #include "../include/triangle.hpp"
 
 int main() {
-  int nBoids = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", std::cin, std::cout, true);
-  int nPredators =
+  size_t nBoids = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", std::cin, std::cout, true);
+  size_t nPredators =
       graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", std::cin, std::cout, false);
 
   flock::Flock flock(nBoids, nPredators);

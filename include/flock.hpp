@@ -2,8 +2,8 @@
 /// @brief      Defines the Flock class.
 ///
 /// @details    This file contains the definition of Flock class.
-///             The Flock represents the group of bird::Birds, divided in bird::Boids and bird::Predators, flying in the
-///             simulation.
+///             The Flock represents the group of bird::Bird objects, divided in bird::Boid and bird::Predator, flying
+///             in the simulation.
 
 #ifndef FLOCK_HPP
 #define FLOCK_HPP
@@ -18,17 +18,19 @@
 
 namespace flock {
 
+/// @brief The Flock class represents the group of birds.
 class Flock {
-  /// @brief The Flock class represents the group of bird::Birds.
  private:
-  /// @param n_boids_ Is number of bird::Boids in the flock.
-  int n_boids_;
+  /// @param n_boids_ Is number of bird::Boid objects in the flock.
+  size_t n_boids_;
 
-  /// @param n_predators_ Is number of bird::Predators in the flock.
-  int n_predators_;
+  /// @param n_predators_ Is number of bird::Predator objects in the flock.
+  size_t n_predators_;
 
-  /// @param flock_ Is the vector containing both bird::Boids and bird::Predators.
+  /// @param b_flock_ Is the vector containing the bird::Boid objects in the flock.
   std::vector<std::shared_ptr<bird::Boid>> b_flock_;
+
+  /// @param p_flock_ Is the vector containing the bird::Boid objects in the flock.
   std::vector<std::shared_ptr<bird::Predator>> p_flock_;
 
   /// @param b_sight_angle_ Is the bird::Boid objects' angle of sight.
@@ -37,38 +39,44 @@ class Flock {
   /// @param p_sight_angle_ Is the bird::Predator objects' angle of sight.
   static constexpr double p_sight_angle_ = 0.5 * M_PI;
 
-  /// @param s_ Is the parameters which modules the separation of the bird::Birds in the flock.
+  /// @param s_ Is the parameter which modules the separation of the bird::Boid and bird::Predator objects in the flock.
   double s_;
 
-  /// @param a_ Is the parameters which modules the alignment of the bird::Boids in the flock.
+  /// @param a_ Is the parameter which modules the alignment of the bird::Boid in the flock.
   double a_;
 
-  /// @param c_ Is the parameters which modules the cohesion of the bird::Boids in the flock.
+  /// @param c_ Is the parameter which modules the cohesion of the bird::Boid in the flock.
   double c_;
 
-  /// @param d_ Is the radius of the circle where the nearby bird::Boids can be located.
-  double d_ = 75.;
+  /// @param r_ Is the parameter which modules the repulsion coefficient for bird::Boid in the flock.
+  double r_;
 
-  /// @param ds_ Is the radius of the circle where the separation rule would be effective.
-  double ds_ = 20.;
+  /// @param d_ Is the radius of the circle where the nearby bird::Boid can be located.
+  static constexpr double d_ = 75.;
+
+  /// @param b_ds_ Is the radius of the circle where the separation rule for bird::Boid objects would be effective.
+  static constexpr double b_ds_ = 20.;
+
+  /// @param p_ds_ Is the radius of the circle where the separation rule for bird::Predator objects would be effective.
+  static constexpr double p_ds_ = d_ * 0.5;
 
   /// @param turn_factor_ Is the increment that is applied to the component of the velocity when a bird::Bird flies too
   /// close to the border of the window.
-  double turn_factor_ = 2.5;
+  static constexpr double turn_factor_ = 2.5;
 
   /// @param margin_ Is the distance from the border of the window within which the border rule applies.
-  double margin_ = 100.;
+  static constexpr double margin_ = 100.;
 
-  /// @param b_max_speed_ Is the maximum speed value for bird::Boid
+  /// @param b_max_speed_ Is the maximum speed value for bird::Boid objects.
   double b_max_speed_;
 
-  /// @param p_max_speed_ Is the maximum speed value for bird::Predators.
+  /// @param p_max_speed_ Is the maximum speed value for bird::Predator objects.
   double p_max_speed_;
 
-  /// @param b_min_speed_ Is the minimum speed value for bird::Boid
+  /// @param b_min_speed_ Is the minimum speed value for bird::Boid objects.
   double b_min_speed_;
 
-  /// @param p_min_speed_ Is the minimum speed value for bird::Predators.
+  /// @param p_min_speed_ Is the minimum speed value for bird::Predator objects.
   double p_min_speed_;
 
  public:
@@ -83,7 +91,7 @@ class Flock {
   /// - p_max_speed_ = 8.
   /// - b_min_speed_ = 7.
   /// - p_min_speed_ = 5.
-  Flock(int nBoids, int nPredators);
+  Flock(size_t nBoids, size_t nPredators);
 
   /// @brief Constructs a new Flock object.
   /// @param boids Vector of std::shared_ptr<bird::Boid>.
@@ -105,15 +113,15 @@ class Flock {
 
   /// @brief Gets the number of bird::Boid in the flock.
   /// @return The number of bird::Boid.
-  [[nodiscard]] int getBoidsNum() const;
+  [[nodiscard]] size_t getBoidsNum() const;
 
   /// @brief Gets the number of bird::Predators in the flock.
   /// @return The number of bird::Predators.
-  [[nodiscard]] int getPredatorsNum() const;
+  [[nodiscard]] size_t getPredatorsNum() const;
 
   /// @brief Gets the number of bird::Bird in the flock.
-  /// @return The sum of the number of bird::Boids and bird::Predators in the flock.
-  [[nodiscard]] int getFlockSize() const;
+  /// @return The sum of the number of bird::Boid and bird::Predators in the flock.
+  [[nodiscard]] size_t getFlockSize() const;
 
   /// @brief Gets the vector of boids in the flock.
   /// @return The vector of bird::Boid objects.
@@ -125,11 +133,17 @@ class Flock {
 
   /// @brief Gets the turn factor for the rule border.
   /// @return The turn factor.
-  [[nodiscard]] double getTurnFactor() const;
+  [[nodiscard]] static double getTurnFactor();
 
   /// @brief Gets the margin for the rule border.
   /// @return The margin.
-  [[nodiscard]] double getMargin() const;
+  [[nodiscard]] static double getMargin();
+
+  /// @brief Gets the margin for the rule border.
+  /// @return The margin.
+  [[nodiscard]] std::array<double, 4> getFlightParams() const;
+
+  [[nodiscard]] static std::array<double, 3> getDistancesParams();
 
   /// @brief Sets the flock's flight parameters with the values streamed in input.
   void setFlockParams();
@@ -142,12 +156,12 @@ class Flock {
   /// @brief Finds bird::Boid objects near a bird.
   /// @param i Is the index identifying the position of the current bird in the flock.
   /// @param is_boid Is a boolean constant which states whether the current bird is a bird::Boid or a bird::Predator.
-  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearBoids(int i, bool is_boid) const;
+  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearBoids(size_t i, bool is_boid) const;
 
   /// @brief Finds bird::Predator objects near a bird.
   /// @param i Is the index identifying the position of the current bird in the flock.
   /// @param is_boid Is a boolean constant which states whether the current bird is a bird::Boid or a bird::Predator.
-  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearPredators(int i, bool is_boid) const;
+  [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearPredators(size_t i, bool is_boid) const;
 
   /// @brief Evaluates the new position and velocity of a bird::Bird in the flock.
   /// @details Evaluates a new velocity for the bird::Bird, taking into account all the rules implemented for the
@@ -166,7 +180,7 @@ class Flock {
   /// @param i Is the index identifying the position of the bird::Bird in the flock.
   /// @param is_boid Is a boolean constant which states whether the current bird is a bird::Boid or a bird::Predator.
   /// @return The array containing, respectively, the updated position and velocity of the bird::Bird.
-  std::array<point::Point, 2> updateBird(sf::VertexArray& triangles, int i, bool is_boid) const;
+  std::array<point::Point, 2> updateBird(sf::VertexArray& triangles, size_t i, bool is_boid) const;
 
   /// @brief Updates the position and the direction of the triangles.
   /// @details It updates the velocity and position of each bird::Bird in the flock. Then the position and the

@@ -9,11 +9,11 @@
 #include "../include/point.hpp"
 #include "../include/triangle.hpp"
 
-constexpr double d{80.};
-constexpr double ds{d / 2.};
-constexpr double s{0.6};
-constexpr double c{0.001};
-constexpr double a{0.6};
+std::array<double, 3> distanceParams = flock::Flock::getDistancesParams();
+
+double d{distanceParams[0]};
+double b_ds{distanceParams[1]};
+double p_ds{distanceParams[2]};
 
 constexpr double bMaxSpeed{5.};
 constexpr double pMaxSpeed{4.};
@@ -195,13 +195,18 @@ const point::Point vel2(-8.5, -6.);
 const point::Point pos3 = pos1 + 0.8 * d * point::Point(std::sin(beta), -std::cos(beta));
 const point::Point vel3(-7.3, 2.5);
 
-const point::Point pos4 = pos1 + 0.5 * ds * point::Point(std::sin(alfa), -std::cos(alfa));
+const point::Point pos4 = pos1 + 0.5 * b_ds * point::Point(std::sin(alfa), -std::cos(alfa));
 const point::Point vel4(-1., -2.);
 
-const point::Point pos5 = pos1 + 0.5 * ds * point::Point(std::sin(beta), -std::cos(beta));
+const point::Point pos5 = pos1 + 0.5 * b_ds * point::Point(std::sin(beta), -std::cos(beta));
 const point::Point vel5(-5., -3.2);
 
 TEST_CASE("Testing Boid class") {
+  double s{0.1};
+  double a{0.1};
+  double c{0.004};
+  double r{s * 6};
+
   const double x = pos1.getX();
   const double y = pos1.getY();
 
@@ -239,16 +244,16 @@ TEST_CASE("Testing Boid class") {
   }
 
   SUBCASE("Testing separation method") {
-    double sep1_x = -s * 0.5 * ds * (std::sin(alfa) + std::sin(beta));
-    double sep1_y = -s * 0.5 * ds * -(std::cos(alfa) + std::cos(beta));
+    double sep1_x = -s * 0.5 * b_ds * (std::sin(alfa) + std::sin(beta));
+    double sep1_y = -s * 0.5 * b_ds * -(std::cos(alfa) + std::cos(beta));
 
-    CHECK(b1.separation(s, ds, near_b1).getX() == doctest::Approx(sep1_x));
-    CHECK(b1.separation(s, ds, near_b1).getY() == doctest::Approx(sep1_y));
+    CHECK(b1.separation(s, b_ds, near_b1).getX() == doctest::Approx(sep1_x));
+    CHECK(b1.separation(s, b_ds, near_b1).getY() == doctest::Approx(sep1_y));
   }
 
   SUBCASE("Testing cohesion method") {
-    double coh1_x = c * ((4 * x + (0.5 * ds + 0.8 * d) * (std::sin(alfa) + std::sin(beta))) / 4. - x);
-    double coh1_y = c * ((4 * y + (0.5 * ds + 0.8 * d) * -(std::cos(alfa) + std::cos(beta))) / 4. - y);
+    double coh1_x = c * ((4 * x + (0.5 * b_ds + 0.8 * d) * (std::sin(alfa) + std::sin(beta))) / 4. - x);
+    double coh1_y = c * ((4 * y + (0.5 * b_ds + 0.8 * d) * -(std::cos(alfa) + std::cos(beta))) / 4. - y);
 
     CHECK(b1.cohesion(c, near_b1).getX() == doctest::Approx(coh1_x));
     CHECK(b1.cohesion(c, near_b1).getY() == doctest::Approx(coh1_y));
@@ -266,11 +271,11 @@ TEST_CASE("Testing Boid class") {
     // here we apply bird::Boid::repel on near_b1, which identifies the boids near b1, even if it was initially intended
     // to be applied on near_predators.
 
-    double rep1_x = -s * 6 * (0.5 * ds + 0.8 * d) * (std::sin(alfa) + std::sin(beta));
-    double rep1_y = -s * 6 * (0.5 * ds + 0.8 * d) * -(std::cos(alfa) + std::cos(beta));
+    double rep1_x = -r * (0.5 * b_ds + 0.8 * d) * (std::sin(alfa) + std::sin(beta));
+    double rep1_y = -r * (0.5 * b_ds + 0.8 * d) * -(std::cos(alfa) + std::cos(beta));
 
-    CHECK(b1.repel(s, near_b1).getX() == doctest::Approx(rep1_x));
-    CHECK(b1.repel(s, near_b1).getY() == doctest::Approx(rep1_y));
+    CHECK(b1.repel(r, near_b1).getX() == doctest::Approx(rep1_x));
+    CHECK(b1.repel(r, near_b1).getY() == doctest::Approx(rep1_y));
   }
 
   SUBCASE("Testing friction method") {
@@ -364,6 +369,8 @@ TEST_CASE("Testing Boid class") {
 //======================================================================================================================
 
 TEST_CASE("Testing Predator class") {
+  double c{0.004};
+
   bird::Predator p1(pos1, vel1);
   bird::Predator p2(pos2, vel2);
   bird::Predator p3(pos3, vel3);
@@ -459,10 +466,8 @@ TEST_CASE("Testing functions in namespace graphic_par") {
     std::ostringstream output2;
     std::ostringstream output3;
 
-    CHECK(graphic_par::getPositiveInteger("Enter a positive integer, might be zero: ", input1, output1, false) ==
-          doctest::Approx(5));
-    // CHECK(graphic_par::getPositiveInteger("Enter a positive integer: ", input2, output2, true) ==
-    // doctest::Approx(0));
+    CHECK(graphic_par::getPositiveInteger("Enter a positive integer, might be zero: ", input1, output1, false) == 5);
+
     CHECK_THROWS_WITH_AS(graphic_par::getPositiveInteger("Enter a positive integer: ", input2, output2, true),
                          "Error: Invalid input. The program will now terminate.", std::domain_error);
     CHECK_THROWS_WITH_AS(graphic_par::getPositiveInteger("Enter a positive integer: ", input3, output3, true),
@@ -493,10 +498,7 @@ TEST_CASE("Testing functions in namespace graphic_par") {
     CHECK(output1.str() == "Enter a double between 0 and 1: ");
     CHECK(output2.str() == "Enter a double between 0 and 1: ");
     CHECK(output3.str() == "Enter a double between 0 and 1: ");
-    // CHECK(output4.str() == "Enter a double between 0 and 1: \nInvalid input. The program will now terminate.\n");
   }
-
-  // SUBCASE("Testing graphic_par::createRectangle()") {}
 }
 //======================================================================================================================
 //===TESTING FUNCTIONS IN NAMESPACE TRIANGLES::=========================================================================
@@ -511,6 +513,11 @@ std::shared_ptr<bird::Predator> p2 = std::make_shared<bird::Predator>(pos5, vel5
 std::vector<std::shared_ptr<bird::Predator>> predators{p1, p2};
 
 flock::Flock flock1(boids, predators, bMaxSpeed, pMaxSpeed, bMinSpeed, pMinSpeed);
+const std::array<double, 4> flightParams = flock1.getFlightParams();
+const double s = flightParams[0];
+const double a = flightParams[1];
+const double c = flightParams[2];
+const double r = flightParams[3];
 
 TEST_CASE("Testing functions in namespace triangles") {
   flock1.getBoidFlock().resize(2);
@@ -608,9 +615,9 @@ TEST_CASE("Testing Flock class") {
   }
 
   SUBCASE("Testing getters and setters") {
-    CHECK(flock1.getFlockSize() == doctest::Approx(4));
-    CHECK(flock1.getBoidsNum() == doctest::Approx(2));
-    CHECK(flock1.getPredatorsNum() == doctest::Approx(2));
+    CHECK(flock1.getFlockSize() == 4);
+    CHECK(flock1.getBoidsNum() == 2);
+    CHECK(flock1.getPredatorsNum() == 2);
   }
 
   SUBCASE("Testing findNearBoids method") {
@@ -668,8 +675,8 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    point::Point v_boid = b1->border(margin, turnFactor) + b1->repel(s, nearPredators1) +
-                          b1->separation(s, ds, nearBoids1) + b1->alignment(a, nearBoids1) +
+    point::Point v_boid = b1->border(margin, turnFactor) + b1->repel(r, nearPredators1) +
+                          b1->separation(s, b_ds, nearBoids1) + b1->alignment(a, nearBoids1) +
                           b1->cohesion(c, nearBoids1);
     b1->boost(bMinSpeed, v_boid);
     b1->friction(bMaxSpeed, v_boid);

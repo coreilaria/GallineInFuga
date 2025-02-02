@@ -1,6 +1,6 @@
 # GallineInFuga
 
-Boid simulation project for Unibo's physics course.
+Boid simulation project for Unibo physics course.
 -----
 to build in release mode, as is advised for better performance:
 

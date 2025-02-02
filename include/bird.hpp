@@ -60,9 +60,9 @@ class Bird {
   /// between the bird and its neighbours.
   /// @param s Factor which modules the correction.
   /// @param ds Identifies the region where it is possible to find neighbours.
-  /// @param near Identifies the bird's neighbours.
+  /// @param near_boids Identifies the bird's neighbours.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point separation(double s, double ds, const std::vector<std::shared_ptr<Bird>> &near) const;
+  [[nodiscard]] point::Point separation(double s, double ds, const std::vector<std::shared_ptr<Bird>> &near_boids) const;
 
   /// @brief Pure virtual function to apply friction to a bird's velocity.
   virtual void friction(double, point::Point &) = 0;
@@ -103,27 +103,27 @@ class Boid final : public Bird {
   /// aligned to the near birds. In particular, the increment depends on the average of the velocities of the
   /// neighbours, from which the velocity of the boid itself is subtracted.
   /// @param a Factor which modules the correction.
-  /// @param near Identifies the boid's neighbours.
+  /// @param near_boids Identifies the boid's neighbours.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point alignment(double a, const std::vector<std::shared_ptr<Bird>> &near) const;
+  [[nodiscard]] point::Point alignment(double a, const std::vector<std::shared_ptr<Bird>> &near_boids) const;
 
   /// @brief Evaluate the correction to the velocity of the boid, in order to keep a more cohesive unit of boids.
   /// @details Whenever a boid sees other boids near it, would be evaluated a component of velocity in order make them a
   /// cohesive group. In particular, the increment depends on the average of the positions of the neighbours, from
   /// which the velocity of the boid itself is subtracted.
   /// @param c Factor which modules the correction.
-  /// @param near Identifies the boid's neighbours.
+  /// @param near_boids Identifies the boid's neighbours.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point cohesion(double c, const std::vector<std::shared_ptr<Bird>> &near) const;
+  [[nodiscard]] point::Point cohesion(double c, const std::vector<std::shared_ptr<Bird>> &near_boids) const;
 
   /// @brief Evaluate the correction to the velocity of the boid, in order to keep it separated from predators.
   /// @details Whenever a boid sees predators near it, would be evaluated a component of velocity in order to keep it
   /// away from the predator and prevent it from being caught.  In particular, the increment depends on the average of
   /// the differences in positions, between the bird and the near predators.
-  /// @param s Factor which modules the correction.
-  /// @param near Identifies the predators near the boid.
+  /// @param r Factor which modules the repulsion.
+  /// @param near_predators Identifies the predators near the boid.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point repel(double s, const std::vector<std::shared_ptr<Bird>> &near) const;
+  [[nodiscard]] point::Point repel(double r, const std::vector<std::shared_ptr<Bird>> &near_predators) const;
 };
 
 class Predator final : public Bird {
@@ -154,10 +154,10 @@ class Predator final : public Bird {
   /// @details Whenever a predator sees boids near it, would be evaluated a component of velocity so that the predators
   /// begin to chase them. In particular, the increment depends on the average of the differences in positions,
   /// between the predator and the near boids.
-  /// @param s Factor which modules the correction.
-  /// @param near Identifies the boids near the predator.
+  /// @param c Factor which modules the correction.
+  /// @param near_boids Identifies the boids near the predator.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point chase(double s, const std::vector<std::shared_ptr<Bird>> &near) const;
+  [[nodiscard]] point::Point chase(double c, const std::vector<std::shared_ptr<Bird>> &near_boids) const;
 };
 }  // namespace bird
 #endif

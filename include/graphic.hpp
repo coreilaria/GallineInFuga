@@ -44,7 +44,7 @@ constexpr double min_vel_y = -max_vel_y;
 ///@param positive Is a boolean constant that determines if the output of the function should be strictly positive or
 /// just positive.
 ///@return An integer.
-int getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, bool positive);
+size_t getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, bool positive);
 
 ///@brief It takes in input a double, checking if lays in the range [0,1]. If an invalid input is given, it exits the
 /// program.
