@@ -103,20 +103,6 @@ class Flock {
         const std::vector<std::shared_ptr<bird::Predator>>& predators, double bMaxSpeed, double pMaxSpeed,
         double bMinSpeed, double pMinSpeed);
 
-  // /// @brief Constructs a new Flock object.
-  // /// @param nBoids Number of boids.
-  // /// @param nPredators Number of predators.
-  // /// @param bMaxSpeed Maximum value of speed for boids.
-  // /// @param pMaxSpeed Maximum value of speed for predators.
-  // /// @param bMinSpeed Minimum value of speed for boids.
-  // /// @param pMinSpeed Minimum value of speed for predators.
-  // /// @details Initializes n_boids_ and n_predators_, b_max_speed_, p_max_speed_, b_min_speed_, p_min_speed_ with the
-  // /// given parameters and sets:
-  // /// - s_ = 0.1
-  // /// - a_ = 0.1
-  // /// - c_ = 0.004
-  // Flock(int nBoids, int nPredators, double bMaxSpeed, double pMaxSpeed, double bMinSpeed, double pMinSpeed);
-
   /// @brief Gets the number of bird::Boid in the flock.
   /// @return The number of bird::Boid.
   [[nodiscard]] int getBoidsNum() const;
@@ -137,9 +123,13 @@ class Flock {
   /// @return The vector of bird::Predator objects.
   [[nodiscard]] std::vector<std::shared_ptr<bird::Predator>> getPredatorFlock() const;
 
-  /// @brief Gets the parameters for the rule border.
-  /// @return The array containing respectively the margin and the turn factor.
-  [[nodiscard]] std::array<double, 2> getBorderParams() const;
+  /// @brief Gets the turn factor for the rule border.
+  /// @return The turn factor.
+  [[nodiscard]] double getTurnFactor() const;
+
+  /// @brief Gets the margin for the rule border.
+  /// @return The margin.
+  [[nodiscard]] double getMargin() const;
 
   /// @brief Sets the flock's flight parameters with the values streamed in input.
   void setFlockParams();

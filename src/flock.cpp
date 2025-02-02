@@ -47,7 +47,8 @@ int Flock::getFlockSize() const { return n_predators_ + n_boids_; }
 std::vector<std::shared_ptr<bird::Boid>> Flock::getBoidFlock() const { return b_flock_; }
 std::vector<std::shared_ptr<bird::Predator>> Flock::getPredatorFlock() const { return p_flock_; }
 
-std::array<double, 2> Flock::getBorderParams() const { return {margin_, turn_factor_}; }
+double Flock::getTurnFactor() const { return {turn_factor_}; }
+double Flock::getMargin() const { return {margin_}; }
 
 void Flock::setFlockParams() {
   char statement;
