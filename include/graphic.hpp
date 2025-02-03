@@ -17,23 +17,23 @@ constexpr float window_width = 1900.f;
 ///@param window_height It represents the height of the simulation window.
 constexpr float window_height = 900.f;
 
-///@param stats_width It represents the width of the window containing the statistics data.
+///@param stats_width It represents the width of the window containing the statistical data.
 constexpr float stats_width = 0.25 * window_width;
 
 ///@param max_vel_x It represents the upper boundary of the random generation range for the component x of the velocity
-/// of a bird.
+/// of a bird::Boid or bird::Predator object.
 constexpr double max_vel_x = 5.;
 
 ///@param min_vel_x It represents the lower boundary of the random generation range for the component x of the velocity
-/// of a bird.
+/// of a bird::Boid or bird::Predator object.
 constexpr double min_vel_x = -max_vel_x;
 
 ///@param max_vel_y It represents the upper boundary of the random generation range for the component y of the velocity
-/// of a bird.
+/// of a bird::Boid or bird::Predator object.
 constexpr double max_vel_y = 3;
 
 ///@param min_vel_y It represents the lower boundary of the random generation range for the component y of the velocity
-/// of a bird.
+/// of a bird::Boid or bird::Predator object.
 constexpr double min_vel_y = -max_vel_y;
 
 ///@brief It takes in input an integer, checking if it should be strictly positive. If an invalid input is given, it
@@ -46,7 +46,7 @@ constexpr double min_vel_y = -max_vel_y;
 ///@return An integer.
 size_t getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, bool positive);
 
-///@brief It takes in input a double, checking if lays in the range [0,1]. If an invalid input is given, it exits the
+///@brief It takes in input a double, checking if it lays in the range [0,1]. If an invalid input is given, it exits the
 /// program.
 ///@param prompt Is a constant string that will be streamed in output.
 ///@param in Is the input stream.
