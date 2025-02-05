@@ -6,13 +6,15 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # require C++17, without not-standard extensions offered by the compiler
 set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
-set(CMAKE_CXX_EXTENSIONS ON)
+set(CMAKE_CXX_EXTENSIONS OFF)
 
-# abilitate warning
-string(APPEND CMAKE_CXX_FLAGS " -Wall -Wextra -pedantic")
+# abilita warning
+string(APPEND CMAKE_CXX_FLAGS
+        " -Wall -Wextra -Wpedantic -Wconversion -Wsign-conversion"
+        " -Wshadow -Wimplicit-fallthrough -Wextra-semi -Wold-style-cast")
 
-# abilitate address sanitizer and undefined-behaviour sanitizer in debug mode
-string(APPEND CMAKE_CXX_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer")
+# abilita asserzioni di debug (in gcc), l'address sanitizer e l'undefined-behaviour sanitizer in debug mode
+string(APPEND CMAKE_CXX_FLAGS_DEBUG " -D_GLIBCXX_ASSERTIONS -fsanitize=address,undefined -fno-omit-frame-pointer")
 string(APPEND CMAKE_EXE_LINKER_FLAGS_DEBUG " -fsanitize=address,undefined -fno-omit-frame-pointer")
 
 find_package(SFML COMPONENTS graphics REQUIRED)
