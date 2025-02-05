@@ -24,7 +24,7 @@ void Bird::setBird(const point::Point position, const point::Point velocity) {
 
 point::Point Bird::separation(const double s, const double ds, const std::vector<std::shared_ptr<Bird>>& near) const {
   assert(s >= 0 && s <= 1);
-  static_assert(ds > 0);
+  assert(ds > 0);
   const point::Point sum = std::accumulate(near.begin(), near.end(), point::Point(0., 0.),
                                            [this, ds](point::Point acc, const std::shared_ptr<Bird>& boid) {
                                              if (boid->getPosition().distance(position_) < ds) {
@@ -36,8 +36,8 @@ point::Point Bird::separation(const double s, const double ds, const std::vector
 }
 
 point::Point Bird::border(const double margin, const double turn_factor) const {
-  static_assert(margin > 0 && margin < graphic_par::stats_width && margin <= graphic_par::window_height);
-  static_assert(turn_factor > 0);
+  assert(margin > 0 && margin < graphic_par::stats_width && margin <= graphic_par::window_height);
+  assert(turn_factor > 0);
 
   double v4_x{velocity_.getX()};
   double v4_y{velocity_.getY()};

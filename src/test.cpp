@@ -528,8 +528,8 @@ TEST_CASE("Testing functions in namespace triangles") {
   sf::Vertex v1{pos1()};
   sf::Vertex v2{pos3()};
 
-  float height{triangles::getHeight()};
-  float base_width{triangles::getBaseWidth()};
+  float height{triangles::height};
+  float base_width{triangles::base_width};
 
   sf::VertexArray triangles(sf::Triangles, 3 * flock1.getFlockSize());
 

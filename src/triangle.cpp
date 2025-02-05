@@ -61,7 +61,4 @@ void rotateTriangle(const point::Point& target_position, sf::VertexArray& triang
                                                           relative_position[index].y * std::cos(theta)));
   }
 }
-
-float getBaseWidth() { return base_width; }
-float getHeight() { return height; }
 }  // namespace triangles

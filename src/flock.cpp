@@ -50,6 +50,10 @@ void Flock::setFlockParams() {
   std::cout << "\nWould you like to customize the parameters of the simulation? (Y/n) ";
   std::cin >> statement;
 
+  if (std::cin.fail()){
+    throw std::runtime_error("Input failed.");
+  }
+
   if (statement == 'Y' || statement == 'y') {
     const double s = graphic_par::getPositiveDouble("\nEnter the separation coefficient: ", std::cin, std::cout);
     const double a = graphic_par::getPositiveDouble("Enter the alignment coefficient: ", std::cin, std::cout);
