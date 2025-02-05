@@ -12,10 +12,7 @@ namespace point {
 /// @brief The Point class represents a vector in 2D.
 class Point {
  private:
-  /// @param x_ Is the x component of the vector.
   double x_;
-
-  /// @param y_ Is the y component of the vector.
   double y_;
 
  public:

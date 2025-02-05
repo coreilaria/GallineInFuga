@@ -8,21 +8,19 @@
 
 namespace triangles {
 
-///@param base_width Represents the length of the triangle's base.
 inline constexpr float base_width = 7;
-
-///@param height Represents the height of the triangle.
 inline constexpr float height = 15;
 
-///@param relative_position Is an array containing the relative position of a triangle's vertex in relation to the
+///@brief Array containing the relative position of a triangle's vertex in relation to the
 /// center. The first three elements identify a triangle associated with a bird::Boid object, the last three identify a
 /// triangle associated with a bird::Predator object.
-inline const std::array<sf::Vector2f, 6> relative_position = {sf::Vector2f(0, -height / 2),
-                                                       sf::Vector2f(-base_width / 2, height / 2),
-                                                       sf::Vector2f(base_width / 2, height / 2),
-                                                       sf::Vector2f(0, (-height * 3 / 2) / 2),
-                                                       sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
-                                                       sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
+inline const std::array<sf::Vector2f, 6> relative_position = {
+    sf::Vector2f(0, -height / 2),
+    sf::Vector2f(-base_width / 2, height / 2),
+    sf::Vector2f(base_width / 2, height / 2),
+    sf::Vector2f(0, (-height * 3 / 2) / 2),
+    sf::Vector2f((-base_width * 3 / 2) / 2, (height * 3 / 2) / 2),
+    sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2)};
 
 /// @brief Constructs an array of sf::Vertex, three to three represent a triangle which is associated with a single
 /// bird.

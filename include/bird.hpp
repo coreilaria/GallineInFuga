@@ -17,10 +17,7 @@ namespace bird {
 /// @brief The Bird class represents a bird in the simulation.
 class Bird {
  protected:
-  /// @param position_ Is the position of the bird.
   point::Point position_;
-
-  /// @param velocity_ Is the velocity of the bird.
   point::Point velocity_;
 
  public:

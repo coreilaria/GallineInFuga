@@ -19,7 +19,7 @@ int main() {
       graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", std::cin, std::cout, false);
 
   flock::Flock flock(nBoids, nPredators);
-  flock.setFlockParams();
+  flock.setFlightParams(std::cin, std::cout);
 
   flock.generateBirds();
 

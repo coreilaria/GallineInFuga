@@ -8,18 +8,16 @@
 
 namespace statistics {
 struct Statistics {
-  ///@param mean_dist Represents the mean value of the distance between each couple of bird::Boid objects, at a fixed
-  /// time.
+  ///@brief Is the mean value of the distance between each couple of bird::Boid objects, at a fixed time.
   double mean_dist;
 
-  ///@param dev_dist Represents the standard deviation associated with the mean distance between bird::Boid objects.
+  ///@brief Is the standard deviation associated with the mean distance between bird::Boid objects.
   double dev_dist;
 
-  ///@param mean_speed Represents the mean value of the speed of each bird::Boid object.
+  ///@brief Is the mean value of the speed of each bird::Boid object, at a fixed time.
   double mean_speed;
 
-  ///@param dev_speed Represents the standard deviation associated with the mean speed of each bird::Boid object, at a
-  /// fixed time.
+  ///@brief Is the standard deviation associated with the mean speed of each bird::Boid object.
   double dev_speed;
 
   ///@brief Constructs a Statistics object.

@@ -21,63 +21,47 @@ namespace flock {
 /// @brief The Flock class represents a group of birds, composed of bird::Boid objects and bird::Predator objects.
 class Flock {
  private:
-  /// @param n_boids_ Is the number of bird::Boid objects in the flock.
   size_t n_boids_;
-
-  /// @param n_predators_ Is the number of bird::Predator objects in the flock.
   size_t n_predators_;
 
-  /// @param b_flock_ Is the vector containing the pointers to bird::Boid objects in the flock.
   std::vector<std::shared_ptr<bird::Boid>> b_flock_;
-
-  /// @param p_flock_ Is the vector containing the pointers to bird::Boid objects in the flock.
   std::vector<std::shared_ptr<bird::Predator>> p_flock_;
 
-  /// @param b_sight_angle_ Is the bird::Boid objects' angle of sight.
   static constexpr double b_sight_angle_ = 2. / 3 * M_PI;
-
-  /// @param p_sight_angle_ Is the bird::Predator objects' angle of sight.
   static constexpr double p_sight_angle_ = 0.5 * M_PI;
 
-  /// @param s_ Is the parameter which modules the separation of the bird::Boid and bird::Predator objects in the flock.
+  /// @brief Is the parameter which modules the separation of the bird::Boid and bird::Predator objects in the flock.
   double s_;
 
-  /// @param a_ Is the parameter which modules the alignment of the bird::Boid objects in the flock.
+  /// @brief Is the parameter which modules the alignment of the bird::Boid objects in the flock.
   double a_;
 
-  /// @param c_ Is the parameter which modules the cohesion of the bird::Boid objects in the flock.
+  /// @brief Is the parameter which modules the cohesion of the bird::Boid objects in the flock.
   double c_;
 
-  /// @param r_ Is the parameter which modules the repulsion coefficient for bird::Boid objects in the flock.
+  /// @pbrief Is the parameter which modules the repulsion coefficient for bird::Boid objects in the flock.
   double r_;
 
-  /// @param d_ Is the radius of the circle where the nearby bird::Boid objects and bird::Predator objects can be
-  /// located.
+  /// @brief Is the radius of the circle where the nearby bird::Boid objects and bird::Predator objects can be located.
   static constexpr double d_ = 75.;
 
-  /// @param b_ds_ Is the radius of the circle where the separation rule for bird::Boid objects is effective.
+  /// @brief Is the radius of the circle where the separation rule for bird::Boid objects is effective.
   static constexpr double b_ds_ = 20.;
 
-  /// @param p_ds_ Is the radius of the circle where the separation rule for bird::Predator objects is effective.
+  /// @brief Is the radius of the circle where the separation rule for bird::Predator objects is effective.
   static constexpr double p_ds_ = d_ * 0.5;
 
-  /// @param turn_factor_ Is the increment that is applied to the velocity when a bird::Boid object or a bird::Predator
-  /// object flies too close to the border of the window.
+  /// @brief Is the increment that is applied to the velocity when a bird::Boid object or a bird::Predator object flies
+  /// too close to the border of the window.
   static constexpr double turn_factor_ = 2.5;
 
-  /// @param margin_ Is the distance from the border of the window within which the border rule applies.
+  /// @brief Is the distance from the border of the window within which the border rule applies.
   static constexpr double margin_ = 100.;
 
-  /// @param b_max_speed_ Is the maximum speed value for bird::Boid objects.
   double b_max_speed_;
-
-  /// @param p_max_speed_ Is the maximum speed value for bird::Predator objects.
   double p_max_speed_;
 
-  /// @param b_min_speed_ Is the minimum speed value for bird::Boid objects.
   double b_min_speed_;
-
-  /// @param p_min_speed_ Is the minimum speed value for bird::Predator objects.
   double p_min_speed_;
 
  public:
@@ -155,7 +139,9 @@ class Flock {
   [[nodiscard]] static std::array<double, 3> getDistancesParams();
 
   /// @brief Sets the flight parameters s_, a_, c_ and r_ of the flock with the values streamed in input.
-  void setFlockParams();
+  /// @param in Is the input stream.
+  /// @param out Is the output stream.
+  void setFlightParams(std::istream& in, std::ostream& out);
 
   /// @brief Generates bird::Boid and bird::Predator objects to fill the flock.
   /// @details bird::Boid and bird::Predator objects are generated with random positions and velocities, then the
