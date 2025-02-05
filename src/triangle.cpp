@@ -50,7 +50,7 @@ void rotateTriangle(const point::Point& target_position, sf::VertexArray& triang
                     const bool is_boid, const size_t nBoids) {
   const sf::Vertex vertex{target_position()};
 
-  const size_t  j = is_boid ? 3 * i : 3 * (i + nBoids);
+  const size_t j = is_boid ? 3 * i : 3 * (i + nBoids);
 
   for (size_t k = j; k < j + 3; ++k) {
     const size_t index = is_boid ? k - j : k - j + 3;

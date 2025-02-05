@@ -91,7 +91,7 @@ point::Point Boid::repel(const double r, const std::vector<std::shared_ptr<Bird>
 
 void Boid::friction(const double b_max_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
-  assert(b_max_speed> 0);
+  assert(b_max_speed > 0);
   if (velocity.module() > b_max_speed) {
     velocity = b_max_speed * (velocity / velocity.module());
   }
@@ -121,7 +121,7 @@ point::Point Predator::chase(const double c, const std::vector<std::shared_ptr<B
 
   return c * 2 * (sum / static_cast<double>(near_boids.size()) - position_);
 }
-void Predator::friction( const double p_max_speed, point::Point& velocity) {
+void Predator::friction(const double p_max_speed, point::Point& velocity) {
   assert(p_max_speed > 0);
   assert(velocity.module() != 0);
   if (velocity.module() > p_max_speed) {

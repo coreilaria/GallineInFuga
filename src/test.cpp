@@ -650,8 +650,8 @@ TEST_CASE("Testing Flock class") {
 
     flock::Flock flock2(2, 0);
     std::vector<std::shared_ptr<bird::Bird>> f2;
-    f2.push_back(b1);
-    f2.push_back(b2);
+    f2.emplace_back(b1);
+    f2.emplace_back(b2);
 
     CHECK(flock2.findNearPredators(0, true).empty());
   }
@@ -660,8 +660,8 @@ TEST_CASE("Testing Flock class") {
   std::array<point::Point, 2> update_predator = flock1.updateBird(triangles, 0, false);
 
   SUBCASE("Testing updateBird method") {
-    const double turnFactor = flock1.getTurnFactor();
-    const double margin = flock1.getMargin();
+    const double turnFactor = flock::Flock::getTurnFactor();
+    const double margin = flock::Flock::getMargin();
 
     CHECK(turnFactor > 0);
     CHECK(margin < (graphic_par::window_width - graphic_par::stats_width) * 0.5);

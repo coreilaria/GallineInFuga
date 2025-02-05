@@ -1,8 +1,5 @@
 #include "../include/graphic.hpp"
 
-#include <cassert>
-#include <cmath>
-#include <iostream>
 #include <sstream>
 #include <stdexcept>
 

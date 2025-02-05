@@ -3,9 +3,6 @@
 
 #include "../include/bird.hpp"
 
-//----------------------------------------------------------------------------------------------------------------------
-//---NAMESPACE GRAPHIC_PAR----------------------------------------------------------------------------------------------
-//----------------------------------------------------------------------------------------------------------------------
 namespace graphic_par {
 
 ///@param dt It represents the temporal interval used to update cinematic quantities.
@@ -36,23 +33,22 @@ constexpr double max_vel_y = 3;
 /// of a bird::Boid or bird::Predator object.
 constexpr double min_vel_y = -max_vel_y;
 
-///@brief It takes in input an integer, checking if it should be strictly positive. If an invalid input is given, it
-/// exits the program.
+///@brief It takes in input an integer, checking if it should be strictly positive. If a valid input is given, the
+/// number would be returned, otherwise the program will terminate.
 ///@param prompt Is a constant string that will be streamed in output.
 ///@param in Is the input stream.
 ///@param out Is the output stream.
 ///@param positive Is a boolean constant that determines if the output of the function should be strictly positive or
-/// just positive.
-///@return An integer.
+/// positive.
+///@return A size_t value.
 size_t getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, bool positive);
 
-///@brief It takes in input a double, checking if it lays in the range [0,1]. If an invalid input is given, it exits the
-/// program.
+///@brief It takes in input a double, checking if it lays in the range [0,1]. If a valid input is given, the
+/// number would be returned, otherwise the program will terminate.
 ///@param prompt Is a constant string that will be streamed in output.
 ///@param in Is the input stream.
 ///@param out Is the output stream.
 ///@return A double.
 double getPositiveDouble(const std::string& prompt, std::istream& in, std::ostream& out);
-
 }  // namespace graphic_par
 #endif

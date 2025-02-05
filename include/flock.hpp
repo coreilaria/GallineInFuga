@@ -21,16 +21,16 @@ namespace flock {
 /// @brief The Flock class represents a group of birds, composed of bird::Boid objects and bird::Predator objects.
 class Flock {
  private:
-  /// @param n_boids_ Is number of bird::Boid objects in the flock.
+  /// @param n_boids_ Is the number of bird::Boid objects in the flock.
   size_t n_boids_;
 
-  /// @param n_predators_ Is number of bird::Predator objects in the flock.
+  /// @param n_predators_ Is the number of bird::Predator objects in the flock.
   size_t n_predators_;
 
-  /// @param b_flock_ Is the vector containing the bird::Boid objects in the flock.
+  /// @param b_flock_ Is the vector containing the pointers to bird::Boid objects in the flock.
   std::vector<std::shared_ptr<bird::Boid>> b_flock_;
 
-  /// @param p_flock_ Is the vector containing the bird::Boid objects in the flock.
+  /// @param p_flock_ Is the vector containing the pointers to bird::Boid objects in the flock.
   std::vector<std::shared_ptr<bird::Predator>> p_flock_;
 
   /// @param b_sight_angle_ Is the bird::Boid objects' angle of sight.
@@ -51,7 +51,8 @@ class Flock {
   /// @param r_ Is the parameter which modules the repulsion coefficient for bird::Boid objects in the flock.
   double r_;
 
-  /// @param d_ Is the radius of the circle where the nearby bird::Boid objects and bird::Predator objects can be located.
+  /// @param d_ Is the radius of the circle where the nearby bird::Boid objects and bird::Predator objects can be
+  /// located.
   static constexpr double d_ = 75.;
 
   /// @param b_ds_ Is the radius of the circle where the separation rule for bird::Boid objects is effective.
@@ -60,8 +61,8 @@ class Flock {
   /// @param p_ds_ Is the radius of the circle where the separation rule for bird::Predator objects is effective.
   static constexpr double p_ds_ = d_ * 0.5;
 
-  /// @param turn_factor_ Is the increment that is applied to the velocity when a bird::Boid object or a bird::Predator object flies too
-  /// close to the border of the window.
+  /// @param turn_factor_ Is the increment that is applied to the velocity when a bird::Boid object or a bird::Predator
+  /// object flies too close to the border of the window.
   static constexpr double turn_factor_ = 2.5;
 
   /// @param margin_ Is the distance from the border of the window within which the border rule applies.
@@ -139,43 +140,47 @@ class Flock {
   /// @return The margin.
   [[nodiscard]] static double getMargin();
 
-  /// @brief Returns an array containing the values of the parameters s_, a_, c_, r_.
-  /// @details Returns an array containing the separation coefficient s_,  
-  /// the alignment coefficient a_, the cohesion coefficient c_ and the repulsion coefficient r_
-  /// (which module the flight of the bird::Boid and bird::Predator objects in the flock) in the stated order.
+  /// @brief Returns an array containing the flight parameters of the flock.
+  /// @details Returns an array containing the separation coefficient s_,
+  /// the alignment coefficient a_, the cohesion coefficient c_ and the repulsion coefficient r_, in the stated order.
   /// @return The array containing the values of the parameters s_, a_, c_, r_.
   [[nodiscard]] std::array<double, 4> getFlightParams() const;
 
   /// @brief Returns an array containing the values of the parameters d_, b_ds_, p_ds_.
-  /// @details Returns an array containing the parameters d_, b_ds_, p_ds_ in the stated order. 
-  /// The first one represents the radius of the circle whithin which the nearby bird::Boid objects and bird::Predator objects 
-  /// can be found, the second and the third one represent the radius of the circle within which the separation rule is applied,
-  /// respectively for bird::Boid and bird::Predator objects.
+  /// @details Returns an array containing the parameters d_, b_ds_, p_ds_ in the stated order.
+  /// The first one represents the radius of the circle within which the nearby bird::Boid objects and bird::Predator
+  /// objects can be found, the second and the third one represent the radius of the circle within which the separation
+  /// rule is applied, respectively for bird::Boid and bird::Predator objects.
   /// @return The array containing the values of the parameters d_, b_ds_, p_ds_.
   [[nodiscard]] static std::array<double, 3> getDistancesParams();
 
-  /// @brief Sets the flight parameters s_, a_ and c_ of the flock with the values streamed in input.
+  /// @brief Sets the flight parameters s_, a_, c_ and r_ of the flock with the values streamed in input.
   void setFlockParams();
 
   /// @brief Generates bird::Boid and bird::Predator objects to fill the flock.
-  /// @details bird::Boid and bird::Predator objects are generated with random positions and velocities, then the b_flock_
-  /// vector and the p_flock_ vector are filled with shared pointers to these objects.
+  /// @details bird::Boid and bird::Predator objects are generated with random positions and velocities, then the
+  /// b_flock_ vector and the p_flock_ vector are filled with the shared pointers to these objects.
   void generateBirds();
 
   /// @brief Finds bird::Boid objects near a bird::Boid object or a bird::Predator object.
   /// @param i Is the index identifying the position of the shared pointer to the current object
   /// either in the b_flock_ vector or in the p_flock_ vector.
-  /// @param is_boid Is a boolean constant which states whether the current object is a bird::Boid object or a bird::Predator object.
+  /// @param is_boid Is a boolean constant which states whether the current object is a bird::Boid object or a
+  /// bird::Predator object.
+  /// @return The vector containing the pointers to the bird::Boid objects near the current bird.
   [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearBoids(size_t i, bool is_boid) const;
 
   //// @brief Finds bird::Boid objects near a bird::Boid object or a bird::Predator object.
   /// @param i Is the index identifying the position of the shared pointer to the current object
   /// either in the b_flock_ vector or in the p_flock_ vector.
-  /// @param is_boid Is a boolean constant which states whether the current object is a bird::Boid object or a bird::Predator object.
+  /// @param is_boid Is a boolean constant which states whether the current object is a bird::Boid object or a
+  /// bird::Predator object.
+  /// @return The vector containing the pointers to the bird::Predator objects near the current bird.
   [[nodiscard]] std::vector<std::shared_ptr<bird::Bird>> findNearPredators(size_t i, bool is_boid) const;
 
-  /// @brief Evaluates the new position and velocity of a bird::Boid object or a bird::Predator object in the flock.
-  /// @details Evaluates a new velocity for a bird::Boid object or a bird::Predator object, taking into account the rules implemented for each class:
+  /// @brief Evaluates the new position and velocity of a bird in the flock.
+  /// @details Evaluates a new velocity for a bird::Boid object or a bird::Predator object, taking into account the
+  /// rules implemented for each class:
   ///  - separation
   ///  - border
   ///  - friction
@@ -186,24 +191,26 @@ class Flock {
   ///  - chase (only for bird::Predator objects)
   ///  Then evaluates the new position by multiplying the new velocity by graphic_par::dt. Eventually updates the
   ///  position and orientation of the triangle associated with the bird::Boid or bird::Predator object.
-  /// @param triangles Is the array containing the triangle associated with the bird::Boid or bird::Predator object.
-  /// @param i Is the index identifying the position of a bird::Boid object in the b_flock_ vector or a bird::Predator object in the p_flock_ vector.
-  /// @param is_boid Is a boolean constant which states whether the current object is a bird::Boid object or a bird::Predator object.
-  /// @return The array containing, respectively, the updated position and velocity of the bird::Boid or bird::Predator object.
+  /// @param triangles Is the array containing the triangle associated with the bird.
+  /// @param i Is the index identifying the position of a bird::Boid object in the b_flock_ vector or a bird::Predator
+  /// object in the p_flock_ vector.
+  /// @param is_boid Is a boolean constant which states whether the current object is a bird::Boid object or a
+  /// bird::Predator object.
+  /// @return The array containing, respectively, the updated position and velocity of the bird.
   std::array<point::Point, 2> updateBird(sf::VertexArray& triangles, size_t i, bool is_boid) const;
 
-  /// @brief Updates the position and the orientation of the triangles.
-  /// @details Updates the velocity and position of each bird::Boid and bird::Predator object in the flock. Then the position and the
-  /// orientation of the associated triangles are updated.
-  /// @param triangles Array of triangles associated with each bird::Boid and bird::Predator object in the flock.
+  /// @brief Updates the position and the orientation of the triangles associated with the birds in the flock.
+  /// @details Updates the velocity and position of each bird::Boid and bird::Predator object in the flock. Then the
+  /// position and the orientation of the associated triangles are updated.
+  /// @param triangles Array of triangles associated with each bird in the flock.
   void evolve(sf::VertexArray& triangles) const;
 
-  /// @brief Evaluates the relevant statistical quantities of the flock.
+  /// @brief Evaluates the relevant statistical quantities for the bird::Boid objects in the flock.
   /// @details It computes:
-  /// - mean distance between the bird::Boid objects
-  /// - standard deviation of the distance between the bird::Boid objects
-  /// - mean speed of the bird::Boid objects
-  /// - standard deviation of the speed of the bird::Boid objects
+  /// - mean distance between boids
+  /// - standard deviation of the distance between each boid
+  /// - mean speed of the boids
+  /// - standard deviation of the speed of the boids
   ///@return A statistics::Statistics object.
   [[nodiscard]] statistics::Statistics statistics() const;
 };

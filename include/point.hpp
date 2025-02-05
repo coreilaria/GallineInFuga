@@ -9,12 +9,13 @@
 #include <SFML/Graphics.hpp>
 
 namespace point {
+/// @brief The Point class represents a vector in 2D.
 class Point {
-  /// @brief The Point class represents a vector in 2D.
-  /// @param x_ Is the x component of the vector.
-  /// @param y_ Is the y component of the vector.
  private:
+  /// @param x_ Is the x component of the vector.
   double x_;
+
+  /// @param y_ Is the y component of the vector.
   double y_;
 
  public:
