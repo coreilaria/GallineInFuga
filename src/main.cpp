@@ -11,6 +11,9 @@
 #include "../include/triangle.hpp"
 
 int main() {
+  statistics::Statistics statistics;
+  unsigned int counter{0};
+
   size_t nBoids = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", std::cin, std::cout, true);
   size_t nPredators =
       graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", std::cin, std::cout, false);
@@ -18,9 +21,7 @@ int main() {
   flock::Flock flock(nBoids, nPredators);
   flock.setFlockParams();
 
-  statistics::Statistics statistics;
   flock.generateBirds();
-  unsigned int counter{0};
 
   sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
   triangles::createTriangles(flock, triangles);
