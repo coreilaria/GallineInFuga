@@ -36,8 +36,8 @@ inline std::array<sf::Vertex, 4> stats_rectangle = {
     sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., window_height)),
     sf::Vertex(sf::Vector2f(stats_width, 0.)), sf::Vertex(sf::Vector2f(stats_width, window_height))};
 
-///@brief It takes in input a double, checking if lays in the range [0,1]. If an invalid input is given, it exits the
-/// program.
+///@brief Returns a sf::VertexBuffer object that represents a rectangle taking from input an array 
+/// of four sf::Vertex objects and the values for the rgb color components.
 ///@param vertex It is an array containing the vertexes needed to draw a rectangle from sf::TrianglesStrips.
 ///@param red It is the red rgb component.
 ///@param green It is the green rgb component.
