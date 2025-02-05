@@ -63,8 +63,7 @@ void Flock::setFlockParams() {
     std::cout << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.004) \n";
 
   } else {
-    std::cerr << "\nInvalid input.";
-    std::exit(1);
+    throw std::domain_error("Error: Invalid input. The program will now terminate.");
   }
 }
 
