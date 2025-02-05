@@ -60,10 +60,9 @@ class Bird {
   /// positions between the bird and its neighbours.
   /// @param s Factor which modules the correction.
   /// @param ds Identifies the region where it is possible to find neighbours.
-  /// @param near_boids Identifies the bird's neighbours.
+  /// @param near Identifies the bird's neighbours.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point separation(double s, double ds,
-                                        const std::vector<std::shared_ptr<Bird>> &near_boids) const;
+  [[nodiscard]] point::Point separation(double s, double ds, const std::vector<std::shared_ptr<Bird>> &near) const;
 
   /// @brief Pure virtual function to apply friction to a bird's velocity.
   virtual void friction(double, point::Point &) = 0;
