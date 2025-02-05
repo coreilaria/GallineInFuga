@@ -457,6 +457,12 @@ TEST_CASE("Testing Predator class") {
 //===TESTING FUNCTIONS IN NAMESPACE GRAPHIC_PAR=========================================================================
 //======================================================================================================================
 TEST_CASE("Testing functions in namespace graphic_par") {
+  SUBCASE("Testing graphic_par::createRectangles()") {
+    sf::VertexBuffer rectangle = graphic_par::createRectangle(graphic_par::stats_rectangle, 50, 50, 50);
+
+    CHECK(rectangle.getPrimitiveType() == sf::TriangleStrip);
+    CHECK(rectangle.getVertexCount() == graphic_par::stats_rectangle.size());
+  }
   SUBCASE("Testing graphic_par::getPositiveInteger()") {
     std::istringstream input1("5\n");
     std::istringstream input2("0\n");
@@ -504,32 +510,19 @@ TEST_CASE("Testing functions in namespace graphic_par") {
 //===TESTING FUNCTIONS IN NAMESPACE TRIANGLES::=========================================================================
 //======================================================================================================================
 
-std::shared_ptr<bird::Boid> b1 = std::make_shared<bird::Boid>(pos1, vel1);
-std::shared_ptr<bird::Boid> b2 = std::make_shared<bird::Boid>(pos2, vel2);
-std::vector<std::shared_ptr<bird::Boid>> boids{b1, b2};
+const std::shared_ptr<bird::Boid> b1 = std::make_shared<bird::Boid>(pos1, vel1);
+const std::shared_ptr<bird::Boid> b2 = std::make_shared<bird::Boid>(pos2, vel2);
+const std::vector<std::shared_ptr<bird::Boid>> boids{b1, b2};
 
-std::shared_ptr<bird::Predator> p1 = std::make_shared<bird::Predator>(pos3, vel3);
-std::shared_ptr<bird::Predator> p2 = std::make_shared<bird::Predator>(pos5, vel5);
-std::vector<std::shared_ptr<bird::Predator>> predators{p1, p2};
+const std::shared_ptr<bird::Predator> p1 = std::make_shared<bird::Predator>(pos3, vel3);
+const std::shared_ptr<bird::Predator> p2 = std::make_shared<bird::Predator>(pos5, vel5);
+const std::vector<std::shared_ptr<bird::Predator>> predators{p1, p2};
 
 flock::Flock flock1(boids, predators, bMaxSpeed, pMaxSpeed, bMinSpeed, pMinSpeed);
-const std::array<double, 4> flightParams = flock1.getFlightParams();
-const double s = flightParams[0];
-const double a = flightParams[1];
-const double c = flightParams[2];
-const double r = flightParams[3];
 
 TEST_CASE("Testing functions in namespace triangles") {
-  flock1.getBoidFlock().resize(2);
-  flock1.getPredatorFlock().resize(2);
-
-  CHECK(flock1.getFlockSize() == flock1.getBoidsNum() + flock1.getPredatorsNum());
-
   sf::Vertex v1{pos1()};
   sf::Vertex v2{pos3()};
-
-  float height{triangles::getHeight()};
-  float base_width{triangles::getBaseWidth()};
 
   sf::VertexArray triangles(sf::Triangles, 3 * flock1.getFlockSize());
 
@@ -540,17 +533,19 @@ TEST_CASE("Testing functions in namespace triangles") {
     CHECK(triangles[1].color == sf::Color::Blue);
     CHECK(triangles[2].color == sf::Color::Blue);
 
-    CHECK(triangles[0].position == v1.position + sf::Vector2f(0, -height / 2));
-    CHECK(triangles[1].position == v1.position + sf::Vector2f(-base_width / 2, height / 2));
-    CHECK(triangles[2].position == v1.position + sf::Vector2f(base_width / 2, height / 2));
+    CHECK(triangles[0].position == v1.position + sf::Vector2f(0, -triangles::height / 2));
+    CHECK(triangles[1].position == v1.position + sf::Vector2f(-triangles::base_width / 2, triangles::height / 2));
+    CHECK(triangles[2].position == v1.position + sf::Vector2f(triangles::base_width / 2, triangles::height / 2));
 
     CHECK(triangles[6].color == sf::Color::Red);
     CHECK(triangles[7].color == sf::Color::Red);
     CHECK(triangles[8].color == sf::Color::Red);
 
-    CHECK(triangles[6].position == v2.position + sf::Vector2f(0, -(height * 3 / 2) / 2));
-    CHECK(triangles[7].position == v2.position + sf::Vector2f(-(base_width * 3 / 2) / 2, (height * 3 / 2) / 2));
-    CHECK(triangles[8].position == v2.position + sf::Vector2f((base_width * 3 / 2) / 2, (height * 3 / 2) / 2));
+    CHECK(triangles[6].position == v2.position + sf::Vector2f(0, -(triangles::height * 3 / 4)));
+    CHECK(triangles[7].position ==
+          v2.position + sf::Vector2f(-triangles::base_width * 3 / 4, triangles::height * 3 / 4));
+    CHECK(triangles[8].position ==
+          v2.position + sf::Vector2f(triangles::base_width * 3 / 4, triangles::height * 3 / 4));
 
     CHECK(static_cast<int>(triangles.getVertexCount()) == 4 * 3);
   }
@@ -614,10 +609,55 @@ TEST_CASE("Testing Flock class") {
     CHECK(!flock0.getPredatorFlock().empty());
   }
 
-  SUBCASE("Testing getters and setters") {
+  SUBCASE("Testing getters") {
+    constexpr std::array<double, 4> default_params{0.1, 0.1, 0.004, 0.6};
+    const std::array<double, 4> params = flock1.getFlightParams();
+
     CHECK(flock1.getFlockSize() == 4);
     CHECK(flock1.getBoidsNum() == 2);
     CHECK(flock1.getPredatorsNum() == 2);
+
+    CHECK(flock1.getBoidFlock() == boids);
+    CHECK(flock1.getPredatorFlock() == predators);
+
+    CHECK(params[0] == default_params[0]);
+    CHECK(params[1] == default_params[1]);
+    CHECK(params[2] == default_params[2]);
+    CHECK(params[3] == doctest::Approx(default_params[3]));
+  }
+
+  SUBCASE("Testing setFlightParams method") {
+    std::istringstream input1("y\n5\n1\n6\n");
+    std::istringstream input2("y\n0\n1\n0.2\n");
+    std::istringstream input3("-1\n");
+    std::istringstream input4("n\n");
+
+    std::ostringstream output1;
+    std::ostringstream output2;
+    std::ostringstream output3;
+    std::ostringstream output4;
+
+    CHECK_THROWS_WITH_AS(flock1.setFlightParams(input1, output1),
+                         "Error: Invalid input. The program will now terminate.", std::domain_error);
+
+    flock1.setFlightParams(input2, output2);
+    std::array<double, 4> params = flock1.getFlightParams();
+
+    CHECK(params[0] == 0);
+    CHECK(params[1] == 1);
+    CHECK(params[2] == 0.2);
+    CHECK(params[0] == doctest::Approx(0));
+
+    CHECK_THROWS_WITH_AS(flock1.setFlightParams(input3, output3),
+                         "Error: Invalid input. The program will now terminate.", std::domain_error);
+
+    flock1.setFlightParams(input4, output4);
+    params = flock1.getFlightParams();
+
+    CHECK(params[0] == 0);
+    CHECK(params[1] == 1);
+    CHECK(params[2] == 0.2);
+    CHECK(params[3] == doctest::Approx(0));
   }
 
   SUBCASE("Testing findNearBoids method") {
@@ -650,8 +690,8 @@ TEST_CASE("Testing Flock class") {
 
     flock::Flock flock2(2, 0);
     std::vector<std::shared_ptr<bird::Bird>> f2;
-    f2.push_back(b1);
-    f2.push_back(b2);
+    f2.emplace_back(b1);
+    f2.emplace_back(b2);
 
     CHECK(flock2.findNearPredators(0, true).empty());
   }
@@ -660,8 +700,14 @@ TEST_CASE("Testing Flock class") {
   std::array<point::Point, 2> update_predator = flock1.updateBird(triangles, 0, false);
 
   SUBCASE("Testing updateBird method") {
-    const double turnFactor = flock1.getTurnFactor();
-    const double margin = flock1.getMargin();
+    std::istringstream input0("n");
+    std::ostringstream output0;
+    flock1.setFlightParams(input0, output0);
+
+    std::array<double, 4> params = flock1.getFlightParams();
+
+    const double turnFactor = flock::Flock::getTurnFactor();
+    const double margin = flock::Flock::getMargin();
 
     CHECK(turnFactor > 0);
     CHECK(margin < (graphic_par::window_width - graphic_par::stats_width) * 0.5);
@@ -675,9 +721,9 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    point::Point v_boid = b1->border(margin, turnFactor) + b1->repel(r, nearPredators1) +
-                          b1->separation(s, b_ds, nearBoids1) + b1->alignment(a, nearBoids1) +
-                          b1->cohesion(c, nearBoids1);
+    point::Point v_boid = b1->border(margin, turnFactor) + b1->repel(params[3], nearPredators1) +
+                          b1->separation(params[0], b_ds, nearBoids1) + b1->alignment(params[1], nearBoids1) +
+                          b1->cohesion(params[2], nearBoids1);
     b1->boost(bMinSpeed, v_boid);
     b1->friction(bMaxSpeed, v_boid);
     point::Point p_boid = b1->getPosition() + graphic_par::dt * v_boid;
@@ -695,8 +741,8 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearBoids1.size() == 1);
     CHECK(nearPredators1.size() == 2);
 
-    point::Point v_predator =
-        p1->border(margin, turnFactor) + p1->separation(s, d * 0.5, nearPredators2) + p1->chase(c, nearBoids2);
+    point::Point v_predator = p1->border(margin, turnFactor) + p1->separation(params[0], p_ds, nearPredators2) +
+                              p1->chase(params[2], nearBoids2);
 
     p1->boost(pMinSpeed, v_predator);
     p1->friction(pMaxSpeed, v_predator);
@@ -737,6 +783,8 @@ TEST_CASE("Testing Flock class") {
   SUBCASE("Testing statistics method") {
     statistics::Statistics stats = flock1.statistics();
 
+    CHECK(flock1.getBoidsNum() > 1);
+
     double speed1 = flock1.getBoidFlock()[0]->getVelocity().module();
     double speed2 = flock1.getBoidFlock()[1]->getVelocity().module();
 
@@ -748,8 +796,6 @@ TEST_CASE("Testing Flock class") {
     CHECK(stats.mean_speed == doctest::Approx(mean_speed));
     CHECK(stats.dev_dist == doctest::Approx(0.));
     CHECK(stats.dev_speed == doctest::Approx(std::sqrt(mean_speed2 - mean_speed * mean_speed)));
-
-    CHECK(flock1.getBoidsNum() > 1);
   }
 }
 
@@ -773,5 +819,3 @@ TEST_CASE("Testing Statistics struct") {
     CHECK(stats1.dev_speed == 0.5);
   }
 }
-
-// TODO: decidere se vogliamo testare funzione flock::setFlockParams()

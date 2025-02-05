@@ -11,33 +11,27 @@
 #include "../include/triangle.hpp"
 
 int main() {
+  statistics::Statistics statistics;
+  unsigned int counter{0};
+
   size_t nBoids = graphic_par::getPositiveInteger("Enter the number of boids to simulate: ", std::cin, std::cout, true);
   size_t nPredators =
       graphic_par::getPositiveInteger("Enter the number of predators to simulate: ", std::cin, std::cout, false);
 
   flock::Flock flock(nBoids, nPredators);
-  flock.setFlockParams();
+  flock.setFlightParams(std::cin, std::cout);
 
-  statistics::Statistics statistics;
   flock.generateBirds();
-  unsigned int counter{0};
 
   sf::VertexArray triangles(sf::Triangles, 3 * (flock.getFlockSize()));
   triangles::createTriangles(flock, triangles);
 
-  sf::VertexBuffer rectangle{sf::TriangleStrip, sf::VertexBuffer::Usage::Static};
-  sf::Vertex v[4] = {sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., graphic_par::window_height)),
-                     sf::Vertex(sf::Vector2f(graphic_par::stats_width, 0.)),
-                     sf::Vertex(sf::Vector2f(graphic_par::stats_width, graphic_par::window_height))};
-  for (auto& i : v) {
-    i.color = sf::Color(50, 50, 50);
-  }
-  rectangle.create(4);
-  rectangle.update(v);
+  sf::VertexBuffer stats_rectangle = graphic_par::createRectangle(graphic_par::stats_rectangle, 50, 50, 50);
 
   sf::RenderWindow window(
       {static_cast<unsigned int>(graphic_par::window_width), static_cast<unsigned int>(graphic_par::window_height)},
       "Flock simulation", sf::Style::Titlebar);
+
   window.setPosition(sf::Vector2i(10, 50));
   window.setFramerateLimit(60);
   sf::Event event{};
@@ -88,7 +82,7 @@ int main() {
     flock.evolve(triangles);
 
     window.draw(triangles);
-    window.draw(rectangle);
+    window.draw(stats_rectangle);
     window.draw(text);
 
     window.display();

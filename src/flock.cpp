@@ -45,26 +45,31 @@ std::array<double, 4> Flock::getFlightParams() const { return {s_, a_, c_, r_}; 
 
 std::array<double, 3> Flock::getDistancesParams() { return {d_, b_ds_, p_ds_}; }
 
-void Flock::setFlockParams() {
+void Flock::setFlightParams(std::istream& in, std::ostream& out) {
   char statement;
-  std::cout << "\nWould you like to customize the parameters of the simulation? (Y/n) ";
-  std::cin >> statement;
+  out << "\nWould you like to customize the parameters of the simulation? (Y/n) ";
+  in >> statement;
+
+  if (in.fail()) {
+    throw std::runtime_error("Input failed.");
+  }
 
   if (statement == 'Y' || statement == 'y') {
-    const double s = graphic_par::getPositiveDouble("\nEnter the separation coefficient: ", std::cin, std::cout);
-    const double a = graphic_par::getPositiveDouble("Enter the alignment coefficient: ", std::cin, std::cout);
-    const double c = graphic_par::getPositiveDouble("Enter the cohesion coefficient: ", std::cin, std::cout);
+    const double s = graphic_par::getPositiveDouble("\nEnter the separation coefficient: ", in, out);
+    const double a = graphic_par::getPositiveDouble("Enter the alignment coefficient: ", in, out);
+    const double c = graphic_par::getPositiveDouble("Enter the cohesion coefficient: ", in, out);
+
     s_ = s;
     a_ = a;
     c_ = c;
+
     r_ = s * 6;
 
   } else if (statement == 'N' || statement == 'n') {
-    std::cout << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.004) \n";
+    out << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.004) \n";
 
   } else {
-    std::cerr << "\nInvalid input.";
-    std::exit(1);
+    throw std::domain_error("Error: Invalid input. The program will now terminate.");
   }
 }
 
