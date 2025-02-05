@@ -369,7 +369,7 @@ TEST_CASE("Testing Boid class") {
 //======================================================================================================================
 
 TEST_CASE("Testing Predator class") {
-  double c{0.004};
+  double ch{0.004};
 
   bird::Predator p1(pos1, vel1);
   bird::Predator p2(pos2, vel2);
@@ -413,11 +413,11 @@ TEST_CASE("Testing Predator class") {
     // here we apply bird::Predator::chase on near_p1, which identifies the predators near p1, even if it was initially
     // intended to be applied on near_boids.
 
-    double chase1_x = c * 2 * d / 3. * (1.3 * std::sin(alfa) + 0.8 * std::sin(beta));
-    double chase1_y = c * 2 * -d / 3. * (1.3 * std::cos(alfa) + 0.8 * std::cos(beta));
+    double chase1_x = ch * d / 3. * (1.3 * std::sin(alfa) + 0.8 * std::sin(beta));
+    double chase1_y = ch * -d / 3. * (1.3 * std::cos(alfa) + 0.8 * std::cos(beta));
 
-    CHECK(p1.chase(c, near_p1).getX() == doctest::Approx(chase1_x));
-    CHECK(p1.chase(c, near_p1).getY() == doctest::Approx(chase1_y));
+    CHECK(p1.chase(ch, near_p1).getX() == doctest::Approx(chase1_x));
+    CHECK(p1.chase(ch, near_p1).getY() == doctest::Approx(chase1_y));
   }
 
   SUBCASE("Testing friction method") {
@@ -610,8 +610,8 @@ TEST_CASE("Testing Flock class") {
   }
 
   SUBCASE("Testing getters") {
-    constexpr std::array<double, 4> default_params{0.1, 0.1, 0.004, 0.6};
-    const std::array<double, 4> params = flock1.getFlightParams();
+    constexpr std::array<double, 5> default_params{0.1, 0.1, 0.004, 0.6, 0.008};
+    const std::array<double, 5> params = flock1.getFlightParams();
 
     CHECK(flock1.getFlockSize() == 4);
     CHECK(flock1.getBoidsNum() == 2);
@@ -624,6 +624,7 @@ TEST_CASE("Testing Flock class") {
     CHECK(params[1] == default_params[1]);
     CHECK(params[2] == default_params[2]);
     CHECK(params[3] == doctest::Approx(default_params[3]));
+    CHECK(params[4] == doctest::Approx(default_params[4]));
   }
 
   SUBCASE("Testing setFlightParams method") {
@@ -641,7 +642,7 @@ TEST_CASE("Testing Flock class") {
                          "Error: Invalid input. The program will now terminate.", std::domain_error);
 
     flock1.setFlightParams(input2, output2);
-    std::array<double, 4> params = flock1.getFlightParams();
+    std::array<double, 5> params = flock1.getFlightParams();
 
     CHECK(params[0] == 0);
     CHECK(params[1] == 1);
@@ -658,6 +659,7 @@ TEST_CASE("Testing Flock class") {
     CHECK(params[1] == 1);
     CHECK(params[2] == 0.2);
     CHECK(params[3] == doctest::Approx(0));
+    CHECK(params[4] == doctest::Approx(0.4));
   }
 
   SUBCASE("Testing findNearBoids method") {
@@ -704,7 +706,7 @@ TEST_CASE("Testing Flock class") {
     std::ostringstream output0;
     flock1.setFlightParams(input0, output0);
 
-    std::array<double, 4> params = flock1.getFlightParams();
+    std::array<double, 5> params = flock1.getFlightParams();
 
     const double turnFactor = flock::Flock::getTurnFactor();
     const double margin = flock::Flock::getMargin();
@@ -742,7 +744,7 @@ TEST_CASE("Testing Flock class") {
     CHECK(nearPredators1.size() == 2);
 
     point::Point v_predator = p1->border(margin, turnFactor) + p1->separation(params[0], p_ds, nearPredators2) +
-                              p1->chase(params[2], nearBoids2);
+                              p1->chase(params[4], nearBoids2);
 
     p1->boost(pMinSpeed, v_predator);
     p1->friction(pMaxSpeed, v_predator);

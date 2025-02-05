@@ -112,13 +112,13 @@ void Boid::boost(const double b_min_speed, point::Point& velocity) {
 Predator::Predator() : Bird() {}
 Predator::Predator(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) {}
 
-point::Point Predator::chase(const double c, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
-  assert(c >= 0 && c <= 1);
+point::Point Predator::chase(const double ch, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
+  assert(ch >= 0 && ch <= 1);
   const point::Point sum = std::accumulate(
       near_boids.begin(), near_boids.end(), point::Point(0., 0.),
       [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
 
-  return c * 2 * (sum / static_cast<double>(near_boids.size()) - position_);
+  return ch * (sum / static_cast<double>(near_boids.size()) - position_);
 }
 void Predator::friction(const double p_max_speed, point::Point& velocity) {
   assert(p_max_speed > 0);

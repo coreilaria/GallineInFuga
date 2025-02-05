@@ -39,8 +39,11 @@ class Flock {
   /// @brief Is the parameter which modules the cohesion of the bird::Boid objects in the flock.
   double c_;
 
-  /// @pbrief Is the parameter which modules the repulsion coefficient for bird::Boid objects in the flock.
+  /// @brief Is the parameter which modules the repulsion coefficient for bird::Boid objects in the flock.
   double r_;
+
+  /// @brief Is the parameter which modules the chase coefficient for bird::Predator objects in the flock.
+  double ch_;
 
   /// @brief Is the radius of the circle where the nearby bird::Boid objects and bird::Predator objects can be located.
   static constexpr double d_ = 75.;
@@ -72,6 +75,8 @@ class Flock {
   /// - s_ = 0.1
   /// - a_ = 0.1
   /// - c_ = 0.004
+  /// - r_ = 0.6
+  /// - ch_ = 0.008
   /// - b_max_speed_ = 12.
   /// - p_max_speed_ = 8.
   /// - b_min_speed_ = 7.
@@ -92,6 +97,8 @@ class Flock {
   /// - s_ = 0.1
   /// - a_ = 0.1
   /// - c_ = 0.004
+  /// - r_ = 0.6
+  /// - ch_ = 0.008
   Flock(const std::vector<std::shared_ptr<bird::Boid>>& boids,
         const std::vector<std::shared_ptr<bird::Predator>>& predators, double bMaxSpeed, double pMaxSpeed,
         double bMinSpeed, double pMinSpeed);
@@ -126,9 +133,10 @@ class Flock {
 
   /// @brief Returns an array containing the flight parameters of the flock.
   /// @details Returns an array containing the separation coefficient s_,
-  /// the alignment coefficient a_, the cohesion coefficient c_ and the repulsion coefficient r_, in the stated order.
-  /// @return The array containing the values of the parameters s_, a_, c_, r_.
-  [[nodiscard]] std::array<double, 4> getFlightParams() const;
+  /// the alignment coefficient a_, the cohesion coefficient c_ and the repulsion coefficient r_ and the chase
+  /// coefficient ch_ in the stated order.
+  /// @return The array containing the values of the parameters s_, a_, c_, r_, ch_.
+  [[nodiscard]] std::array<double, 5> getFlightParams() const;
 
   /// @brief Returns an array containing the values of the parameters d_, b_ds_, p_ds_.
   /// @details Returns an array containing the parameters d_, b_ds_, p_ds_ in the stated order.

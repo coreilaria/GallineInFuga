@@ -154,10 +154,10 @@ class Predator final : public Bird {
   /// @details Whenever a predator sees boids near it, an additional component of velocity is evaluated so
   /// that the predator begin to chase them. In particular, the increment depends on the average of the
   /// differences in positions between the predator and the near boids.
-  /// @param c Factor which modules the correction.
+  /// @param ch Factor which modules the correction.
   /// @param near_boids Identifies the boids near the predator.
   /// @return The correction to the velocity.
-  [[nodiscard]] point::Point chase(double c, const std::vector<std::shared_ptr<Bird>> &near_boids) const;
+  [[nodiscard]] point::Point chase(double ch, const std::vector<std::shared_ptr<Bird>> &near_boids) const;
 };
 }  // namespace bird
 #endif

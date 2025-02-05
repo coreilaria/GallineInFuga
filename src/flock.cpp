@@ -19,7 +19,7 @@
 namespace flock {
 
 Flock::Flock(const size_t nBoids, const size_t nPredators)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), r_(s_ * 6), b_max_speed_(12.),
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), r_(s_ * 6), ch_(c_ * 2), b_max_speed_(12.),
       p_max_speed_(8.), b_min_speed_(7.), p_min_speed_(5.) {
   b_flock_.reserve(n_boids_);
   p_flock_.reserve(n_predators_);
@@ -29,7 +29,7 @@ Flock::Flock(const std::vector<std::shared_ptr<bird::Boid>>& boids,
              const std::vector<std::shared_ptr<bird::Predator>>& predators, const double bMaxSpeed,
              const double pMaxSpeed, const double bMinSpeed, const double pMinSpeed)
     : n_boids_(boids.size()), n_predators_(predators.size()), b_flock_(boids), p_flock_(predators), s_(0.1), a_(0.1),
-      c_(0.004), r_(s_ * 6), b_max_speed_(bMaxSpeed), p_max_speed_(pMaxSpeed), b_min_speed_(bMinSpeed),
+      c_(0.004), r_(s_ * 6), ch_(c_ * 2), b_max_speed_(bMaxSpeed), p_max_speed_(pMaxSpeed), b_min_speed_(bMinSpeed),
       p_min_speed_(pMinSpeed) {}
 
 size_t Flock::getBoidsNum() const { return n_boids_; }
@@ -41,7 +41,7 @@ std::vector<std::shared_ptr<bird::Predator>> Flock::getPredatorFlock() const { r
 double Flock::getTurnFactor() { return {turn_factor_}; }
 double Flock::getMargin() { return {margin_}; }
 
-std::array<double, 4> Flock::getFlightParams() const { return {s_, a_, c_, r_}; }
+std::array<double, 5> Flock::getFlightParams() const { return {s_, a_, c_, r_, ch_}; }
 
 std::array<double, 3> Flock::getDistancesParams() { return {d_, b_ds_, p_ds_}; }
 
@@ -64,6 +64,7 @@ void Flock::setFlightParams(std::istream& in, std::ostream& out) {
     c_ = c;
 
     r_ = s * 6;
+    ch_ = c * 2;
 
   } else if (statement == 'N' || statement == 'n') {
     out << "\nThe simulation parameters are set as default (s = 0.1, a = 0.1, c = 0.004) \n";
@@ -219,7 +220,7 @@ std::array<point::Point, 2> Flock::updateBird(sf::VertexArray& triangles, const 
       v += p_flock_[i]->separation(s_, p_ds_, near_predators);
     }
     if (!near_boids.empty()) {
-      v += p_flock_[i]->chase(c_, near_boids);
+      v += p_flock_[i]->chase(ch_, near_boids);
     }
     p_flock_[i]->boost(p_min_speed_, v);
     p_flock_[i]->friction(p_max_speed_, v);
