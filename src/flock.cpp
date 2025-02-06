@@ -19,8 +19,8 @@
 namespace flock {
 
 Flock::Flock(const size_t nBoids, const size_t nPredators)
-    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), r_(s_ * 6), ch_(c_ * 2), b_max_speed_(12.),
-      p_max_speed_(8.), b_min_speed_(7.), p_min_speed_(5.) {
+    : n_boids_(nBoids), n_predators_(nPredators), s_(0.1), a_(0.1), c_(0.004), r_(s_ * 6), ch_(c_ * 2),
+      b_max_speed_(12.), p_max_speed_(8.), b_min_speed_(7.), p_min_speed_(5.) {
   b_flock_.reserve(n_boids_);
   p_flock_.reserve(n_predators_);
 }

@@ -1,10 +1,10 @@
 #include <SFML/Graphics.hpp>
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/System/Vector2.hpp>
-#include <iostream>
-#include <string>
 #include <iomanip>
+#include <iostream>
 #include <sstream>
+#include <string>
 
 #include "../include/flock.hpp"
 #include "../include/graphic.hpp"
@@ -65,12 +65,12 @@ int main() {
       statistics = flock.statistics();
     }
 
-   std::ostringstream out;
+    std::ostringstream out;
 
-   out << "Mean distance: " <<std::fixed << std::setprecision(2) << statistics.mean_dist <<"\n"
-    << "Distance standard deviation: " <<std::fixed << std::setprecision(2) << statistics.dev_dist << "\n\n"
-    << "Mean speed: " <<std::fixed << std::setprecision(2)<< statistics.mean_speed << "\n"
-    << "Speed standard deviation: " <<std::fixed << std::setprecision(2)<< statistics.dev_speed;
+    out << "Mean distance: " << std::fixed << std::setprecision(2) << statistics.mean_dist << "\n"
+        << "Distance standard deviation: " << std::fixed << std::setprecision(2) << statistics.dev_dist << "\n\n"
+        << "Mean speed: " << std::fixed << std::setprecision(2) << statistics.mean_speed << "\n"
+        << "Speed standard deviation: " << std::fixed << std::setprecision(2) << statistics.dev_speed;
 
     text.setString(out.str());
     text.setCharacterSize(24);  // in pixels
