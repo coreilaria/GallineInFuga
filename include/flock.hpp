@@ -146,7 +146,7 @@ class Flock {
   /// @return The array containing the values of the parameters d_, b_ds_, p_ds_.
   [[nodiscard]] static std::array<double, 3> getDistancesParams();
 
-  /// @brief Sets the flight parameters s_, a_, c_ and r_ of the flock with the values streamed in input.
+  /// @brief Sets the flight parameters s_, a_, c_ and r_ of the flock with the values streamed from input.
   /// @param in Is the input stream.
   /// @param out Is the output stream.
   void setFlightParams(std::istream& in, std::ostream& out);

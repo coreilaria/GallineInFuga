@@ -31,14 +31,14 @@ inline constexpr double min_vel_x = -max_vel_x;
 /// bird::Predator object.
 inline constexpr double min_vel_y = -max_vel_y;
 
-///@brief Is an array containing the vertexes needed to draw the statistics' rectangle from sf::TrianglesStrips.
+///@brief Is an array containing the vertexes needed to draw the statistics' rectangle from sf::TriangleStrip.
 inline std::array<sf::Vertex, 4> stats_rectangle = {
     sf::Vertex(sf::Vector2f(0., 0.)), sf::Vertex(sf::Vector2f(0., window_height)),
     sf::Vertex(sf::Vector2f(stats_width, 0.)), sf::Vertex(sf::Vector2f(stats_width, window_height))};
 
 ///@brief Returns a sf::VertexBuffer object that represents a rectangle taking from input an array
 /// of four sf::Vertex objects and the values for the rgb color components.
-///@param vertex It is an array containing the vertexes needed to draw a rectangle from sf::TrianglesStrips.
+///@param vertex It is an array containing the vertexes needed to draw a rectangle from sf::TriangleStrip.
 ///@param red It is the red rgb component.
 ///@param green It is the green rgb component.
 ///@param blue It is the blue rgb component.
@@ -46,7 +46,7 @@ inline std::array<sf::Vertex, 4> stats_rectangle = {
 sf::VertexBuffer createRectangle(std::array<sf::Vertex, 4>& vertex, unsigned char red, unsigned char green,
                                  unsigned char blue);
 
-///@brief It takes in input an integer, checking if it should be strictly positive. If a valid input is given, the
+///@brief It takes an integer from input, checking if it should be strictly positive. If a valid input is given, the
 /// number would be returned, otherwise the program will terminate.
 ///@param prompt Is a constant string that will be streamed in output.
 ///@param in Is the input stream.
@@ -56,7 +56,7 @@ sf::VertexBuffer createRectangle(std::array<sf::Vertex, 4>& vertex, unsigned cha
 ///@return A size_t value.
 size_t getPositiveInteger(const std::string& prompt, std::istream& in, std::ostream& out, bool positive);
 
-///@brief It takes in input a double, checking if it lays in the range [0,1]. If a valid input is given, the
+///@brief It takes a double from input, checking if it lays in the range [0,1]. If a valid input is given, the
 /// number would be returned, otherwise the program will terminate.
 ///@param prompt Is a constant string that will be streamed in output.
 ///@param in Is the input stream.
