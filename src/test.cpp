@@ -457,7 +457,7 @@ TEST_CASE("Testing Predator class") {
 //===TESTING FUNCTIONS IN NAMESPACE GRAPHIC_PAR=========================================================================
 //======================================================================================================================
 TEST_CASE("Testing functions in namespace graphic_par") {
-  SUBCASE("Testing graphic_par::createRectangles()") {
+  SUBCASE("Testing graphic_par::createRectangle()") {
     sf::VertexBuffer rectangle = graphic_par::createRectangle(graphic_par::stats_rectangle, 50, 50, 50);
 
     CHECK(rectangle.getPrimitiveType() == sf::TriangleStrip);

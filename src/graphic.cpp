@@ -11,7 +11,7 @@ sf::VertexBuffer createRectangle(std::array<sf::Vertex, 4>& vertex, const unsign
   for (auto& v : vertex) {
     v.color = sf::Color(red, green, blue);
   }
-  sf::VertexBuffer rectangle(sf::TrianglesStrip, sf::VertexBuffer::Static);
+  sf::VertexBuffer rectangle(sf::TriangleStrip, sf::VertexBuffer::Static);
 
   if (!rectangle.create(4)) {
     throw std::runtime_error("Failed to create VertexBuffer.");
