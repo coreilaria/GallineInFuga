@@ -66,8 +66,8 @@ int main() {
 
     std::ostringstream out;
 
-    out << "Mean distance: " << std::fixed << std::setprecision(2) << statistics.mean_dist << "\n"
-        << "Distance standard deviation: " << std::fixed << std::setprecision(2) << statistics.dev_dist << "\n\n"
+    out << "Mean distance: " << std::fixed << std::setprecision(0) << statistics.mean_dist << "\n"
+        << "Distance standard deviation: " << std::fixed << std::setprecision(0) << statistics.dev_dist << "\n\n"
         << "Mean speed: " << std::fixed << std::setprecision(2) << statistics.mean_speed << "\n"
         << "Speed standard deviation: " << std::fixed << std::setprecision(2) << statistics.dev_speed;
 
