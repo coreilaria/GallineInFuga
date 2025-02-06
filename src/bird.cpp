@@ -1,7 +1,6 @@
 #include "../include/bird.hpp"
 
 #include <cassert>
-#include <cmath>
 #include <memory>
 #include <numeric>
 #include <vector>
@@ -10,7 +9,6 @@
 #include "../include/point.hpp"
 
 namespace bird {
-
 //----------------------------------------------------------------------------------------------------------------------
 // ---Implementation of Bird class--------------------------------------------------------------------------------------
 //----------------------------------------------------------------------------------------------------------------------
@@ -34,7 +32,7 @@ point::Point Bird::separation(const double s, const double ds, const std::vector
                                              }
                                              return acc;
                                            });
-  return (-s) * sum;
+  return -s * sum;
 }
 
 point::Point Bird::border(const double margin, const double turn_factor) const {
@@ -64,46 +62,46 @@ point::Point Bird::border(const double margin, const double turn_factor) const {
 //----------------------------------------------------------------------------------------------------------------------
 
 Boid::Boid() : Bird() {}
-Boid::Boid(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sight_angle_ = 2. / 3 * M_PI; }
+Boid::Boid(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) {}
 
-point::Point Boid::alignment(const double a, const std::vector<std::shared_ptr<Bird>>& near) const {
+point::Point Boid::alignment(const double a, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
   assert(a >= 0 && a <= 1);
   const point::Point sum = std::accumulate(
-      near.begin(), near.end(), point::Point(0., 0.),
+      near_boids.begin(), near_boids.end(), point::Point(0., 0.),
       [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getVelocity(); });
-  return a * (sum / static_cast<double>(near.size()) - velocity_);
+  return a * (sum / static_cast<double>(near_boids.size()) - velocity_);
 }
 
-point::Point Boid::cohesion(const double c, const std::vector<std::shared_ptr<Bird>>& near) const {
+point::Point Boid::cohesion(const double c, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
   assert(c >= 0 && c <= 1);
   const point::Point sum = std::accumulate(
-      near.begin(), near.end(), point::Point(0., 0.),
+      near_boids.begin(), near_boids.end(), point::Point(0., 0.),
       [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
-  return c * (sum / static_cast<double>(near.size()) - position_);
+  return c * (sum / static_cast<double>(near_boids.size()) - position_);
 }
 
-point::Point Boid::repel(const double s, const std::vector<std::shared_ptr<Bird>>& near) const {
-  assert(s >= 0);
+point::Point Boid::repel(const double r, const std::vector<std::shared_ptr<Bird>>& near_predators) const {
+  assert(r >= 0);
   const point::Point sum = std::accumulate(
-      near.begin(), near.end(), point::Point(0., 0.),
+      near_predators.begin(), near_predators.end(), point::Point(0., 0.),
       [this](point::Point acc, const std::shared_ptr<Bird>& boid) { return acc += boid->getPosition() - position_; });
-  return (-s * 6) * sum;
+  return -r * sum;
 }
 
-void Boid::friction(const std::array<double, 2>& max_speed, point::Point& velocity) {
+void Boid::friction(const double b_max_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
-  assert(max_speed[0] > 0);
-  if (velocity.module() > max_speed[0]) {
-    velocity = max_speed[0] * (velocity / velocity.module());
+  assert(b_max_speed > 0);
+  if (velocity.module() > b_max_speed) {
+    velocity = b_max_speed * (velocity / velocity.module());
   }
 }
 
-void Boid::boost(const std::array<double, 2>& min_speed, point::Point& velocity) {
+void Boid::boost(const double b_min_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
-  assert(min_speed[0] > 0);
+  assert(b_min_speed > 0);
 
-  if (velocity.module() < min_speed[0]) {
-    velocity = min_speed[0] * (velocity / velocity.module());
+  if (velocity.module() < b_min_speed) {
+    velocity = b_min_speed * (velocity / velocity.module());
   }
 }
 
@@ -112,28 +110,28 @@ void Boid::boost(const std::array<double, 2>& min_speed, point::Point& velocity)
 //----------------------------------------------------------------------------------------------------------------------
 
 Predator::Predator() : Bird() {}
-Predator::Predator(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) { sight_angle_ = 1. / 2 * M_PI; }
+Predator::Predator(point::Point const& pos, point::Point const& vel) : Bird(pos, vel) {}
 
-point::Point Predator::chase(const double c, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
-  assert(c >= 0 && c <= 1);
+point::Point Predator::chase(const double ch, const std::vector<std::shared_ptr<Bird>>& near_boids) const {
+  assert(ch >= 0 && ch <= 1);
   const point::Point sum = std::accumulate(
       near_boids.begin(), near_boids.end(), point::Point(0., 0.),
       [](const point::Point acc, const std::shared_ptr<Bird>& boid) { return acc + boid->getPosition(); });
 
-  return c * 2 * (sum / static_cast<double>(near_boids.size()) - position_);
+  return ch * (sum / static_cast<double>(near_boids.size()) - position_);
 }
-void Predator::friction(const std::array<double, 2>& max_speed, point::Point& velocity) {
-  assert(max_speed[1] > 0);
+void Predator::friction(const double p_max_speed, point::Point& velocity) {
+  assert(p_max_speed > 0);
   assert(velocity.module() != 0);
-  if (velocity.module() > max_speed[1]) {
-    velocity = max_speed[1] * (velocity / velocity.module());
+  if (velocity.module() > p_max_speed) {
+    velocity = p_max_speed * (velocity / velocity.module());
   }
 }
-void Predator::boost(const std::array<double, 2>& min_speed, point::Point& velocity) {
+void Predator::boost(const double p_min_speed, point::Point& velocity) {
   assert(velocity.module() != 0);
-  assert(min_speed[1] > 0);
-  if (velocity.module() < min_speed[1]) {
-    velocity = min_speed[1] * (velocity / velocity.module());
+  assert(p_min_speed > 0);
+  if (velocity.module() < p_min_speed) {
+    velocity = p_min_speed * (velocity / velocity.module());
   }
 }
 }  // namespace bird

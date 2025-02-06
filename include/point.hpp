@@ -1,18 +1,16 @@
 /// @file       ../include/point.hpp
 /// @brief      Defines the Point class.
 ///
-/// @details    This file contains the definition of Point class.
-///             The Point class represents a vector in a two dimension space.
+/// @details    This file contains the definition of the Point class.
+///             The Point class represents a vector in a two-dimensional space.
 #ifndef POINT_HPP
 #define POINT_HPP
 
 #include <SFML/Graphics.hpp>
 
 namespace point {
+/// @brief The Point class represents a vector in 2D.
 class Point {
-  /// @brief The Point class represents a vector in 2D.
-  /// @param x_ Is the x component of the vector.
-  /// @param y_ Is the y component of the vector.
  private:
   double x_;
   double y_;
@@ -39,31 +37,31 @@ class Point {
   [[nodiscard]] double module() const;
 
   ///@brief Evaluates the distance between two Point objects.
-  ///@param p Is the Point we want to find the distance form.
+  ///@param p Is the Point we want to find the distance from.
   ///@return The module of the two vector difference.
   [[nodiscard]] double distance(const Point& p) const;
 
   ///@brief Evaluates the angle between the vector and the vertical axis.
-  ///@return An angle in radiant, in the range [0 - 2pi].
+  ///@return An angle in radiant, in the range [0, 2pi].
   [[nodiscard]] float angle() const;
 
-  ///@brief Evaluates the sum between itself and another Point object.
+  ///@brief Evaluates the vector sum between itself and another Point object.
   ///@param a Is another Point object.
   ///@return Itself.
   Point& operator+=(const Point& a);
 
   ///@brief Converts a Point object into a sf::Vertex object.
-  ///@return The conversion in sf::Vertex.
+  ///@return The corresponding sf::Vertex object.
   sf::Vertex operator()() const;
 };
 
-///@brief Evaluates the sum between two Point objects.
+///@brief Evaluates the vector sum between two Point objects.
 ///@param a First addend.
 ///@param b Second addend.
 ///@return The vector sum.
 Point operator+(const Point& a, const Point& b);
 
-///@brief Evaluates the difference between two Point objects.
+///@brief Evaluates the vector difference between two Point objects.
 ///@param a Is the subtrahend.
 ///@param b Is the minuend.
 ///@return The vector difference.
