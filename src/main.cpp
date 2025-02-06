@@ -52,7 +52,7 @@ int main() {
     sf::Font font;
 
     if (!font.loadFromFile("arial.ttf")) {
-      throw std::runtime_error("Error: failed to load font\n");
+      throw std::runtime_error("Error: failed to load font.\n");
     }
 
     text.setFont(font);
